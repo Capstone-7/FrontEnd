@@ -7,11 +7,11 @@ const SetUpRouters = () => {
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<LandingPage />} >
-
+        
             </Route>
         </Routes>
     </BrowserRouter>
   )
 }
 
-export default SetUpRouters
+export default SetUpRouters;

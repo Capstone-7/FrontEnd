@@ -1,0 +1,160 @@
+.Download {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 10px;
+    cursor: pointer;
+    width: 128px;
+    height: 56px;
+    background: #284E7D;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    color: #fff;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+.BackgroundContent {
+    background-image: url('../../assets/images/Background.png');
+    position: absolute;
+    width: 100%;
+    height: 1200px;
+    background-size: cover;
+    border-radius: 0px;
+    z-index: 1;
+}
+
+
+.MainContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 280px;
+    gap: 718px;
+    z-index: 2;
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    left: 0px;
+    top: 0px;
+    background: #E8F2FE;
+    box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.25);
+}
+
+.MainContent__Navbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 250px;
+    width: 1025px;
+    height: 40px;
+    background: #E8F2FE;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.NavItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 1px;
+    width: 404px;
+    height: 45px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+/* .NavList_Home {
+    width: 62px;
+    height: 30px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.15px;
+    color: #182E4A;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.NavList__About {
+    width: 76px;
+    height: 30px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-left: 20px;
+    color: #000000;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.NavList__Product {
+    width: 150px;
+    height: 30px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 30px;
+    display: flex;
+    margin-left: 10px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.5px;
+    color: #000000;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+} */
+
+
+.Hero {
+    width: 700px;
+    margin-top: 200px;
+}
+
+.HeroText {   
+    margin-top: 60%;
+    margin-left: 150px;
+    font-family: 'Poppins';
+    width: 700px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 58px;
+    line-height: 87px;
+    color: #396EB0;
+}
+
+.btnDownload {
+    margin-left: 48%;
+    width: 25%;
+    margin-top: 20px;
+    cursor: pointer;
+}
