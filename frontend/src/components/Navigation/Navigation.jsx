@@ -21,9 +21,9 @@ const Navigation = () => {
             <Container className={styles.MainContent__Navbar}>
               <Navbar.Brand href="#home"><img src={logo} alt="Logo Brand" style={{width: "73px", height: "97"}}/></Navbar.Brand>
               <Nav className={styles.NavItem}>
-                <Nav.Link href="#home" className={styles.NavList_Home}>Home</Nav.Link>
-                <Nav.Link href="#features" className={styles.NavList__About}>About</Nav.Link>
-                <Nav.Link href="#pricing" className={styles.NavList__Product}>Product List</Nav.Link>
+                <Nav.Link href="#home" className={styles.NavList__Item}>Home</Nav.Link>
+                <Nav.Link href="#features" className={styles.NavList__Item}>About</Nav.Link>
+                <Nav.Link href="#pricing" className={styles.NavList__Item}>Product List</Nav.Link>
               </Nav>
               <btn className={styles.Download}>Download</btn>
             </Container>
