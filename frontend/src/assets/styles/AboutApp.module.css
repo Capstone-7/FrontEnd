@@ -1,11 +1,11 @@
 .Mocup {
-    width: 789px;
+    width: 120%;
     margin-top: -200px;
     margin-left: -70px;
 }
 
 .buttonMore {
-    margin-left: 40%;
+    margin-left: 30%;
     margin-top: 50px;
     width: 145px;
     height: 36px;
@@ -13,7 +13,7 @@
 }
 
 .Content {
-    width: 448px;
+    width: 65%;
     margin-left: 90px;
     height: 315px;
     font-family: 'Poppins';

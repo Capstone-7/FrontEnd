@@ -10,18 +10,24 @@ import btnDownload from '../../assets/images/btn_download.png';
 import styles from '../../assets/styles/Navigation.module.css'
 import Stack from 'react-bootstrap/Stack';
 
+import Form from 'react-bootstrap/Form';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Button from 'react-bootstrap/Button'
+
 
 const Navigation = () => {
   return (
     <>
-    {/* Navbar */}
+
     <div className={styles.BackgroundContent}>
-      <Stack className={styles.ContainerMainContent}>
-        <Navbar className={styles.MainContent}>
-            <Container className={styles.MainContent__Navbar}>
-              <Navbar.Brand href="#home"><img src={logo} alt="Logo Brand" style={{width: "73px", height: "97"}} /></Navbar.Brand>
+    <Stack className={styles.ContainerMainContent}>
+        <Navbar collapseOnSelect expand="lg" className={styles.MainContent} >
+          <Container>
+          <Navbar.Brand href="#home"><img src={logo} alt="Logo Brand" style={{width: "73px", height: "97"}} className={styles.Logo} /></Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className={styles.NavItem}>
-                <Nav.Link href="#home" className={styles.NavList__Item}>
+              <Nav.Link href="#home" className={styles.NavList__Item}>
                   Home
                   <div className={styles.NavList__BottomBorder}></div>
                 </Nav.Link>
@@ -34,9 +40,12 @@ const Navigation = () => {
                   <div className={styles.NavList__BottomBorder}></div> 
                 </Nav.Link>
               </Nav>
+              <Nav>
               <button className={styles.Download}>Download</button>
-            </Container>
-          </Navbar>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
       </Stack>
 
 
@@ -53,7 +62,7 @@ const Navigation = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
     </>
   )
 }
