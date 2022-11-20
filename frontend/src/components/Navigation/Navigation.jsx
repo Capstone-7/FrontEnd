@@ -16,16 +16,25 @@ const Navigation = () => {
     <>
     {/* Navbar */}
     <div className={styles.BackgroundContent}>
-      <Stack className={styles.MainContent}>
-        <Navbar>
+      <Stack className={styles.ContainerMainContent}>
+        <Navbar className={styles.MainContent}>
             <Container className={styles.MainContent__Navbar}>
-              <Navbar.Brand href="#home"><img src={logo} alt="Logo Brand" style={{width: "73px", height: "97"}}/></Navbar.Brand>
+              <Navbar.Brand href="#home"><img src={logo} alt="Logo Brand" style={{width: "73px", height: "97"}} /></Navbar.Brand>
               <Nav className={styles.NavItem}>
-                <Nav.Link href="#home" className={styles.NavList__Item}>Home</Nav.Link>
-                <Nav.Link href="#features" className={styles.NavList__Item}>About</Nav.Link>
-                <Nav.Link href="#pricing" className={styles.NavList__Item}>Product List</Nav.Link>
+                <Nav.Link href="#home" className={styles.NavList__Item}>
+                  Home
+                  <div className={styles.NavList__BottomBorder}></div>
+                </Nav.Link>
+                <Nav.Link href="#features" className={styles.NavList__Item}>
+                  About
+                  <div className={styles.NavList__BottomBorder}></div>
+                </Nav.Link>
+                <Nav.Link href="#pricing" className={styles.NavList__Item}>
+                  Product List
+                  <div className={styles.NavList__BottomBorder}></div> 
+                </Nav.Link>
               </Nav>
-              <btn className={styles.Download}>Download</btn>
+              <button className={styles.Download}>Download</button>
             </Container>
           </Navbar>
       </Stack>
@@ -39,8 +48,7 @@ const Navigation = () => {
               <img src={Hero} className={styles.Hero} alt="Hero"/>
           </div>
           <div className="col-md-6">
-              {/* belum fix untuk bold "beban tagihan" */}
-              <h1 className={styles.HeroText}>Si paling jadi pilihan buat nuntasin <span>Beban Tagihan</span> kamu</h1>
+              <h1 className={styles.HeroText}>Si paling jadi pilihan buat nuntasin <span className={styles.SecondaryText}>Beban Tagihan</span> kamu</h1>
               <img src={btnDownload} alt="Google Play" className={styles.btnDownload}/>
           </div>
         </div>
