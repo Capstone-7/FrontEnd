@@ -1,0 +1,35 @@
+.blockfooter {
+    background-color: #1F3D61;
+    color: #E8F2FE;
+    padding: 4em 0em 4em 0em;
+}
+
+.rowfooter {
+    justify-content: center;
+    align-items: center;
+    padding: 0em 7em 0em 7em;
+}
+
+.logo {
+    width: 90px;
+    padding-bottom: 15px;
+}
+
+.columnone {
+    padding-bottom: 15px;
+}
+
+.line {
+    border: 2px solid #EBF1F7;
+    width: 1px;
+    height: 200px;
+    margin-left: 50px;
+}
+
+/* 
+.linerow {
+    text-align: center;
+    float: right;
+    justify-content: center;
+    align-items: center;
+} */
