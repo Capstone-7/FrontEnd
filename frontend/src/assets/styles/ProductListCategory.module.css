@@ -1,0 +1,15 @@
+/* .BackgroundCategorys {
+    background-image: url('../../assets/images/Background.png');
+    width: 100%;
+    height: 640px;
+    background-size: cover;
+    border-radius: 0px; 
+    margin-top: 280px;
+} */
+
+
+.CarouselProductList {
+    margin-top: 100px;
+    height: 70%;
+    z-index: -1;
+}

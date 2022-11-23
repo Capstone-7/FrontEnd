@@ -70,7 +70,7 @@ const Service = () => {
                             <Card style={{
                                 width: '18rem',
                                 alignItems: "center",
-                                height: "53vh"
+                                // height: "53vh"
                             }} className={styles.card}>
                                 <Card.Img variant="top" src={require("../../assets/icons/easypeasy.png")} style={{
                                     width: "35%",
@@ -91,7 +91,7 @@ const Service = () => {
                         <Card style={{
                             width: '18rem',
                             alignItems: "center",
-                            height: "53vh"
+                            // height: "53vh"
                         }} className={styles.card}>
                             <Card.Img variant="top" src={require("../../assets/icons/antiadmin.png")} style={{
                                 width: "35%",
@@ -109,7 +109,7 @@ const Service = () => {
                         <Card style={{
                             width: '18rem',
                             alignItems: "center",
-                            height: "53vh"
+                            // height: "53vh"
                         }} className={styles.card}>
                             <Card.Img variant="top" src={require("../../assets/icons/selfreward.png")} style={{
                                 width: "35%",

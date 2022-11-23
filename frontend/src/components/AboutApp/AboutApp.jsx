@@ -19,6 +19,7 @@ const AboutApp = () => {
             </div>
         </div>
       </div>
+      </div>
     </>
   )
 }
