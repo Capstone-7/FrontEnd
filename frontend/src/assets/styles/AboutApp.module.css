@@ -1,6 +1,9 @@
 .Mocup {
     width: 120%;
     margin-top: -200px;
+}
+
+.buttonMore {
     margin-left: -70px;
 }
 
@@ -10,6 +13,7 @@
     width: 145px;
     height: 36px;
     border-radius: 8px; 
+    margin-inline: auto;
 }
 
 .Content {
@@ -29,4 +33,19 @@
     font-weight: 700;
     font-size: 23px;
     line-height: 34px;
+}
+
+@media only screen and (max-width: 768px) {
+    .Mocup-gradient {
+        background: linear-gradient(360deg, rgba(27,27,27,0.8) 0%, rgba(27,27,27,0.8) 100%);
+    }
+    .Mocup {
+        opacity: 0.3;
+        z-index: -1;
+    }
+
+    .Content {
+        font-weight: 500;
+        width: 100%;
+    }
 }

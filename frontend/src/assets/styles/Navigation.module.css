@@ -19,6 +19,7 @@
     letter-spacing: 1.25px;
 }
 
+
 .BackgroundContent {
     background-image: url('../../assets/images/Background.png');
     width: 100%;
@@ -65,22 +66,24 @@
     height: 45px;
 }
 
+
 .NavList__Item {
     font-style: normal !important;
     font-weight: 500 !important;
     font-size: 20px !important;
     text-align: center !important;
     margin-left: 30px;
-}
+} 
 
 
 .NavList__Item:hover {
     color: #182e4a !important;
-}
-
-.NavList__BottomBorder {
+  }
+  
+  .NavList__BottomBorder {
     display: none;
-}
+  }
+ 
 
 .NavList__Item:hover .NavList__BottomBorder {
     content: "";
@@ -89,11 +92,10 @@
     border-radius: 102px 101px 0px 0px;
     -moz-border-radius: 102px 101px 0px 0px;
     -webkit-border-radius: 102px 101px 0px 0px;
-
     width: 40px;
     margin-top: 4px;
     margin-inline: auto;
-}
+  }
 
 .Hero {
     width: 100%;
