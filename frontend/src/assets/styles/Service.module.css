@@ -1,6 +1,8 @@
 .blockservice {
     background-color: #EBF1F7;
     padding: 2em;
+    font-family: 'Poppins';
+    /* font-style: normal; */
 }
 
 .titleservice {

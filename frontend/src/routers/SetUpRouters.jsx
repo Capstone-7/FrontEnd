@@ -5,11 +5,11 @@ import LandingPage from '../pages/LandingPage'
 const SetUpRouters = () => {
   return (
     <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<LandingPage />} />
-        </Routes>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
     </BrowserRouter>
   )
 }
 
-export default SetUpRouters
+export default SetUpRouters;
