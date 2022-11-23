@@ -5,12 +5,10 @@ import Navbar from 'react-bootstrap/Navbar';
 
 import logo from '../../assets/images/Logo.png'
 
+
 import styles from '../../assets/styles/Navigation.module.css'
 import Stack from 'react-bootstrap/Stack';
-
-
 import { useNavigate } from "react-router-dom"
-
 
 
 const Navigation = () => {
@@ -51,7 +49,6 @@ const Navigation = () => {
           </Container>
         </Navbar>
       </Stack>
-
     </>
   )
 }
