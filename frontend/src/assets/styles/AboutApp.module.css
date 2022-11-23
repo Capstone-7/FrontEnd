@@ -4,6 +4,11 @@
 }
 
 .buttonMore {
+    margin-left: -70px;
+}
+
+.buttonMore {
+    margin-left: 30%;
     margin-top: 50px;
     width: 145px;
     height: 36px;
@@ -13,6 +18,7 @@
 
 .Content {
     width: 65%;
+    margin-left: 90px;
     height: 315px;
     font-family: 'Poppins';
     font-style: normal;

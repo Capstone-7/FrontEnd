@@ -1,0 +1,38 @@
+.blockfooter {
+    background-color: #1F3D61;
+    color: #E8F2FE;
+    padding: 4em 0em 4em 0em;
+    font-family: 'Poppins';
+}
+
+.rowfooter {
+    justify-content: center;
+    align-items: center;
+    padding: 0em 0em 0em 0em;
+}
+
+.logo {
+    width: 90px;
+    padding-bottom: 15px;
+}
+
+.columnone {
+    padding-bottom: 15px;
+    font-size: 11px;
+}
+
+.line {
+    border: 2px solid #EBF1F7;
+    width: 1px;
+    height: 200px;
+    /* margin: 0px 10px 0px 10px; */
+    /* margin-left: 50px; */
+}
+
+/* 
+.linerow {
+    text-align: center;
+    float: right;
+    justify-content: center;
+    align-items: center;
+} */

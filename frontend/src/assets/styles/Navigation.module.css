@@ -20,6 +20,14 @@
 }
 
 
+.BackgroundContent {
+    background-image: url('../../assets/images/Background.png');
+    width: 100%;
+    height: 1200px;
+    background-size: cover;
+    border-radius: 0px;
+}
+
 
 
 .MainContent {
@@ -31,6 +39,7 @@
     background: #E8F2FE;
     box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.25);
     position: fixed !important;
+    z-index: 2;
     width: 100vw !important;
 }
 
@@ -57,7 +66,8 @@
     height: 45px;
 }
 
- .NavList__Item {
+
+.NavList__Item {
     font-style: normal !important;
     font-weight: 500 !important;
     font-size: 20px !important;
@@ -73,16 +83,49 @@
   .NavList__BottomBorder {
     display: none;
   }
-  
-  .NavList__Item:hover .NavList__BottomBorder {
+ 
+
+.NavList__Item:hover .NavList__BottomBorder {
     content: "";
     display: block;
     border-bottom: 4px solid #182e4a;
     border-radius: 102px 101px 0px 0px;
     -moz-border-radius: 102px 101px 0px 0px;
     -webkit-border-radius: 102px 101px 0px 0px;
-  
     width: 40px;
     margin-top: 4px;
     margin-inline: auto;
   }
+
+.Hero {
+    width: 100%;
+    padding-top: 150px;
+}
+
+.HeroText {
+    padding-top: 40%;
+    margin-left: 80px;
+    font-family: 'Poppins';
+    width: 100%;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 58px;
+    line-height: 87px;
+    color: #396EB0;
+    text-align: center;
+}
+
+.SecondaryText {
+    color: #182E4A;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 58px;
+}
+
+.btnDownload {
+    margin-left: 49%;
+    width: 25%;
+    margin-top: 20px;
+    cursor: pointer;
+}

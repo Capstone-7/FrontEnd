@@ -17,7 +17,6 @@ const AboutApp = () => {
             <div className="d-flex justify-content-center">
               <button style={{backgroundColor: "#396EB0", color: "#EBF1F7", borderColor: "#396EB0"}} className={styles.buttonMore}>Lihat Lainnya</button>
             </div>
-          </div>
         </div>
       </div>
     </>
