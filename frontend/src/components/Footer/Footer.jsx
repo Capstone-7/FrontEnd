@@ -12,7 +12,7 @@ const Footer = () => {
     return (
         <Container fluid className={styles.blockfooter}>
             <Row className={styles.rowfooter}>
-                <Col lg={3}>
+                <Col lg={3} sm={3}>
                     <Stack direction="horizontal" gap={3}>
                         <div>
                             <Image src={require("../../assets/icons/logo.png")} alt="logo" fluid className={styles.logo} />
@@ -43,7 +43,7 @@ const Footer = () => {
                 </Col>
                 {/* <Col lg={1} className={styles.linerow}>
                 </Col> */}
-                <Col lg={4} style={{ textAlign: "center", fontSize: "13px" }}>
+                <Col lg={4} sm={4} style={{ textAlign: "center", fontSize: "13px" }}>
                     <Stack direction="horizontal" gap={5}>
                         <div className={styles.line}></div>
                         <div>
@@ -73,7 +73,7 @@ const Footer = () => {
                 </Col>
                 {/* <Col lg={1} className={styles.linerow}>
                 </Col> */}
-                <Col lg={3}>
+                <Col lg={3} sm={3}>
                     <div style={{ color: "#B7D7FD", paddingBottom: "12px", }}>
                         Get in app
                     </div>

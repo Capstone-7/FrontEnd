@@ -1,0 +1,99 @@
+.blockcarousel {
+    font-family: "Poppins";
+    align-items: center;
+}
+
+.mySwiper {
+    align-items: center;
+    height: 500px;
+    border-radius: 50px;
+}
+
+.active {
+    width: 100%;
+    height: 500px;
+    border-radius: 50px;
+    align-items: center;
+    box-shadow: -1px 3px 12px 0px rgba(0, 0, 0, 0.75);
+    position: absolute;
+    z-index: 1;
+    /* transform: scale(1.5); */
+}
+
+.normal {
+    width: 100%;
+    height: 500px;
+    border-radius: 50px;
+    align-items: center;
+    opacity: .5;
+    /* transform: scale(1); */
+}
+
+.dailystyle {
+    position: absolute;
+    z-index: 2;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin-left: 40px;
+    bottom: 0;
+    margin-bottom: 30px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.dailystyle h2,
+.billsstyle h2 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 46px;
+    /* line-height: 69px; */
+    color: #FFFAE7;
+}
+
+.dailystyle div,
+.billsstyle div,
+.entertainmentstyle div {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    color: #F8F8F8;
+    letter-spacing: 0.5px;
+    padding-bottom: 10px;
+    /* line-height: 22px; */
+}
+
+.dailystyle button {
+    background: #284E7D;
+    border-radius: 8px;
+    padding: 8px 16px;
+    width: 155px;
+    height: 36px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #EBF1F7;
+}
+
+.billsstyle,
+.entertainmentstyle {
+    position: absolute;
+    z-index: 2;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 0px 20px 30px 20px;
+    bottom: 0;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.entertainmentstyle h2 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 23px;
+    color: #FFFAE7;
+}
