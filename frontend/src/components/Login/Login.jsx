@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -10,6 +10,8 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 
 const Login = () => {
+    const [passwordShown, setPasswordShown] = useState(false);
+
     return (
         <Container fluid className={styles.blocklogin}>
             <Row
@@ -19,7 +21,7 @@ const Login = () => {
                     justifyContent: "right",
                     paddingRight: "4em"
                 }}>
-                <Col lg={4}>
+                <Col lg={4} sm={4}>
                     <div>
                         <div className={styles.ketlogin}>
                             <h2>Admin Login</h2>
@@ -44,12 +46,12 @@ const Login = () => {
                                     <InputGroup>
                                         <InputGroup.Text style={{ backgroundColor: "#ffffff" }}><FontAwesomeIcon icon={faLock} /></InputGroup.Text>
                                         <Form.Control
-                                            type='password'
+                                            type={passwordShown ? "text" : "password"}
                                             placeholder="Masukkan Kata sandi"
                                             aria-label="Username"
                                             aria-describedby="basic-addon1"
                                         />
-                                        <InputGroup.Text style={{ backgroundColor: "#ffffff", borderLeft: "0" }}><FontAwesomeIcon icon={faEye} /></InputGroup.Text>
+                                        <InputGroup.Text onClick={() => setPasswordShown(!passwordShown)} style={{ backgroundColor: "#ffffff", borderLeft: "0" }}><FontAwesomeIcon icon={faEye} /></InputGroup.Text>
                                     </InputGroup>
                                 </Form.Group>
                                 <Button className={styles.button} variant="primary">Login</Button>
