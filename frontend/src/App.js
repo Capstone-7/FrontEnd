@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import SetUpRouters from "./routers/SetUpRouters";
 import ThemeProvider from "./theme";
