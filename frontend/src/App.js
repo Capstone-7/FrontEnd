@@ -1,10 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
-import SetUpRouters from './routers/SetUpRouters';
+import logo from "./logo.svg";
+import "./App.css";
+import SetUpRouters from "./routers/SetUpRouters";
+import ThemeProvider from "./theme";
 
 function App() {
   return (
-    <SetUpRouters />
+    <ThemeProvider>
+      <SetUpRouters />
+    </ThemeProvider>
   );
 }
 
