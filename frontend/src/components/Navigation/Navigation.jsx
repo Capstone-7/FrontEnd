@@ -41,6 +41,7 @@ const Navigation = () => {
                   Product List
                   <div className={styles.NavList__BottomBorder}></div> 
                 </Nav.Link>
+                {/* <DarkMode /> */}
               </Nav>
               <Nav>
               <button className={styles.Download}>Download</button>
