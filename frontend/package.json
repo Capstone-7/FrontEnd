@@ -10,6 +10,8 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.2.2",
+    "js-cookie": "^3.0.1",
+    "random-token": "^0.0.8",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-dom": "^18.2.0",
@@ -18,8 +20,8 @@
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "react-slick": "^0.29.0",
-    "swiper": "*",
     "slick-carousel": "^1.8.1",
+    "swiper": "*",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
