@@ -7,10 +7,10 @@ export const Auth = {
         const token = Cookies.get("token");
         // const display_name = Cookies.get("display_name")
 
-        // if (token) {
-        //     return { display_name, token };
-        // }
-        // return { display_name: '', token: '' };
+        if (token) {
+            return { token };
+        }
+        return { token: '' };
     },
     signOut() {
         Cookies.remove("token");

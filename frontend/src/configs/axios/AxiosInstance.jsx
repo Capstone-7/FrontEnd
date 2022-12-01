@@ -1,12 +1,13 @@
 import axios from "axios";
+import CONST from "../../utils/Constants";
 
-const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_BASEURL,
+const AxiosInstance = axios.create({
+    baseURL: CONST.BASE_URL_API,
     headers: {
+        accept: 'application/json',
         'Content-Type': 'application/json',
-        'X-Hasura-Role': 'admin',
-        'x-hasura-admin-secret': process.env.REACT_APP_API_KEY
+        'admin-secret': process.env.REACT_APP_API_KEY,
     }
 });
 
-export default axiosInstance;
+export default AxiosInstance;

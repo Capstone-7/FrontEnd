@@ -1,0 +1,71 @@
+.dashboardPage {
+    -webkit-box-shadow: 7px 7px 25px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 7px 7px 25px -6px rgba(0,0,0,0.75);
+    box-shadow: 0px 6px 12px rgba(41, 41, 41, 0.08);
+    border-radius: 20px;
+    background: #EBF1F7;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 40px;
+    gap: 23px;
+    height: 400px;
+}
+
+.dataStatistik {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 23px;
+    line-height: 34px;
+    color: #1D1D1D;
+}
+
+.dataStatistikSecond {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: 0.15px;
+    margin-left: 2%;
+    color: #1D1D1D;
+}
+
+.dataDashboard {
+    width: 30% !important;
+    height: 200px; 
+    background: #A4BCDB;
+    border-radius: 10px;    
+    margin-top: 1.5% !important;  
+}
+
+.content {
+    width: 100%;
+}
+
+.DataImage {
+    width: 14%;
+}
+
+.DataText {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: 0.5px;
+    color: #000000;
+    margin-top: 5%;
+}
+
+.secondText {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 18px;
+    color: #000000;
+    margin-top: 5%;
+}

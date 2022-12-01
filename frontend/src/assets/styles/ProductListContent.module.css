@@ -10,6 +10,9 @@
     height: 100vh;
     background-size: cover;
     border-radius: 0px;
+    box-shadow: 2px -9px 20px 14px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 2px -9px 20px 14px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px -9px 20px 14px rgba(0,0,0,0.75);
   }
 
   /* .Content {

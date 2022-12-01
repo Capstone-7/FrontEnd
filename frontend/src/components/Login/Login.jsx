@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,9 +8,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faLock, faEye } from '@fortawesome/free-solid-svg-icons'
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
+import { login } from "../../store/ItemSlice"
+import { useSelector, useDispatch } from "react-redux"
 
 const Login = () => {
     const [passwordShown, setPasswordShown] = useState(false);
+
+    const items = useSelector((state) => console.log(state))
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(login())
+    }, [])
 
     return (
         <Container fluid className={styles.blocklogin}>
