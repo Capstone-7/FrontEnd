@@ -10,6 +10,8 @@ import Transaksi from '../pages/admin/Transaksi'
 import LoginPage from '../pages/LoginPage'
 
 import DashboardLayout from "../layouts/dashboard";
+import ProtectedRoute from "./ProtectedRoute";
+import PrivateRoute from "./PrivateRoute";
 
 const SetUpRouters = () => {
   return (
@@ -18,8 +20,8 @@ const SetUpRouters = () => {
         {/* Landing Page (For User) */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/productlist" element={<PageProduct />} />
-        {/* Login Page */}
-        <Route path="/admin/login" element={<LoginPage />} />
+        {/* Private Route */}
+        <Route path="/admin/login" element={<PrivateRoute />} />
         {/* Dashboard Admin */}
         <Route path="/admin" element={<DashboardLayout />}>
           <Route index element={<DashboardAppPage />} />

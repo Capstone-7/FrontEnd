@@ -42,9 +42,10 @@ import ModalComponent from './ModalComponent';
 
 
 const TABLE_HEAD = [
+  { id: 'idPengguna', label: 'ID PENGGUNA', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'role', label: 'Tanggal Registrasi', alignRight: false },
   { id: 'isVerified', label: 'Verified', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
@@ -163,7 +164,9 @@ export default function UserPage() {
         <title> User | Minimal UI </title>
       </Helmet>
 
-      <Container>
+      <Container sx={{
+        width: 1300
+      }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Manage User
@@ -177,7 +180,7 @@ export default function UserPage() {
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
+            <TableContainer sx={{ width: 1150, height: 500  }}>
               <Table>
                 <UserListHead
                   order={order}
@@ -190,13 +193,17 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, idPengguna, role, status, email, avatarUrl, isVerified } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
                         <TableCell padding="checkbox">
                           <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
+                        </TableCell>
+
+                        <TableCell align="left">
+                          {idPengguna}
                         </TableCell>
 
                         <TableCell component="th" scope="row" padding="none">
@@ -208,14 +215,14 @@ export default function UserPage() {
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{company}</TableCell>
+                        <TableCell align="left">{email}</TableCell>
 
                         <TableCell align="left">{role}</TableCell>
 
                         <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
 
                         <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(status === 'Unverified' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">
