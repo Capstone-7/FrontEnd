@@ -1,12 +1,16 @@
 .ModalTransaksi {
     width: 100%;
-    height: 750px;
-    background: #EBF1F7;
+    height: 470px;
+    background: #FAFAFA;
+    padding: 20px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
 }
 
+/* 
 .ModalChild {
     background: #EBF1F7;
-}
+} */
 
 .PrimaryModal__Data {
     font-family: 'Poppins';
@@ -26,17 +30,17 @@
     letter-spacing: 0.1px;
     color: #1F3D61;
     width: 123px;
-height: 20px;
+    height: 20px;
 }
 
-.SearchText{
+.SearchText {
     font-family: 'Poppins';
-font-style: normal;
-font-weight: 400;
-font-size: 13px;
-line-height: 20px;
-letter-spacing: 0.25px;
-color: #99A1B5;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    color: #99A1B5;
 }
 
 .WrapperTransactions {
@@ -63,4 +67,23 @@ color: #99A1B5;
     background: #EBF1F7;
     border: 1px solid #618BC0;
     border-radius: 10px;
+}
+
+.theadcell {
+    border-radius: 30px !important;
+}
+
+.evenodd tr:nth-child(odd) {
+    background-color: #EBF1F7;
+}
+
+.evenodd tr:nth-child(even) {
+    background-color: #FFFFFF;
+}
+
+.datatable {
+    margin-top: 30px;
+    border-radius: 20px;
+    border: 0;
+    /* overflow-x: auto; */
 }
