@@ -15,7 +15,9 @@ import {
 import account from '../../../_mock/account';
 import { Auth } from "../../../utils/Auth"
 import { useNavigate } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { useEffect } from 'react';
+import { getCurrentAdmins } from "../../../store/features/UserSlice";
 
 // ----------------------------------------------------------------------
 
@@ -37,9 +39,15 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getCurrentAdmins())
+  }, [dispatch])
+
   const navigate = useNavigate();
 
-  const admin = useSelector((state) => state.UserSlice.admin)
+  const admin = useSelector((state) => state?.UserSlice.admin)
 
   // console.log(admin)
   const [open, setOpen] = useState(null);

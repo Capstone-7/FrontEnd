@@ -7,11 +7,10 @@ import Page404 from "../pages/admin/Page404";
 import ProductsPage from "../pages/admin/ProductsPage";
 import UserPage from "../pages/admin/UserPage";
 import Transaksi from '../pages/admin/Transaksi'
-import LoginPage from '../pages/LoginPage'
 import { Provider } from 'react-redux';
-import DashboardLayout from "../layouts/dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import { store } from "../store/Store"
+import PrivateRoute from "./PrivateRoute";
 
 const SetUpRouters = () => {
   return (
@@ -22,7 +21,7 @@ const SetUpRouters = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/productlist" element={<PageProduct />} />
           {/* Login Page */}
-          <Route path="/admin/login" element={<LoginPage />} />
+          <Route path="/admin/login" element={<PrivateRoute />} />
           {/* Protected Route */}
           <Route path="/admin" element={<ProtectedRoute />}>
             <Route index element={<DashboardAppPage />} />
