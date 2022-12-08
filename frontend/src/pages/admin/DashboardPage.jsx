@@ -120,8 +120,8 @@ export default function DashboardAppPage() {
 
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
-              title="Website Visits"
-              subheader="(+43%) than last year"
+              title="Data Statistik"
+              subheader="Total Pemasukan"
               chartLabels={[
                 "01/01/2022",
                 "02/01/2022",

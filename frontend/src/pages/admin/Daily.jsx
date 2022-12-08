@@ -43,30 +43,23 @@ import Cookies from "js-cookie";
 const TABLE_HEAD = [
   { id: "number", label: "#", alignRight: false },
   // { id: "idPengguna", label: "ID PENGGUNA", alignRight: false },
-  { id: "name", label: "Name", alignRight: false },
-  { id: "email", label: "Email", alignRight: false },
-  { id: "role", label: "Tanggal Registrasi", alignRight: false },
+  { id: "name", label: "Kode Produk", alignRight: false },
+  { id: "role", label: "Deskripsi", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
+  { id: "status", label: "Nominal", alignRight: false },
+  { id: "status", label: "Kategori", alignRight: false },
+  { id: "status", label: "Harga (Rp)", alignRight: false },
   { id: "status", label: "", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (orderBy === "name") {
-    if (b[orderBy].toLowerCase() < a[orderBy].toLowerCase()) {
-      return -1;
-    }
-    if (b[orderBy].toLowerCase() > a[orderBy].toLowerCase()) {
-      return 1;
-    }
-  } else {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
   }
   return 0;
 }
@@ -104,6 +97,7 @@ export default function UserPage() {
   const [token, setToken] = useState(Cookies.get("token"));
   const [user, setUser] = useState([]);
   const [currentID, setCurrentID] = useState("");
+  const [product, setProduct] = useState([]);
 
   const [load, setLoad] = useState();
 
@@ -174,34 +168,25 @@ export default function UserPage() {
     filterName
   );
 
-  const handleDelete = (e) => {
+  const handleDelete = (e, id) => {
     // e.preventDefault();
     // setLoad(true);
     // AxiosInstance.delete(`user/${id}`).then((res) => setLoad(false));
-    AxiosInstance.delete(`user/${currentID}`, {
+    AxiosInstance.delete(`user/${id}`, {
       headers: { Authorization: `Bearer ` + token },
     }).then((res) => console.log(res));
-    const userIndex = user.findIndex((usr) => usr._id === currentID);
-    console.log(userIndex);
-    const updateUser = [
-      ...user.slice(0, userIndex),
-      ...user.slice(userIndex + 1),
-    ];
-    setUser(updateUser);
-    setOpen(false);
-    // console.log(AxiosInstance.deleteuser(currentID));
+    console.log(AxiosInstance.deleteuser(currentID));
   };
-  console.log(currentID);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
   useEffect(() => {
-    AxiosInstance.get("user/all", {
+    AxiosInstance.get("product/all", {
       headers: {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      setUser(res.data.data);
+      setUser(res.data);
     });
   }, []);
 
@@ -223,7 +208,8 @@ export default function UserPage() {
           mb={5}
         >
           <Typography variant="h4" gutterBottom>
-            Manage User
+            Manajemen Produk
+            <div onClick={() => console.log(user)}>test</div>
           </Typography>
         </Stack>
 
@@ -247,8 +233,17 @@ export default function UserPage() {
               />
               <TableBody id="body-table">
                 {filteredUsers.map((row) => {
-                  const { name, _id, created, status, email } = row;
-                  const selectedUser = selected.indexOf(name) !== -1;
+                  const {
+                    code,
+                    description,
+                    status,
+                    nominal,
+                    category,
+                    price,
+                    _id,
+                    icon_url,
+                  } = row;
+                  const selectedUser = selected.indexOf(_id) !== -1;
                   return (
                     <TableRow
                       hover
@@ -260,25 +255,30 @@ export default function UserPage() {
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={selectedUser}
-                          onChange={(event) => handleClick(event, name)}
+                          onChange={(event) => handleClick(event, code)}
                         />
                       </TableCell>
                       <TableCell id="user-data" align="left"></TableCell>
                       {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          {/* <Avatar
-                              alt={name}
-                              src={urlFoto}
-                            /> */}
+                          {/* <Avatar alt={name} src={urlFoto} /> */}
                           <Typography variant="subtitle2" noWrap>
-                            {name}
+                            {code.toUpperCase()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align="left">{email}</TableCell>
                       <TableCell align="left">
-                        {new Date(created).toLocaleDateString()}
+                        <div className="d-flex flex-row align-items-center">
+                          <img
+                            src={icon_url}
+                            alt="Produk"
+                            width="60"
+                            className="pb-2"
+                            style={{ paddingInline: "auto" }}
+                          />
+                          <div className="me-0">{description}</div>
+                        </div>
                       </TableCell>
                       <TableCell align="left">
                         <Label
@@ -286,9 +286,12 @@ export default function UserPage() {
                             status === "not_verified" ? "error" : "success"
                           }
                         >
-                          {sentenceCase(status)}
+                          {status}
                         </Label>
                       </TableCell>
+                      <TableCell align="left">{nominal}</TableCell>
+                      <TableCell align="left">{category}</TableCell>
+                      <TableCell align="left">{price}</TableCell>
                       <TableCell align="right">
                         <IconButton
                           size="large"
@@ -443,7 +446,10 @@ export default function UserPage() {
         </MenuItem> */}
         <ModalComponent id={currentID} />
 
-        <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
+        <MenuItem
+          sx={{ color: "error.main" }}
+          onClick={(e) => handleDelete(e, currentID)}
+        >
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
           Delete
         </MenuItem>

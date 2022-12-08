@@ -25,6 +25,14 @@ export const getTransaksiCounts = createAsyncThunk("PayOll/getTransaksiCounts", 
     // return res.data.todos
 })
 
+export const getCurrentProfiles = createAsyncThunk("PayOll/getCurrentProfiles", async () => {
+    const res = await APIPayoll.getCurrentProfile()
+    console.log(res)
+    // return res.data.todos
+})
+
+
+
 export const login = createAsyncThunk("PayOll/login", async () => {
     const res = await APIPayoll.login()
     console.log(res)

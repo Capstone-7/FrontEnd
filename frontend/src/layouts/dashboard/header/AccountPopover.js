@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
+import Cookies from "js-cookie";
 // @mui
 import { alpha } from "@mui/material/styles";
 import {
@@ -13,9 +15,8 @@ import {
   Popover,
 } from "@mui/material";
 // mocks_
-import account from '../../../_mock/account';
-import { Auth } from '../../../utils/Auth';
-
+import account from "../../../_mock/account";
+import { Auth } from "../../../utils/Auth";
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +52,22 @@ export default function AccountPopover() {
   const handleLogout = () => {
     Auth.signOut();
     navigate("/admin/login");
-  }
+  };
+
+  const [token, setToken] = useState(Cookies.get("token"));
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+
+  useEffect(() => {
+    AxiosInstance.get("user/profile", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }).then((res) => {
+      setName(res.data.data.name);
+      setEmail(res.data.data.email);
+    });
+  }, []);
 
   return (
     <>
@@ -96,10 +112,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {name}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {account.email}
+            {email}
           </Typography>
         </Box>
 

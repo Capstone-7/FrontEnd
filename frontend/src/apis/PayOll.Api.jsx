@@ -37,6 +37,24 @@ const APIPayoll = {
             throw new Error(message);
         }
     },
+    async getCurrentProfile() {
+        try {
+            const response = await AxiosInstance.get("user/profile");
+            return response;
+        } catch (err) {
+            const { message } = err.response.data;
+            throw new Error(message);
+        }
+    },
+    async deleteUser(id) {
+        try {
+          const response = await AxiosInstance.delete(`user/${id}`);
+          return response;
+        } catch (err) {
+          const { message } = err.response.data;
+          throw new Error(message);
+        }
+    }
 };
 
 export default APIPayoll;
