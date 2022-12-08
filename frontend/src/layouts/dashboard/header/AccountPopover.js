@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
+import Cookies from "js-cookie";
 // @mui
 import { alpha } from "@mui/material/styles";
 import {
@@ -12,7 +15,10 @@ import {
   Popover,
 } from "@mui/material";
 // mocks_
-import account from '../../../_mock/account';
+import account from "../../../_mock/account";
+import { Auth } from "../../../utils/Auth";
+import { useSelector, useDispatch } from "react-redux";
+import { getCurrentAdmins } from "../../../store/features/UserSlice";
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +40,17 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCurrentAdmins());
+  }, [dispatch]);
+
+  const navigate = useNavigate();
+
+  const admin = useSelector((state) => state?.UserSlice?.admin);
+
+  // console.log(admin)
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -42,6 +59,32 @@ export default function AccountPopover() {
 
   const handleClose = () => {
     setOpen(null);
+  };
+
+  // const navigate = useNavigate();
+  // const handleLogout = () => {
+  //   Auth.signOut();
+  //   navigate("/admin/login");
+  // };
+
+  // const [token, setToken] = useState(Cookies.get("token"));
+  // const [name, setName] = useState();
+  // const [email, setEmail] = useState();
+
+  // useEffect(() => {
+  //   AxiosInstance.get("user/profile", {
+  //     headers: {
+  //       Authorization: "Bearer " + token,
+  //     },
+  //   }).then((res) => {
+  //     setName(res.data.data.name);
+  //     setEmail(res.data.data.email);
+  //   });
+  // }, []);
+
+  const handleLogOut = () => {
+    Auth.signOut();
+    navigate("/admin/login");
   };
 
   return (
@@ -87,10 +130,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {admin?.data?.name}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {account.email}
+            {admin?.data?.email}
           </Typography>
         </Box>
 
@@ -106,7 +149,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: "dashed" }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={handleLogOut} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </Popover>

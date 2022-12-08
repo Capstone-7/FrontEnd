@@ -25,6 +25,24 @@ const navConfig = [
     title: "Manage Product",
     path: "/admin/products",
     icon: icon("ic_cart"),
+    isAccordion: true,
+    paths: [
+      {
+        title: "Daily",
+        path: "/admin/products/daily",
+        icon: icon("ic_cart"),
+      },
+      {
+        title: "Bills",
+        path: "/admin/products/bills",
+        icon: icon("ic_cart"),
+      },
+      {
+        title: "Entertainment",
+        path: "/admin/products/entertainment",
+        icon: icon("ic_cart"),
+      },
+    ],
   },
   {
     title: "Manage Transaksi",
