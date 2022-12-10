@@ -34,10 +34,12 @@ import { UserListHead, UserListToolbar } from "../../section/user";
 // mock
 import AxiosInstance from "../../configs/axios/AxiosInstance";
 
-import "./ModalComponent";
-import ModalComponent from "./ModalComponent";
+import "./DailyModal";
+import DailyModal from "./DailyModal";
 import Cookies from "js-cookie";
 
+import ProdukBaruModal from "./ProdukBaruModal";
+import "../../assets/styles/ProdukBaru.css";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -168,27 +170,32 @@ export default function UserPage() {
     filterName
   );
 
-  const handleDelete = (e, id) => {
-    // e.preventDefault();
-    // setLoad(true);
-    // AxiosInstance.delete(`user/${id}`).then((res) => setLoad(false));
-    AxiosInstance.delete(`user/${id}`, {
+  const handleDelete = (e) => {
+    AxiosInstance.delete(`product/${currentID}`, {
       headers: { Authorization: `Bearer ` + token },
-    }).then((res) => console.log(res));
-    console.log(AxiosInstance.deleteuser(currentID));
+    }).then((res) => res);
+    const userIndex = user.findIndex((usr) => usr._id === currentID);
+    const updateUser = [
+      ...user.slice(0, userIndex),
+      ...user.slice(userIndex + 1),
+    ];
+    setUser(updateUser);
+    setOpen(false);
   };
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
   useEffect(() => {
-    AxiosInstance.get("product/all", {
+    AxiosInstance.get("product/by_type/daily", {
       headers: {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      setUser(res.data);
+      setUser(res?.data?.data);
     });
   }, []);
+
+  const handleOpen = () => setOpen(!true);
 
   return (
     <>
@@ -198,7 +205,7 @@ export default function UserPage() {
 
       <Container
         sx={{
-          width: 1300,
+          width: 1400,
         }}
       >
         <Stack
@@ -207,11 +214,11 @@ export default function UserPage() {
           justifyContent="space-between"
           mb={5}
         >
-          <Typography variant="h4" gutterBottom>
-            Manajemen Produk
-            <div onClick={() => console.log(user)}>test</div>
-          </Typography>
+          <Typography variant="h3">Manajemen Produk</Typography>
         </Stack>
+        <Typography variant="h4" className="ms-3">
+          Daily
+        </Typography>
 
         <Card>
           <UserListToolbar
@@ -219,6 +226,9 @@ export default function UserPage() {
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
+          <MenuItem className="produkBaruBtn" onClick={handleOpen}>
+            <ProdukBaruModal id={currentID} />
+          </MenuItem>
 
           <TableContainer sx={{ width: 1150, height: 500 }}>
             <Table>
@@ -292,7 +302,7 @@ export default function UserPage() {
                       <TableCell align="left">{nominal}</TableCell>
                       <TableCell align="left">{category}</TableCell>
                       <TableCell align="left">{price}</TableCell>
-                      <TableCell align="right">
+                      <TableCell align="right" width="50">
                         <IconButton
                           size="large"
                           color="inherit"
@@ -378,7 +388,7 @@ export default function UserPage() {
                     })} */}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={5} />
+                    <TableCell colSpan={6} />
                   </TableRow>
                 )}
               </TableBody>
@@ -444,12 +454,9 @@ export default function UserPage() {
         <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           Edit
         </MenuItem> */}
-        <ModalComponent id={currentID} />
+        <DailyModal id={currentID} />
 
-        <MenuItem
-          sx={{ color: "error.main" }}
-          onClick={(e) => handleDelete(e, currentID)}
-        >
+        <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
           Delete
         </MenuItem>

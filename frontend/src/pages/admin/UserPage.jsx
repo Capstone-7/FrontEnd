@@ -151,14 +151,14 @@ export default function UserPage() {
     setSelected(newSelected);
   };
 
-  // const handleChangePage = (event, newPage) => {
-  //   setPage(newPage);
-  // };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-  // const handleChangeRowsPerPage = (event) => {
-  //   setPage(0);
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  // };
+  const handleChangeRowsPerPage = (event) => {
+    setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10));
+  };
 
   const handleFilterByName = (event) => {
     setPage(0);
@@ -175,9 +175,6 @@ export default function UserPage() {
   );
 
   const handleDelete = (e) => {
-    // e.preventDefault();
-    // setLoad(true);
-    // AxiosInstance.delete(`user/${id}`).then((res) => setLoad(false));
     AxiosInstance.delete(`user/${currentID}`, {
       headers: { Authorization: `Bearer ` + token },
     }).then((res) => console.log(res));
@@ -189,7 +186,6 @@ export default function UserPage() {
     ];
     setUser(updateUser);
     setOpen(false);
-    // console.log(AxiosInstance.deleteuser(currentID));
   };
   console.log(currentID);
 
@@ -246,7 +242,7 @@ export default function UserPage() {
                 onSelectAllClick={handleSelectAllClick}
               />
               <TableBody id="body-table">
-                {filteredUsers.map((row) => {
+                {filteredUsers.map((row, index) => {
                   const { name, _id, created, status, email } = row;
                   const selectedUser = selected.indexOf(name) !== -1;
                   return (
@@ -263,9 +259,11 @@ export default function UserPage() {
                           onChange={(event) => handleClick(event, name)}
                         />
                       </TableCell>
-                      <TableCell id="user-data" align="left"></TableCell>
+                      <TableCell component="th" scope="row" width="20">
+                        {index + 1}
+                      </TableCell>
                       {/* <TableCell align="left">{_id}</TableCell> */}
-                      <TableCell component="th" scope="row" padding="none">
+                      <TableCell component="th" scope="row" width="70">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           {/* <Avatar
                               alt={name}
@@ -276,11 +274,13 @@ export default function UserPage() {
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align="left">{email}</TableCell>
-                      <TableCell align="left">
+                      <TableCell align="left" width="100">
+                        {email}
+                      </TableCell>
+                      <TableCell align="left" width="50">
                         {new Date(created).toLocaleDateString()}
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell align="left" width="50">
                         <Label
                           color={
                             status === "not_verified" ? "error" : "success"
@@ -289,7 +289,7 @@ export default function UserPage() {
                           {sentenceCase(status)}
                         </Label>
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="right" width="50">
                         <IconButton
                           size="large"
                           color="inherit"
@@ -406,7 +406,7 @@ export default function UserPage() {
             </Table>
           </TableContainer>
 
-          {/* <TablePagination
+          <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
             count={user.length}
@@ -415,7 +415,7 @@ export default function UserPage() {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
             sx={{ float: "left" }}
-          /> */}
+          />
         </Card>
       </Container>
 
