@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Form from 'react-bootstrap/Form';
 import Table from '@mui/material/Table';
@@ -8,40 +8,130 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TablePagination from '@mui/material/TablePagination';
+import TableFooter from '@mui/material/TableFooter';
 import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import { useTheme } from '@mui/material/styles';
+import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 import './Transaksi.css'
+import { ToastContainer, toast } from 'react-toastify';
 import { Container, Typography } from '@mui/material';
 import { useSelector, useDispatch } from "react-redux"
 import Image from 'react-bootstrap/Image'
+import { Slide, Zoom, Flip, Bounce } from 'react-toastify';
 import Menu from '@mui/material/Menu';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import moment from "moment/moment";
-import { getAllTransactions } from '../../store/features/TransactionSlice';
-import { useState } from 'react';
+import Iconify from "../../components/Admin-Component/iconify/Iconify";
+import { changesTransactionStatus, getAllTransactions } from '../../store/features/TransactionSlice';
 
-// function createData(index, idPengguna, idProduk, totalPembayaran, statusBayar, metodePembayaran, statusTransaksi, tanggalPembayaran) {
-//   return { index, idPengguna, idProduk, totalPembayaran, statusBayar, metodePembayaran, statusTransaksi, tanggalPembayaran };
-// }
+function TablePaginationActions(props) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
 
-// const rows = [
-//   createData('01', 'USER0001', 'PLNP100000', 30000, 'Terbayar', 'Gopay', 'Dibuat', '17/11/2022'),
-//   createData('02', 'USER0002', 'RGPD', 11000, 'Terbayar', 'Gopay', 'Dibuat', '01/11/2022'),
-//   createData('03', 'USER0003', 'TRIP10000', 10000, 'Tidak Terbayar', 'Ovo', 'Diperbarui', '02/11/2022'),
-// ];
+  const handleFirstPageButtonClick = (event) => {
+    onPageChange(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+    onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+    onPageChange(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+}
+
+TablePaginationActions.propTypes = {
+  count: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+};
 
 const Transaksi = () => {
+  // initialData
+  const [data, setData] = useState({
+    id: "",
+    status: "",
+  })
 
+
+  // call API using dispatch and use global state with using selector
   const dispatch = useDispatch()
+  const transactions = useSelector((state) => state?.TransactionSlice?.data)
+
+  // Pagination
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - transactions?.length) : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // Menu
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  // Modal
+  const [modalShow, setModalShow] = React.useState(false);
 
   useEffect(() => {
     dispatch(getAllTransactions())
-  }, [dispatch])
-
-  const [success, setSuccess] = useState("SUCCESS")
-  const [pending, setPending] = useState("PENDING")
+  }, [dispatch, transactions])
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -50,13 +140,16 @@ const Transaksi = () => {
     },
   }));
 
-  const transactions = useSelector((state) => state.TransactionSlice.data)
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  // Menu Logic
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+
+  const handleClick = (id, event) => {
     setAnchorEl(event.currentTarget);
+    setData({
+      id
+    })
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -66,9 +159,55 @@ const Transaksi = () => {
     setAnchorEl(null);
   }
 
-  const [modalShow, setModalShow] = React.useState(false);
+  // onChange and Submit to initialData
+  const onChange = e => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (data.status !== "") {
+      dispatch(changesTransactionStatus({
+        status: data.status,
+        id: data.id
+      }))
+      setModalShow(false)
+      console.log("ok")
+      toast.success('Edit Berhasil', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        transition: { Slide },
+        progress: "0..1",
+        theme: "light",
+      });
+    } else {
+      alert("masukkan gagal")
+    }
+  }
+
+
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        transition={Slide}
+        pauseOnHover
+        theme="light"
+      />
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           Manage Transaksi
@@ -89,7 +228,7 @@ const Transaksi = () => {
             </div>
           </div>
         </Typography>
-        <TableContainer component={Paper} style={{ paddingTop: "30px" }}>
+        <TableContainer component={Paper} style={{ paddingTop: "30px", backgroundColor: "#EBF1F7" }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table" className="evenodd">
             <TableHead className="theadcell">
               <TableRow className="theadcell">
@@ -100,30 +239,35 @@ const Transaksi = () => {
                 <StyledTableCell align="left">Status Pembayaran</StyledTableCell>
                 <StyledTableCell align="left">Metode Pembayaran</StyledTableCell>
                 <StyledTableCell align="left">Status</StyledTableCell>
-                <StyledTableCell style={{ borderRadius: "0 10px 0 0" }} colSpan={2} align="left">Tanggal Pembayaran</StyledTableCell>
-                {/* <StyledTableCell style={{ borderRadius: "0 10px 0 0" }} align="left">&nbsp;</StyledTableCell> */}
+                <StyledTableCell align="left">Tanggal Pembayaran</StyledTableCell>
+                <StyledTableCell style={{ borderRadius: "0 10px 0 0" }} align="left">&nbsp;*&nbsp;</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {transactions?.map((row, index) => (
+              {(rowsPerPage > 0
+                ? transactions?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                : transactions
+              )?.map((row, index) => (
                 <TableRow
                   key={row.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
+
+                  {/* // 1 - 1 + limit */}
                   <TableCell component="th" scope="row">
-                    {index + 1}
+                    {(page * rowsPerPage) + (index + 1)}
                   </TableCell>
                   <TableCell align="left">{row.user_email}</TableCell>
                   <TableCell align="left">{row.product_code}</TableCell>
-                  <TableCell style={{ color: "#396EB0" }} align="left">{row.total_price}</TableCell>
+                  <TableCell style={{ color: "#396EB0" }} align="right">{row.total_price}</TableCell>
                   <TableCell align="center">
-                    <div className={`${success ? "paid" : pending ? "pending" : "cancel"}`}>
+                    <div className={`${row.xendit_status === 'PAID' ? 'success' : 'cancel'}`}>
                       {row.xendit_status}
                     </div>
                   </TableCell>
                   <TableCell align="left">{row.xendit_payment_channel}</TableCell>
                   <TableCell align="center">
-                    <div className={`${success ? "paid" : pending ? "pending" : "cancel"}`}>
+                    <div className={`${row.status === "SUCCESS" ? 'success' : row.status === "PENDING" ? 'pending' : 'cancel'}`}>
                       {row.status}
                     </div>
                   </TableCell>
@@ -134,12 +278,17 @@ const Transaksi = () => {
                     <Image
                       src={require("../../assets/icons/titiktiga.png")}
                       alt="titiktiga"
-                      onClick={handleClick}
+                      onClick={(event) => handleClick(row.id, event)}
                       className='image'
                     />
                   </TableCell>
                 </TableRow>
               ))}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
               <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
@@ -149,7 +298,12 @@ const Transaksi = () => {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem onClick={closeMenu}>Edit</MenuItem>
+                <MenuItem onClick={closeMenu}>
+                  <Iconify
+                    icon={"eva:edit-fill"}
+                    sx={{ mr: 2 }} />
+                  Edit
+                </MenuItem>
               </Menu>
               <Modal
                 size="md"
@@ -168,20 +322,40 @@ const Transaksi = () => {
                 <Modal.Body>
                   <Form>
                     <h6>Status</h6>
-                    <Form.Select style={{ width: "130px" }} aria-label="Default select example">
-                      <option>Pilih Disini</option>
-                      <option value="1">Success</option>
-                      <option value="2">Pending</option>
-                      <option value="3">Cancel</option>
+                    <Form.Select onChange={onChange} name="status" value={data.status} style={{ width: "130px" }} aria-label="Default select example">
+                      <option selected disabled>Pilih Disini</option>
+                      <option value="SUCCESS">Success</option>
+                      <option value="PENDING">Pending</option>
+                      <option value="CANCEL">Cancel</option>
                     </Form.Select>
                   </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button style={{ backgroundColor: "#396EB0", border: "0" }} variant="primary">Simpan</Button>
+                  <Button onClick={handleSubmit} style={{ backgroundColor: "#396EB0", border: "0" }} variant="primary">Simpan</Button>
                   <Button style={{ border: "0" }} variant="danger" onClick={() => setModalShow(false)}>Close</Button>
                 </Modal.Footer>
               </Modal>
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                  colSpan={9}
+                  count={transactions?.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: {
+                      'aria-label': 'rows per page',
+                    },
+                    native: true,
+                  }}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActions}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
       </Container>
