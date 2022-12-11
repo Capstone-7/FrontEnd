@@ -38,7 +38,7 @@ import "./DailyModal";
 import DailyModal from "./DailyModal";
 import Cookies from "js-cookie";
 
-import ProdukBaruModal from "./ProdukBaruModal";
+import BillsModal from "./BillsModal";
 import "../../assets/styles/ProdukBaru.css";
 // ----------------------------------------------------------------------
 
@@ -176,7 +176,7 @@ export default function UserPage() {
   const isNotFound = !filteredUsers.length && !!filterName;
 
   useEffect(() => {
-    AxiosInstance.get("product/by_type/daily", {
+    AxiosInstance.get("product/by_type/bills", {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -217,7 +217,7 @@ export default function UserPage() {
             onFilterName={handleFilterByName}
           />
           <MenuItem className="produkBaruBtn" onClick={handleOpen}>
-            <ProdukBaruModal id={currentID} />
+            <BillsModal id={currentID} />
           </MenuItem>
 
           <TableContainer sx={{ width: 1150, height: 500 }}>

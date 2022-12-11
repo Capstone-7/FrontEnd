@@ -6,6 +6,7 @@ import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
+import swal from "sweetalert";
 
 import AxiosInstance from "../../configs/axios/AxiosInstance";
 

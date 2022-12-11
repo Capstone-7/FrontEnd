@@ -51,7 +51,7 @@ const navConfig = [
   },
   {
     title: "Not found",
-    path: "/404",
+    path: "/admin/404",
     icon: icon("ic_disabled"),
   },
 ];

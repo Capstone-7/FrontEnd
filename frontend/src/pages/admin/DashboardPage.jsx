@@ -38,6 +38,7 @@ export default function DashboardAppPage() {
   const [user, setUser] = useState(0);
   const [product, setProduct] = useState(0);
   const [transaksi, setTransaksi] = useState(0);
+  const [pieChart, setPieChart] = useState(0);
 
   useEffect(() => {
     AxiosInstance.get("user/count", {
@@ -63,7 +64,14 @@ export default function DashboardAppPage() {
     }).then((res) => setProduct(res.data.data));
   }, []);
 
-  // console.log(user)
+  useEffect(() => {
+    AxiosInstance.get("transaction/topbycategory", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }).then((res) => setPieChart(res.data.data));
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -76,23 +84,6 @@ export default function DashboardAppPage() {
         </Typography>
 
         <Grid container spacing={3}>
-          {/* <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="Weekly Sales"
-              total={714000}
-              icon={"ant-design:android-filled"}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="New Users"
-              total={1352831}
-              color="info"
-              icon={"ant-design:apple-filled"}
-            />
-          </Grid> */}
-
           <div className="container dashboardPage">
             <div className="row d-flex flex-row justify-content-between content">
               <h3 className="dataStatistik">
