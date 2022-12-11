@@ -38,7 +38,7 @@ import "./DailyModal";
 import DailyModal from "./DailyModal";
 import Cookies from "js-cookie";
 
-import ProdukBaruModal from "./ProdukBaruModal";
+import EntertainmentModal from "./EntertaimentModal";
 import "../../assets/styles/ProdukBaru.css";
 // ----------------------------------------------------------------------
 
@@ -176,7 +176,7 @@ export default function UserPage() {
   const isNotFound = !filteredUsers.length && !!filterName;
 
   useEffect(() => {
-    AxiosInstance.get("product/by_type/daily", {
+    AxiosInstance.get("product/by_type/entertaiment", {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -207,7 +207,7 @@ export default function UserPage() {
           <Typography variant="h3">Manajemen Produk</Typography>
         </Stack>
         <Typography variant="h4" className="ms-3">
-          Daily
+          Entertainment
         </Typography>
 
         <Card>
@@ -217,7 +217,7 @@ export default function UserPage() {
             onFilterName={handleFilterByName}
           />
           <MenuItem className="produkBaruBtn" onClick={handleOpen}>
-            <ProdukBaruModal id={currentID} />
+            <EntertainmentModal id={currentID} />
           </MenuItem>
 
           <TableContainer sx={{ width: 1150, height: 500 }}>
@@ -259,10 +259,8 @@ export default function UserPage() {
                         />
                       </TableCell>
                       <TableCell id="user-data" align="left"></TableCell>
-                      {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          {/* <Avatar alt={name} src={urlFoto} /> */}
                           <Typography variant="subtitle2" noWrap>
                             {code.toUpperCase()}
                           </Typography>

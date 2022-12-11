@@ -37,7 +37,7 @@ const ProdukBaruModal = ({ id }) => {
     status: "Not Active",
     nominal: "",
     harga: "",
-    type: "daily",
+    type: "entertaiment",
     detail: "Detail Here",
     period: 0,
   });
@@ -158,7 +158,7 @@ const ProdukBaruModal = ({ id }) => {
               <div className="d-flex justify-content-start align-items-center ModalChild">
                 <h3 className="EditModal ms-3">
                   Tambah Produk
-                  <span className="PrimaryModal__Data ms-2">Daily</span>
+                  <span className="PrimaryModal__Data ms-2">Entertainment</span>
                 </h3>
                 <h3 className="mt-3 ms-auto" onClick={handleOpen}>
                   X
@@ -242,9 +242,8 @@ const ProdukBaruModal = ({ id }) => {
                     <option selected disabled>
                       Pilih Disini
                     </option>
-                    <option value="Paket Data">Paket Data</option>
-                    <option value="pulsa">Pulsa</option>
-                    <option value="Top up">Top Up</option>
+                    <option value="Games">Games</option>
+                    <option value="Digital Voucher">Digital Voucher</option>
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
