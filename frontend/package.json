@@ -42,6 +42,8 @@
     "slick-carousel": "^1.8.1",
     "snake-case": "^3.0.4",
     "styled-components": "^5.3.6",
+    "sweetalert": "^2.1.2",
+    "sweetalert2": "^11.6.15",
     "swiper": "^8.4.5",
     "web-vitals": "^2.1.4"
   },

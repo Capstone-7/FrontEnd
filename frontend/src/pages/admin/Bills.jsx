@@ -38,8 +38,9 @@ import "./DailyModal";
 import DailyModal from "./DailyModal";
 import Cookies from "js-cookie";
 
-import ProdukBaruModal from "./ProdukBaruModal";
+import BillsModal from "./BillsModal";
 import "../../assets/styles/ProdukBaru.css";
+import BillsEditModal from "./BillsEditModal";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -113,6 +114,10 @@ export default function UserPage() {
     setOpen(null);
   };
 
+  // const handleMenu = () => {
+  //   setOpen(false)
+  // }
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -176,7 +181,7 @@ export default function UserPage() {
   const isNotFound = !filteredUsers.length && !!filterName;
 
   useEffect(() => {
-    AxiosInstance.get("product/by_type/daily", {
+    AxiosInstance.get("product/by_type/bills", {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -217,7 +222,7 @@ export default function UserPage() {
             onFilterName={handleFilterByName}
           />
           <MenuItem className="produkBaruBtn" onClick={handleOpen}>
-            <ProdukBaruModal id={currentID} />
+            <BillsModal id={currentID} />
           </MenuItem>
 
           <TableContainer sx={{ width: 1150, height: 500 }}>
@@ -341,6 +346,7 @@ export default function UserPage() {
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleCloseMenu}
+        // onClick={handleCloseMenu}
         anchorOrigin={{ vertical: "top", horizontal: "left" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         PaperProps={{
@@ -355,7 +361,7 @@ export default function UserPage() {
           },
         }}
       >
-        <DailyModal id={currentID} />
+        <BillsEditModal id={currentID} />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

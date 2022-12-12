@@ -38,7 +38,7 @@ const ProdukBaruModal = ({ id }) => {
     status: "Not Active",
     nominal: "",
     harga: "",
-    type: "entertaiment",
+    type: "bills",
     detail: "Detail Here",
     period: 0,
   });
@@ -101,36 +101,6 @@ const ProdukBaruModal = ({ id }) => {
     } catch (err) {}
   };
 
-  // const UpdateStatus = (prop) => {
-  //   const {
-  //     code,
-  //     description,
-  //     nominal,
-  //     price,
-  //     type,
-  //     category,
-  //     status,
-  //     icon_rul,
-  //   } = prop;
-  //   AxiosInstance.post(
-  //     `product/${id}`,
-  //     {
-  //       code: code,
-  //       description: description,
-  //       nominal: nominal,
-  //       price: price,
-  //       type: type,
-  //       category: category,
-  //       status: isChecked ? "active" : "not active",
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: "Bearer " + token,
-  //       },
-  //     }
-  //   );
-  // };
-
   return (
     <>
       <div>
@@ -159,7 +129,7 @@ const ProdukBaruModal = ({ id }) => {
               <div className="d-flex justify-content-start align-items-center ModalChild">
                 <h3 className="EditModal ms-3">
                   Tambah Produk
-                  <span className="PrimaryModal__Data ms-2">Entertainment</span>
+                  <span className="PrimaryModal__Data ms-2">Bills</span>
                 </h3>
                 <h3 className="mt-3 ms-auto" onClick={handleOpen}>
                   X
@@ -243,8 +213,11 @@ const ProdukBaruModal = ({ id }) => {
                     <option selected disabled>
                       Pilih Disini
                     </option>
-                    <option value="Games">Games</option>
-                    <option value="Digital Voucher">Digital Voucher</option>
+                    <option value="Token">Token</option>
+                    <option value="Tagihan Air">Tagihan Air</option>
+                    <option value="Internet & Tv">Internet & Tv</option>
+                    <option value="Internet & Tv">Internet & Tv</option>
+                    <option value="Pendidikan">Pendidikan</option>
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
