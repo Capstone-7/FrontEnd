@@ -6,11 +6,15 @@ import DashboardAppPage from "../pages/admin/DashboardPage";
 import Page404 from "../pages/admin/Page404";
 import ProductsPage from "../pages/admin/ProductsPage";
 import UserPage from "../pages/admin/UserPage";
-import Transaksi from '../pages/admin/Transaksi'
-import { Provider } from 'react-redux';
+import Transaksi from "../pages/admin/Transaksi";
+import { Provider } from "react-redux";
 import ProtectedRoute from "./ProtectedRoute";
-import { store } from "../store/Store"
+import { store } from "../store/Store";
 import PrivateRoute from "./PrivateRoute";
+import { ProductLayout } from "../layouts/dashboard";
+import Daily from "../pages/admin/Daily";
+import Bills from "../pages/admin/Bills";
+import Entertainment from "../pages/admin/Entertainment";
 
 const SetUpRouters = () => {
   return (
@@ -26,7 +30,14 @@ const SetUpRouters = () => {
           <Route path="/admin" element={<ProtectedRoute />}>
             <Route index element={<DashboardAppPage />} />
             <Route path="/admin/*" element={<Page404 />} />
-            <Route path="/admin/products" element={<ProductsPage />} />
+            <Route path="/admin/products" element={<ProductLayout />}>
+              <Route path="/admin/products/daily" element={<Daily />} />
+              <Route path="/admin/products/bills" element={<Bills />} />
+              <Route
+                path="/admin/products/entertainment"
+                element={<Entertainment />}
+              />
+            </Route>
             <Route path="/admin/transaksi" element={<Transaksi />} />
             <Route path="/admin/user" element={<UserPage />} />
           </Route>

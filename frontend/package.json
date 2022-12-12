@@ -6,6 +6,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@mui/icons-material": "^5.10.16",
     "@mui/lab": "^5.0.0-alpha.109",
     "@mui/styled-engine-sc": "^5.10.14",
     "@mui/x-data-grid": "^5.17.14",
@@ -20,6 +21,7 @@
     "change-case": "^4.1.2",
     "date-fns": "^2.29.3",
     "js-cookie": "^3.0.1",
+    "material-icons": "^1.13.1",
     "moment": "^2.29.4",
     "numeral": "^2.0.6",
     "random-token": "^0.0.8",
@@ -38,6 +40,7 @@
     "redux": "^4.2.0",
     "simplebar-react": "^2.4.3",
     "slick-carousel": "^1.8.1",
+    "snake-case": "^3.0.4",
     "styled-components": "^5.3.6",
     "swiper": "^8.4.5",
     "web-vitals": "^2.1.4"

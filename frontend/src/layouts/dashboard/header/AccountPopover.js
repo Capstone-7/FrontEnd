@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
+import Cookies from "js-cookie";
 // @mui
 import { alpha } from "@mui/material/styles";
 import {
@@ -12,11 +15,9 @@ import {
   Popover,
 } from "@mui/material";
 // mocks_
-import account from '../../../_mock/account';
-import { Auth } from "../../../utils/Auth"
-import { useNavigate } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
-import { useEffect } from 'react';
+import account from "../../../_mock/account";
+import { Auth } from "../../../utils/Auth";
+import { useSelector, useDispatch } from "react-redux";
 import { getCurrentAdmins } from "../../../store/features/UserSlice";
 
 // ----------------------------------------------------------------------
@@ -39,15 +40,15 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCurrentAdmins())
-  }, [dispatch])
+    dispatch(getCurrentAdmins());
+  }, [dispatch]);
 
   const navigate = useNavigate();
 
-  const admin = useSelector((state) => state?.UserSlice.admin)
+  const admin = useSelector((state) => state?.UserSlice?.admin);
 
   // console.log(admin)
   const [open, setOpen] = useState(null);
@@ -60,10 +61,31 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
+  // const navigate = useNavigate();
+  // const handleLogout = () => {
+  //   Auth.signOut();
+  //   navigate("/admin/login");
+  // };
+
+  // const [token, setToken] = useState(Cookies.get("token"));
+  // const [name, setName] = useState();
+  // const [email, setEmail] = useState();
+
+  // useEffect(() => {
+  //   AxiosInstance.get("user/profile", {
+  //     headers: {
+  //       Authorization: "Bearer " + token,
+  //     },
+  //   }).then((res) => {
+  //     setName(res.data.data.name);
+  //     setEmail(res.data.data.email);
+  //   });
+  // }, []);
+
   const handleLogOut = () => {
-    Auth.signOut()
-    navigate("/admin/login")
-  }
+    Auth.signOut();
+    navigate("/admin/login");
+  };
 
   return (
     <>

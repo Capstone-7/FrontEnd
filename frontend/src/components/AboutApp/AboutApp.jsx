@@ -5,7 +5,7 @@ import styles from '../../assets/styles/AboutApp.module.css'
 const AboutApp = () => {
   return (
     <>
-      <div className="container py-5">
+      <div className="container py-5 pb-5">
         <div className="row mb-5">
           <div className="col-md-6 mt-5 d-flex justify-content-center">
               <p className={styles.Content}><span className={styles.SecondaryContent}>PayOll</span> adalah aplikasi yang dapat mempermudah kamu dalam melakukan transaksi dan pembayaran PPOB secara online. Gaperlu risau bayar tagihan karna terbatas jarak dan waktu, dengan PayOll kamu bisa melakukannya dimana pun dan kapan ajah semau kamu </p>

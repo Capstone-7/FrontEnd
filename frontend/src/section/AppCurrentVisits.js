@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import ReactApexChart from "react-apexcharts";
+import React ,{useState, useEffect}from "react";
 // @mui
 import { useTheme, styled } from "@mui/material/styles";
 import { Card, CardHeader } from "@mui/material";
@@ -71,6 +72,29 @@ export default function AppCurrentVisits({
     },
   });
 
+  const [contryname, setCountryname]= useState([]);
+    const [medal, setMedal]= useState([]);
+
+    useEffect( ()=>{
+     const getdata= async()=>{
+          const countryname=[];
+          const getmedal=[];
+
+        const reqData= await fetch("http://localhost/reactgraphtutorial/medals"); 
+        const resData= await reqData.json();
+        for(let i=0; i<resData.length; i++)
+        {
+            countryname.push(resData[i].country);
+            getmedal.push(parseInt(resData[i].medals));
+        }
+        setCountryname(countryname);
+        setMedal(getmedal);
+     
+
+     }
+     getdata();
+    },[]);
+  
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} />

@@ -23,8 +23,26 @@ const navConfig = [
   },
   {
     title: "Manage Product",
-    path: "/admin/products",
+    // path: "/admin/products",
     icon: icon("ic_cart"),
+    isAccordion: true,
+    paths: [
+      {
+        title: "Daily",
+        path: "/admin/products/daily",
+        icon: icon("ic_cart"),
+      },
+      {
+        title: "Bills",
+        path: "/admin/products/bills",
+        icon: icon("ic_cart"),
+      },
+      {
+        title: "Entertainment",
+        path: "/admin/products/entertainment",
+        icon: icon("ic_cart"),
+      },
+    ],
   },
   {
     title: "Manage Transaksi",
@@ -33,7 +51,7 @@ const navConfig = [
   },
   {
     title: "Not found",
-    path: "/404",
+    path: "/admin/404",
     icon: icon("ic_disabled"),
   },
 ];

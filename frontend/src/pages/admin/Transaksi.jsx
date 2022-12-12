@@ -109,7 +109,7 @@ const Transaksi = () => {
 
   // Pagination
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - transactions?.length) : 0;
@@ -180,11 +180,10 @@ const Transaksi = () => {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
-        closeOnClick: false,
+        closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        transition: { Slide },
-        progress: "0..1",
+        progress: undefined,
         theme: "light",
       });
     } else {
@@ -204,7 +203,6 @@ const Transaksi = () => {
         rtl={false}
         pauseOnFocusLoss
         draggable
-        transition={Slide}
         pauseOnHover
         theme="light"
       />

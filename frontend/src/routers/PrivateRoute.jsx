@@ -1,6 +1,6 @@
 import { Auth } from "../utils/Auth"
 import { Outlet, Navigate } from "react-router-dom"
-import LoginPage from "../pages/LoginPage"
+import LoginPage from '../pages/LoginPage'
 
 export default function PrivateRoute() {
     const { token } = Auth.isAuthorization()
