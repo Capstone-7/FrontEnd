@@ -25,6 +25,13 @@ import {
   TableContainer,
   TablePagination,
 } from "@mui/material";
+import PropTypes from 'prop-types';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import { useTheme } from '@mui/material/styles';
+import TableFooter from '@mui/material/TableFooter';
 // components
 import Label from "../../components/Admin-Component/label/Label";
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
@@ -37,17 +44,18 @@ import AxiosInstance from "../../configs/axios/AxiosInstance";
 import "./ModalComponent";
 import ModalComponent from "./ModalComponent";
 import Cookies from "js-cookie";
+import styles from "../../assets/styles/UserPage.module.css"
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "number", label: "#", alignRight: false },
+  { id: "number", headerClassName: 'super-app-theme--header', label: "#", alignRight: false },
   // { id: "idPengguna", label: "ID PENGGUNA", alignRight: false },
-  { id: "name", label: "Name", alignRight: false },
-  { id: "email", label: "Email", alignRight: false },
-  { id: "role", label: "Tanggal Registrasi", alignRight: false },
-  { id: "status", label: "Status", alignRight: false },
-  { id: "status", label: "", alignRight: false },
+  { id: "name", headerClassName: 'super-app-theme--header', label: "Nama", alignRight: false },
+  { id: "email", headerClassName: 'super-app-theme--header', label: "Email", alignRight: false },
+  { id: "role", headerClassName: 'super-app-theme--header', label: "Tanggal Registrasi", alignRight: false },
+  { id: "status", headerClassName: 'super-app-theme--header', label: "Status", alignRight: false },
+  { id: "kosong", headerClassName: 'super-app-theme--header', label: "", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -93,14 +101,79 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+function TablePaginationActions(props) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
+
+  const handleFirstPageButtonClick = (event) => {
+    onPageChange(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+    onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+    onPageChange(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+}
+
 export default function UserPage() {
   const [open, setOpen] = useState(false);
-  const [page, setPage] = useState(0);
+
+  // custom pagination actions
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const [token, setToken] = useState(Cookies.get("token"));
   const [user, setUser] = useState([]);
   const [currentID, setCurrentID] = useState("");
@@ -151,28 +224,29 @@ export default function UserPage() {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setPage(0);
-    setRowsPerPage(parseInt(event.target.value, 10));
-  };
-
   const handleFilterByName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
   };
-
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - user.length) : 0;
 
   const filteredUsers = applySortFilter(
     user,
     getComparator(order, orderBy),
     filterName
   );
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredUsers.length) : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const handleDelete = (e) => {
     AxiosInstance.delete(`user/${currentID}`, {
@@ -187,7 +261,7 @@ export default function UserPage() {
     setUser(updateUser);
     setOpen(false);
   };
-  console.log(currentID);
+  // console.log(currentID);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -209,7 +283,7 @@ export default function UserPage() {
 
       <Container
         sx={{
-          width: 1300,
+          width: 960,
         }}
       >
         <Stack
@@ -218,21 +292,32 @@ export default function UserPage() {
           justifyContent="space-between"
           mb={5}
         >
-          <Typography variant="h4" gutterBottom>
-            Manage User
+          <Typography variant="h3" gutterBottom>
+            Manajemen Pengguna
           </Typography>
         </Stack>
 
         <Card>
+          <Typography sx={{ padding: "20px 0px 0px 25px" }} variant="h5" gutterBottom>
+            Data Pengguna
+          </Typography>
           <UserListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
 
-          <TableContainer sx={{ width: 1150, height: 500 }}>
+          <TableContainer sx={{
+            width: 900,
+            height: 520,
+          }} >
             <Table>
               <UserListHead
+                sx={{
+                  '& .super-app-theme--header': {
+                    background: '#396EB0 !important',
+                  },
+                }}
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
@@ -241,8 +326,16 @@ export default function UserPage() {
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={handleSelectAllClick}
               />
-              <TableBody id="body-table">
-                {filteredUsers.map((row, index) => {
+              <TableBody id="body-table" sx={{
+                '& .super-app-theme--header': {
+                  background: '#396EB0',
+                },
+              }}>
+                {/* {filteredUsers.map((row, index) */}
+                {(rowsPerPage > 0
+                  ? filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : filteredUsers
+                )?.map((row, index) => {
                   const { name, _id, created, status, email } = row;
                   const selectedUser = selected.indexOf(name) !== -1;
                   return (
@@ -260,7 +353,7 @@ export default function UserPage() {
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">
-                        {index + 1}
+                        {(page * rowsPerPage) + (index + 1)}
                       </TableCell>
                       {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" width="70">
@@ -375,7 +468,7 @@ export default function UserPage() {
                     })} */}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={5} />
+                    <TableCell colSpan={6} />
                   </TableRow>
                 )}
               </TableBody>
@@ -403,19 +496,28 @@ export default function UserPage() {
                   </TableRow>
                 </TableBody>
               )}
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={7}
+                    count={filteredUsers.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        'aria-label': 'rows per page',
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
-
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={user.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            sx={{ float: "left" }}
-          />
         </Card>
       </Container>
 

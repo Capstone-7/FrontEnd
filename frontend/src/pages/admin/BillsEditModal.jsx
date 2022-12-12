@@ -121,7 +121,7 @@ const BillsEditModal = ({ id }) => {
                             <div className="d-flex justify-content-start align-items-center ModalChild">
                                 <h3 className="EditModal ms-3">
                                     Ubah Data
-                                    <span className="PrimaryModal__Data ms-2">Daily</span>
+                                    <span className="PrimaryModal__Data ms-2">Bills</span>
                                 </h3>
                                 <h3 className="mt-3 ms-auto" onClick={handleOpen}>
                                     X
@@ -170,11 +170,9 @@ const BillsEditModal = ({ id }) => {
                                         value={product?.kategori}
                                     // onSelect={product?.category}
                                     >
-                                        <option disabled value="">Pilih Disini</option>
-                                        <option value="Token">Token</option>
+                                        <option value="token">Token</option>
                                         <option value="Tagihan Air">Tagihan Air</option>
-                                        <option value="Internet & Tv">Internet & Tv</option>
-                                        <option value="Internet & Tv">Internet & Tv</option>
+                                        {/* <option value="Internet & Tv">Internet & Tv</option> */}
                                         <option value="Pendidikan">Pendidikan</option>
                                     </Form.Select>
                                 </Form.Group>

@@ -288,6 +288,7 @@ const Transaksi = () => {
                 </TableRow>
               )}
               <Menu
+                style={{ marginRight: "20px" }}
                 id="basic-menu"
                 anchorEl={anchorEl}
                 open={open}
@@ -296,7 +297,9 @@ const Transaksi = () => {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem onClick={closeMenu}>
+                <MenuItem
+
+                  onClick={closeMenu}>
                   <Iconify
                     icon={"eva:edit-fill"}
                     sx={{ mr: 2 }} />

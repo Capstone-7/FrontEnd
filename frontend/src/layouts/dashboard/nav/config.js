@@ -12,17 +12,17 @@ const icon = (name) => (
 
 const navConfig = [
   {
-    title: "dashboard",
+    title: "Dashboard",
     path: "/admin",
     icon: icon("ic_analytics"),
   },
   {
-    title: "Manage User",
+    title: "Pengguna",
     path: "/admin/user",
     icon: icon("ic_user"),
   },
   {
-    title: "Manage Product",
+    title: "Produk",
     // path: "/admin/products",
     icon: icon("ic_cart"),
     isAccordion: true,
@@ -45,7 +45,7 @@ const navConfig = [
     ],
   },
   {
-    title: "Manage Transaksi",
+    title: "Transaksi",
     path: "/admin/transaksi",
     icon: icon("ic_cart"),
   },
