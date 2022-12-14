@@ -308,8 +308,8 @@ export default function Daily() {
           </Typography>
         </Stack>
 
-        <Card>
-          <Typography variant="h4" className="ms-3">
+        <Card className={styles.box}>
+          <Typography sx={{ padding: "20px 0px 0px 25px" }} variant="h5" gutterBottom>
             Daily
           </Typography>
           <UserListToolbar
