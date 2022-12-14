@@ -1,0 +1,25 @@
+.tablehead {
+  background-color: #396eb0 !important;
+}
+
+.container {
+  width: 960;
+}
+
+.tableContainer {
+  width: 900;
+  height: 520;
+}
+
+@media only screen and (max-width: 1920px) {
+  .container {
+    width: 1700;
+  }
+}
+
+@media only screen and (max-width: 1920px) {
+  .tableContainer {
+    width: 1700;
+    height: 800;
+  }
+}

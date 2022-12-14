@@ -56,16 +56,18 @@ const TransactionAPIPayoll = {
     //         throw new Error(message);
     //     }
     // },
-    // async changeTransactionStatus() {
-    //     try {
-    //         // ${id}
-    //         const response = await AxiosInstance.put(`/transaction/`);
-    //         return response;
-    //     } catch (err) {
-    //         const { message } = err.response.data;
-    //         throw new Error(message);
-    //     }
-    // },
+    async changeTransactionStatus(data) {
+        try {
+            // ${id}
+            const response = await AxiosInstance.put(`/transaction/${data.id}`, {
+                status: data.status
+            });
+            return response;
+        } catch (err) {
+            const { message } = err.response.data;
+            throw new Error(message);
+        }
+    },
 };
 
 export default TransactionAPIPayoll;

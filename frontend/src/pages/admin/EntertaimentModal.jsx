@@ -98,7 +98,7 @@ const ProdukBaruModal = ({ id }) => {
         period: 0,
       });
       return response;
-    } catch (err) {}
+    } catch (err) { }
   };
 
   // const UpdateStatus = (prop) => {
@@ -244,7 +244,7 @@ const ProdukBaruModal = ({ id }) => {
                       Pilih Disini
                     </option>
                     <option value="Games">Games</option>
-                    <option value="Digital Voucher">Digital Voucher</option>
+                    {/* <option value="Digital Voucher">Digital Voucher</option> */}
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">

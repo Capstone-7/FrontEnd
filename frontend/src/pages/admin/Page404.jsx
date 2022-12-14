@@ -59,7 +59,7 @@ export default function Page404() {
           />
 
           <Button
-            to="/"
+            to="/admin"
             size="large"
             variant="contained"
             component={RouterLink}

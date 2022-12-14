@@ -26,6 +26,12 @@ export const getAllTransactions = createAsyncThunk("PayOll/getAllTransaction", a
     }
 })
 
+export const changesTransactionStatus = createAsyncThunk("PayOll/changeTransactionStatus", async (data) => {
+    // console.log(data)
+    const res = await TransactionAPIPayoll.changeTransactionStatus(data)
+    return res.data.data
+    // console.log(res)
+})
 // export const getTotalTransactions = createAsyncThunk("PayOll/getTotalTransaction", async () => {
 //     const res = await TransactionAPIPayoll.getTotalTransaction()
 // })
@@ -38,9 +44,6 @@ export const getAllTransactions = createAsyncThunk("PayOll/getAllTransaction", a
 //     const res = await TransactionAPIPayoll.submitTransaction()
 // })
 
-// export const changesTransactionStatus = createAsyncThunk("PayOll/changeTransactionStatus", async () => {
-//     const res = await TransactionAPIPayoll.changeTransactionStatus()
-// })
 
 export const TransactionSlice = createSlice({
     name: "transaction",
@@ -58,6 +61,9 @@ export const TransactionSlice = createSlice({
                 state.status = "success"
                 state.data = action.payload
             })
+            .addCase(changesTransactionStatus.fulfilled, (state, action) => {
+                state.status = "success"
+            })
         // .addCase(getTotalTransactions.fulfilled, (state, action) => {
         //     state.status = "success"
         // })
@@ -65,9 +71,6 @@ export const TransactionSlice = createSlice({
         //     state.status = "success"
         // })
         // .addCase(submitTransactions.fulfilled, (state, action) => {
-        //     state.status = "success"
-        // })
-        // .addCase(changesTransactionStatus.fulfilled, (state, action) => {
         //     state.status = "success"
         // })
     }

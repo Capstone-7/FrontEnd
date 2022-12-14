@@ -98,7 +98,7 @@ const ProdukBaruModal = ({ id }) => {
         period: 0,
       });
       return response;
-    } catch (err) {}
+    } catch (err) { }
   };
 
   return (
@@ -177,7 +177,7 @@ const ProdukBaruModal = ({ id }) => {
                   <Form.Check
                     type="switch"
                     id="custom-switch"
-                    label={"status"}
+                    label={isChecked ? "Active" : "Not Active"}
                     checked={isChecked}
                     value={status}
                     onClick={() => setChecked(!isChecked)}
@@ -213,10 +213,9 @@ const ProdukBaruModal = ({ id }) => {
                     <option selected disabled>
                       Pilih Disini
                     </option>
-                    <option value="Token">Token</option>
+                    <option value="token">Token</option>
                     <option value="Tagihan Air">Tagihan Air</option>
-                    <option value="Internet & Tv">Internet & Tv</option>
-                    <option value="Internet & Tv">Internet & Tv</option>
+                    {/* <option value="Internet & Tv">Internet & Tv</option> */}
                     <option value="Pendidikan">Pendidikan</option>
                   </Form.Select>
                 </Form.Group>

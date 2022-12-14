@@ -21,23 +21,25 @@ import "./DashboardPage.css";
 import ProductDashboard from "../../assets/images/Product_dashboard.png";
 import TransaksiDashboard from "../../assets/images/Transaction_dashboard.png";
 import UserDashboard from "../../assets/images/User_dashboard.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCurrentAdmins } from "../../store/features/UserSlice";
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+  const [token, setToken] = useState(Cookies.get("token"));
+  const [user, setUser] = useState(0);
+  const [product, setProduct] = useState(0);
+  const [transaksi, setTransaksi] = useState(0);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getCurrentAdmins());
   }, []);
 
-  const [token, setToken] = useState(Cookies.get("token"));
-  const [user, setUser] = useState(0);
-  const [product, setProduct] = useState(0);
-  const [transaksi, setTransaksi] = useState(0);
+  const admin = useSelector((state) => state?.UserSlice?.admin);
   const [pieChart, setPieChart] = useState(0);
 
   useEffect(() => {
@@ -80,7 +82,7 @@ export default function DashboardAppPage() {
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Halo, Selamat Datang Admin
+          Halo, Selamat Datang {admin?.data?.name}
         </Typography>
 
         <Grid container spacing={3}>

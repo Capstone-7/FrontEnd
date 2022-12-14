@@ -40,6 +40,7 @@ import Cookies from "js-cookie";
 
 import BillsModal from "./BillsModal";
 import "../../assets/styles/ProdukBaru.css";
+import BillsEditModal from "./BillsEditModal";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -112,6 +113,10 @@ export default function UserPage() {
   const handleCloseMenu = () => {
     setOpen(null);
   };
+
+  // const handleMenu = () => {
+  //   setOpen(false)
+  // }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -296,7 +301,7 @@ export default function UserPage() {
                           color="inherit"
                           onClick={(e) => handleOpenMenu(e, _id)}
                         >
-                          <Iconify icon={"eva:more-vertical-fill"} />
+                          <Iconify icon={"eva:more-horizontal-fill"} />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -341,6 +346,7 @@ export default function UserPage() {
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleCloseMenu}
+        // onClick={handleCloseMenu}
         anchorOrigin={{ vertical: "top", horizontal: "left" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         PaperProps={{
@@ -355,7 +361,7 @@ export default function UserPage() {
           },
         }}
       >
-        <DailyModal id={currentID} />
+        <BillsEditModal id={currentID} />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

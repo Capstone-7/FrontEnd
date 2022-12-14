@@ -27,8 +27,18 @@ const style = {
 
 const DailyModal = ({ id }) => {
   const [open, setOpen] = React.useState(false);
+  // const [anchorEl, setAnchorEl] = React.useState(null);
   const [isChecked, setChecked] = useState();
-  const [product, setproduct] = useState({});
+  const [product, setproduct] = useState({
+    gambar: "",
+    kodeProduk: "",
+    deskripsi: "",
+    status: "Not Active",
+    nominals: "",
+    kategori: "",
+    details: "New Details",
+    harga: "",
+  });
 
   const token = Cookies.get("token");
 
@@ -44,38 +54,42 @@ const DailyModal = ({ id }) => {
     });
   }, []);
 
-  useEffect(() => {
-    setChecked(product.status === "verified" ? true : false);
-  }, [product]);
+  const handleChangeFormData = (e) => {
+    setproduct({
+      ...product,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  const UpdateStatus = (prop) => {
-    const {
-      code,
-      description,
-      nominal,
-      price,
-      type,
-      category,
-      status,
-      icon_rul,
-    } = prop;
-    AxiosInstance.put(
-      `product/${id}`,
-      {
-        code: code,
-        description: description,
-        nominal: nominal,
-        price: price,
-        type: type,
-        category: category,
-        status: isChecked ? "active" : "not active",
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
+  const UpdateStatus = async (data, e) => {
+    e.preventDefault();
+    try {
+      const response = await AxiosInstance.put(`/product/${data}`, {
+        icon_url: product.gambar,
+        code: product.kodeProduk,
+        description: product.deskripsi,
+        status: product.status,
+        nominal: product.nominals,
+        category: product.kategori,
+        type: product.type,
+        details: product.details,
+        active_period: product.period,
+        price: Number(product.harga),
+      });
+      setproduct({
+        gambar: "",
+        kodeProduk: "",
+        deskripsi: "",
+        status: "Not Active",
+        nominals: "",
+        kategori: "",
+        details: "New",
+        harga: "",
+      });
+      setOpen(false)
+      // setAnchorEl(null);
+      return response;
+    } catch (err) { }
   };
 
   return (
@@ -112,53 +126,59 @@ const DailyModal = ({ id }) => {
                 <h3 className="mt-3 ms-auto" onClick={handleOpen}>
                   X
                 </h3>
-                {/* <h3 onClick={() => console.log(user.status)}>Test</h3> */}
               </div>
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 1 }}>
               <Form>
                 <Form.Group className="mb-1" controlId="formBasicEmail">
                   <Form.Label>Gambar</Form.Label>
-                  <Form.Control type="text" placeholder="Masukan Tautan" />
+                  <Form.Control onChange={handleChangeFormData} name="gambar" value={product?.gambar} type="text" placeholder={product?.icon_url} />
                 </Form.Group>
 
                 <Form.Group className="mb-1" controlId="formBasicPassword">
                   <Form.Label>Kode Produk</Form.Label>
-                  <Form.Control type="text" placeholder="TELKOMP5000" />
+                  <Form.Control onChange={handleChangeFormData} name="kodeProduk" value={product?.kodeProduk} type="text" placeholder={product?.code} />
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
                   <Form.Label>Deskripsi</Form.Label>
-                  <Form.Control type="text" placeholder="Telkomsel" />
+                  <Form.Control onChange={handleChangeFormData} name="deskripsi" value={product?.deskripsi} type="text" placeholder={product?.description} />
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicEmail">
                   <Form.Label>Status</Form.Label>
                   <Form.Check
+                    onChange={handleChangeFormData}
+                    name="status"
                     type="switch"
                     id="custom-switch"
                     label={isChecked ? "Active" : "Not Active"}
+                    value={isChecked ? "Not Active" : "Active"}
                     checked={isChecked}
                     onClick={() => setChecked(!isChecked)}
                   />
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicPassword">
                   <Form.Label>Nominal</Form.Label>
-                  <Form.Control type="text" placeholder="5000" />
+                  <Form.Control onChange={handleChangeFormData} name="nominals" value={product?.nominals} type="text" placeholder={product?.nominal} />
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicPassword">
-                  <Form.Label>Deskripsi</Form.Label>
+                  <Form.Label>Kategori</Form.Label>
                   <Form.Select
+                    onChange={handleChangeFormData}
+                    name="kategori"
                     style={{ width: "130px" }}
                     aria-label="Default select example"
+                    value={product?.kategori}
+                  // onSelect={product?.category}
                   >
-                    <option>Pilih Disini</option>
-                    <option value="1">Success</option>
-                    <option value="2">Pending</option>
-                    <option value="3">Cancel</option>
+                    <option disabled value="">Pilih Disini</option>
+                    <option value="pulsa">Pulsa</option>
+                    <option value="Paket Data">Paket Data</option>
+                    <option value="voucher">Voucher</option>
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
                   <Form.Label>Harga (Rp)</Form.Label>
-                  <Form.Control type="text" placeholder="5000" />
+                  <Form.Control onChange={handleChangeFormData} name="harga" value={product?.harga} type="text" placeholder={product?.price} />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
                   <button type="button" class="btn TombolReset">
@@ -167,7 +187,7 @@ const DailyModal = ({ id }) => {
                   <button
                     type="button"
                     class="btn TombolSimpan ms-3"
-                    onClick={() => UpdateStatus(product)}
+                    onClick={(e) => UpdateStatus(id, e)}
                   >
                     Simpan
                   </button>

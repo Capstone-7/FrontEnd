@@ -98,7 +98,7 @@
   cursor: pointer;
 }
 
-.paid {
+.success {
   color: #42ad3a;
   border-radius: 50px;
   border: 1px solid #c4e6c2;

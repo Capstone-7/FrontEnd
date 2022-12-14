@@ -105,6 +105,7 @@ export default function UserPage() {
   const limiter = 50;
 
   const handleOpenMenu = (event, id) => {
+    // console.log(id)
     setOpen(event.currentTarget);
     setCurrentID(id);
   };
@@ -181,6 +182,7 @@ export default function UserPage() {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
+      // console.log(res)
       setUser(res?.data?.data);
     });
   }, []);
@@ -259,10 +261,8 @@ export default function UserPage() {
                         />
                       </TableCell>
                       <TableCell id="user-data" align="left"></TableCell>
-                      {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          {/* <Avatar alt={name} src={urlFoto} /> */}
                           <Typography variant="subtitle2" noWrap>
                             {code.toUpperCase()}
                           </Typography>
@@ -291,14 +291,16 @@ export default function UserPage() {
                       </TableCell>
                       <TableCell align="left">{nominal}</TableCell>
                       <TableCell align="left">{category}</TableCell>
-                      <TableCell align="left">{price}</TableCell>
+                      <TableCell align="left">
+                        {price.toLocaleString(["id"])}
+                      </TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
                           size="large"
                           color="inherit"
                           onClick={(e) => handleOpenMenu(e, _id)}
                         >
-                          <Iconify icon={"eva:more-vertical-fill"} />
+                          <Iconify icon={"eva:more-horizontal-fill"} />
                         </IconButton>
                       </TableCell>
                     </TableRow>

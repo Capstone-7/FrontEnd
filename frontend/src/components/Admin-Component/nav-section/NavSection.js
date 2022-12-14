@@ -53,11 +53,11 @@ function NavItem({ item }) {
               "&:hover": {
                 color: "text.primary",
               },
-              "&.active": {
-                color: "text.primary",
-                bgcolor: "action.selected",
-                fontWeight: "fontWeightBold",
-              },
+              // "&.active": {
+              //   color: "text.primary",
+              //   bgcolor: "action.selected",
+              //   fontWeight: "fontWeightBold",
+              // },
             }}
           >
             <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>

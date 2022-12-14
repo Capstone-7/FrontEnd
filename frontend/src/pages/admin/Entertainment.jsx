@@ -40,6 +40,7 @@ import Cookies from "js-cookie";
 
 import EntertainmentModal from "./EntertaimentModal";
 import "../../assets/styles/ProdukBaru.css";
+import EntertainmentEditModal from "./EntertainmentEditModal";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -296,7 +297,7 @@ export default function UserPage() {
                           color="inherit"
                           onClick={(e) => handleOpenMenu(e, _id)}
                         >
-                          <Iconify icon={"eva:more-vertical-fill"} />
+                          <Iconify icon={"eva:more-horizontal-fill"} />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -355,7 +356,7 @@ export default function UserPage() {
           },
         }}
       >
-        <DailyModal id={currentID} />
+        <EntertainmentEditModal id={currentID} />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

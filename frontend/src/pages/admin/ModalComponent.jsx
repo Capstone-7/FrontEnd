@@ -80,8 +80,8 @@ const ModalComponent = ({ id }) => {
         >
           <Box
             sx={{
-              width: 851,
-              height: 550,
+              width: 600,
+              height: 300,
             }}
             className="boxModal"
           >
