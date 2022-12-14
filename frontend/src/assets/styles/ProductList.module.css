@@ -43,6 +43,13 @@
     border-radius: 20px;
 }
 
+@media screen and (max-width: 750px) {
+    .dailystyle {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+}
+
 .dailystyle h2,
 .billsstyle h2 {
     font-style: normal;

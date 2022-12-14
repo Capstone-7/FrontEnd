@@ -6,10 +6,10 @@ import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
-
+// import styles from "../../assets/styles/ProductsModal.module.css"
 import AxiosInstance from "../../configs/axios/AxiosInstance";
 
-import "./modalUser.css";
+import "../../assets/styles/ProductsModal.css";
 
 import Cookies from "js-cookie";
 
@@ -25,15 +25,15 @@ const style = {
   p: 4,
 };
 
-const DailyModal = ({ id, setUpdate, update }) => {
-  const [open, setOpen] = React.useState(false);
+const DailyModal = ({ id, setUpdate, update, setOpen }) => {
+  const [opens, setOpens] = React.useState(false);
   // const [anchorEl, setAnchorEl] = React.useState(null);
   const [isChecked, setChecked] = useState();
   const [product, setproduct] = useState({});
 
   const token = Cookies.get("token");
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => setOpens(!opens);
 
   useEffect(() => {
     AxiosInstance.get(`product/${id}`, {
@@ -79,16 +79,12 @@ const DailyModal = ({ id, setUpdate, update }) => {
           Edit
         </MenuItem>
         <Modal
-          open={open}
+          open={opens}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           className="modalUser"
         >
           <Box
-            sx={{
-              width: 851,
-              height: 700,
-            }}
             className="boxModal"
           >
             <Typography

@@ -88,7 +88,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserPage() {
+export default function Entertainment() {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");

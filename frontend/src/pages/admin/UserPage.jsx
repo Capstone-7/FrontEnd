@@ -292,14 +292,14 @@ export default function UserPage() {
           direction="row"
           alignItems="center"
           justifyContent="space-between"
-          mb={5}
+          mb={3}
         >
           <Typography variant="h3" gutterBottom>
             Manajemen Pengguna
           </Typography>
         </Stack>
 
-        <Card>
+        <Card className={styles.box}>
           <Typography sx={{ padding: "20px 0px 0px 25px" }} variant="h5" gutterBottom>
             Data Pengguna
           </Typography>
@@ -360,7 +360,7 @@ export default function UserPage() {
                       <TableCell align="left" width="100">
                         {email}
                       </TableCell>
-                      <TableCell align="left" width="50">
+                      <TableCell align="left" style={{ color: "#396EB0" }} width="50">
                         {new Date(created).toLocaleDateString()}
                       </TableCell>
                       <TableCell align="left" width="50">
@@ -386,7 +386,7 @@ export default function UserPage() {
                 })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
+                    <TableCell colSpan={9} />
                   </TableRow>
                 )}
               </TableBody>
@@ -418,7 +418,7 @@ export default function UserPage() {
                 <TableRow>
                   <TablePagination
                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                    colSpan={7}
+                    colSpan={9}
                     count={filteredUsers.length}
                     rowsPerPage={rowsPerPage}
                     page={page}

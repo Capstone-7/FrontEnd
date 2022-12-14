@@ -55,7 +55,7 @@ import styles from "../../assets/styles/Products.module.css"
 
 const TABLE_HEAD = [
   { id: "number", label: "#", alignRight: false },
-  { id: "name", label: "Kode Produk", alignRight: false },
+  { id: "code", label: "Kode Produk", alignRight: false },
   { id: "role", label: "Deskripsi", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
   { id: "nominal", label: "Nominal", alignRight: false },
@@ -67,7 +67,7 @@ const TABLE_HEAD = [
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (orderBy === "name") {
+  if (orderBy === "code") {
     if (b[orderBy].toLowerCase() < a[orderBy].toLowerCase()) {
       return -1;
     }
@@ -168,17 +168,22 @@ function TablePaginationActions(props) {
   );
 }
 
-export default function UserPage() {
+export default function Daily() {
   const [open, setOpen] = useState(false);
+
+  // pagination
   const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const [token, setToken] = useState(Cookies.get("token"));
   const [currentID, setCurrentID] = useState("");
-  const [product, setProduct] = useState([]);
+
+  const [products, setProducts] = useState([]);
 
   const [update, setUpdate] = useState(false);
 
@@ -201,7 +206,7 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = product.map((n) => n.name);
+      const newSelecteds = products.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -232,7 +237,7 @@ export default function UserPage() {
   };
 
   const filteredProducts = applySortFilter(
-    product,
+    products,
     getComparator(order, orderBy),
     filterName
   );
@@ -259,12 +264,12 @@ export default function UserPage() {
     AxiosInstance.delete(`product/${currentID}`, {
       headers: { Authorization: `Bearer ` + token },
     }).then((res) => res);
-    const productIndex = product.findIndex((usr) => usr._id === currentID);
+    const productIndex = products.findIndex((usr) => usr._id === currentID);
     const updateProduct = [
-      ...product.slice(0, productIndex),
-      ...product.slice(productIndex + 1),
+      ...products.slice(0, productIndex),
+      ...products.slice(productIndex + 1),
     ];
-    setProduct(updateProduct);
+    setProducts(updateProduct);
     setOpen(false);
   };
 
@@ -275,12 +280,11 @@ export default function UserPage() {
       },
     }).then((res) => {
       console.log(res)
-      setProduct(res?.data?.data);
-      console.log(product)
+      setProducts(res?.data?.data);
     });
-  }, []);
+  }, [update]);
 
-  // console.log(product)
+  console.log(products)
 
   const handleOpen = () => setOpen(!true);
 
@@ -315,16 +319,16 @@ export default function UserPage() {
           />
 
           <MenuItem className="produkBaruBtn" onClick={handleOpen}>
-            <ProdukBaruModal id={currentID} />
+            <ProdukBaruModal id={currentID} setUpdate={setUpdate} update={update} />
           </MenuItem>
-
+          {/*  */}
           <TableContainer className={styles.tableContainer}>
             <Table className={styles.evenodd}>
               <UserListHead
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={product.length}
+                rowCount={products.length}
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={handleSelectAllClick}
@@ -392,9 +396,9 @@ export default function UserPage() {
                           {status}
                         </Label>
                       </TableCell>
-                      <TableCell align="left">{nominal}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="left">{nominal}</TableCell>
                       <TableCell align="left">{category}</TableCell>
-                      <TableCell align="left">{price.toLocaleString(['id'])}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="right">{price.toLocaleString(['id'])}</TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
                           size="large"
@@ -409,7 +413,7 @@ export default function UserPage() {
                 })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
+                    <TableCell colSpan={9} />
                   </TableRow>
                 )}
               </TableBody>
@@ -441,7 +445,7 @@ export default function UserPage() {
                 <TableRow>
                   <TablePagination
                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                    colSpan={7}
+                    colSpan={9}
                     count={filteredProducts.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
@@ -480,7 +484,7 @@ export default function UserPage() {
           },
         }}
       >
-        <DailyModal id={currentID} setUpdate={setUpdate} update={update} />
+        <DailyModal id={currentID} setUpdate={setUpdate} update={update} setOpen={setOpen} />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

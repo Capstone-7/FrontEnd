@@ -29,7 +29,7 @@ const Service = () => {
                 </Row>
                 <Stack style={{ zIndex: "1" }}>
                     <Row className={styles.rowonecard}>
-                        <Col lg={3} sm={4}>
+                        <Col lg={3} sm={5} className={styles.toMid}>
                             <Card className={styles.card}>
                                 <Card.Img variant="top" src={require("../../assets/icons/pengamanan.png")}
                                     style={{
@@ -45,7 +45,7 @@ const Service = () => {
                                 </Card.Body>
                             </Card>
                         </Col>
-                        <Col lg={3} sm={4}>
+                        <Col lg={3} sm={5} className={styles.toMid}>
                             <Card className={styles.card}>
                                 <Card.Img variant="top" src={require("../../assets/icons/pasdikantong.png")} style={{
                                     width: "35%",
@@ -59,7 +59,7 @@ const Service = () => {
                                 </Card.Body>
                             </Card>
                         </Col>
-                        <Col lg={3} sm={4}>
+                        <Col lg={3} sm={5} className={styles.toMid}>
                             <Card className={styles.card}>
                                 <Card.Img variant="top" src={require("../../assets/icons/easypeasy.png")} style={{
                                     width: "35%",
@@ -76,7 +76,7 @@ const Service = () => {
                     </Row>
                 </Stack>
                 <Row className={styles.rowtwocard}>
-                    <Col lg={3} sm={4}>
+                    <Col lg={3} sm={5} className={styles.toMid}>
                         <Card className={styles.card}>
                             <Card.Img variant="top" src={require("../../assets/icons/antiadmin.png")} style={{
                                 width: "35%",
@@ -90,7 +90,7 @@ const Service = () => {
                             </Card.Body>
                         </Card>
                     </Col>
-                    <Col lg={3} sm={4}>
+                    <Col lg={3} sm={5} className={styles.toMid}>
                         <Card className={styles.card}>
                             <Card.Img variant="top" src={require("../../assets/icons/selfreward.png")} style={{
                                 width: "35%",

@@ -25,7 +25,7 @@ const style = {
   p: 4,
 };
 
-const ProdukBaruModal = ({ id }) => {
+const ProdukBaruModal = ({ id, setUpdate, update }) => {
   const [open, setOpen] = React.useState(false);
   const [isChecked, setChecked] = useState();
   const [product, setproduct] = useState({});
@@ -96,6 +96,7 @@ const ProdukBaruModal = ({ id }) => {
         detail: "Detail Here",
         period: 0,
       });
+      setUpdate(!update)
       return response;
     } catch (err) { }
   };
@@ -206,7 +207,7 @@ const ProdukBaruModal = ({ id }) => {
                   <Form.Check
                     type="switch"
                     id="custom-switch"
-                    label={"status"}
+                    label={isChecked ? "Active" : "Not Active"}
                     checked={isChecked}
                     value={status}
                     onClick={() => setChecked(!isChecked)}
