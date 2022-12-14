@@ -25,20 +25,11 @@ const style = {
   p: 4,
 };
 
-const DailyModal = ({ id }) => {
+const DailyModal = ({ id, setUpdate, update }) => {
   const [open, setOpen] = React.useState(false);
   // const [anchorEl, setAnchorEl] = React.useState(null);
   const [isChecked, setChecked] = useState();
-  const [product, setproduct] = useState({
-    gambar: "",
-    kodeProduk: "",
-    deskripsi: "",
-    status: "Not Active",
-    nominals: "",
-    kategori: "",
-    details: "New Details",
-    harga: "",
-  });
+  const [product, setproduct] = useState({});
 
   const token = Cookies.get("token");
 
@@ -51,6 +42,7 @@ const DailyModal = ({ id }) => {
       },
     }).then((res) => {
       setproduct(res.data.data);
+      setChecked(res.data.data.status === 'Active' ? true : false)
     });
   }, []);
 
@@ -61,31 +53,18 @@ const DailyModal = ({ id }) => {
     });
   };
 
+  const handleChangePriceData = (e) => {
+    setproduct({
+      ...product,
+      [e.target.name]: Number(e.target.value),
+    });
+  };
+
   const UpdateStatus = async (data, e) => {
     e.preventDefault();
     try {
-      const response = await AxiosInstance.put(`/product/${data}`, {
-        icon_url: product.gambar,
-        code: product.kodeProduk,
-        description: product.deskripsi,
-        status: product.status,
-        nominal: product.nominals,
-        category: product.kategori,
-        type: product.type,
-        details: product.details,
-        active_period: product.period,
-        price: Number(product.harga),
-      });
-      setproduct({
-        gambar: "",
-        kodeProduk: "",
-        deskripsi: "",
-        status: "Not Active",
-        nominals: "",
-        kategori: "",
-        details: "New",
-        harga: "",
-      });
+      const response = await AxiosInstance.put(`/product/${data}`, product);
+      setUpdate(!update)
       setOpen(false)
       // setAnchorEl(null);
       return response;
@@ -132,16 +111,16 @@ const DailyModal = ({ id }) => {
               <Form>
                 <Form.Group className="mb-1" controlId="formBasicEmail">
                   <Form.Label>Gambar</Form.Label>
-                  <Form.Control onChange={handleChangeFormData} name="gambar" value={product?.gambar} type="text" placeholder={product?.icon_url} />
+                  <Form.Control onChange={handleChangeFormData} name="icon_url" value={product?.icon_url} type="text" />
                 </Form.Group>
 
                 <Form.Group className="mb-1" controlId="formBasicPassword">
                   <Form.Label>Kode Produk</Form.Label>
-                  <Form.Control onChange={handleChangeFormData} name="kodeProduk" value={product?.kodeProduk} type="text" placeholder={product?.code} />
+                  <Form.Control onChange={handleChangeFormData} name="code" value={product?.code} type="text" />
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
                   <Form.Label>Deskripsi</Form.Label>
-                  <Form.Control onChange={handleChangeFormData} name="deskripsi" value={product?.deskripsi} type="text" placeholder={product?.description} />
+                  <Form.Control onChange={handleChangeFormData} name="description" value={product?.description} type="text" />
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicEmail">
                   <Form.Label>Status</Form.Label>
@@ -158,27 +137,27 @@ const DailyModal = ({ id }) => {
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicPassword">
                   <Form.Label>Nominal</Form.Label>
-                  <Form.Control onChange={handleChangeFormData} name="nominals" value={product?.nominals} type="text" placeholder={product?.nominal} />
+                  <Form.Control onChange={handleChangeFormData} name="nominal" value={product?.nominal} type="text" />
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicPassword">
                   <Form.Label>Kategori</Form.Label>
                   <Form.Select
                     onChange={handleChangeFormData}
-                    name="kategori"
+                    name="category"
                     style={{ width: "130px" }}
                     aria-label="Default select example"
-                    value={product?.kategori}
+                    value={product.category}
                   // onSelect={product?.category}
                   >
                     <option disabled value="">Pilih Disini</option>
                     <option value="pulsa">Pulsa</option>
-                    <option value="Paket Data">Paket Data</option>
+                    <option value="data">Paket Data</option>
                     <option value="voucher">Voucher</option>
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
                   <Form.Label>Harga (Rp)</Form.Label>
-                  <Form.Control onChange={handleChangeFormData} name="harga" value={product?.harga} type="text" placeholder={product?.price} />
+                  <Form.Control onChange={handleChangePriceData} name="price" value={product?.price} type="number" />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
                   <button type="button" class="btn TombolReset">

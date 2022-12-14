@@ -25,10 +25,12 @@ import {
   TableContainer,
   TablePagination,
 } from "@mui/material";
+
 // components
 import Label from "../../components/Admin-Component/label/Label";
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
 import Scrollbar from "../../components/Admin-Component/scrollbar/Scrollbar";
+
 // sections
 import { UserListHead, UserListToolbar } from "../../section/user";
 // mock
@@ -38,8 +40,17 @@ import "./DailyModal";
 import DailyModal from "./DailyModal";
 import Cookies from "js-cookie";
 
+// pagination
+import PropTypes from 'prop-types';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import { useTheme } from '@mui/material/styles';
+import TableFooter from '@mui/material/TableFooter';
+
 import ProdukBaruModal from "./ProdukBaruModal";
-import "../../assets/styles/ProdukBaru.css";
+import styles from "../../assets/styles/Products.module.css"
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -47,20 +58,29 @@ const TABLE_HEAD = [
   { id: "name", label: "Kode Produk", alignRight: false },
   { id: "role", label: "Deskripsi", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
-  { id: "status", label: "Nominal", alignRight: false },
-  { id: "status", label: "Kategori", alignRight: false },
-  { id: "status", label: "Harga (Rp)", alignRight: false },
-  { id: "status", label: "", alignRight: false },
+  { id: "nominal", label: "Nominal", alignRight: false },
+  { id: "kategori", label: "Kategori", alignRight: false },
+  { id: "harga", label: "Harga (Rp)", alignRight: false },
+  { id: "kosong", label: "", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
+  if (orderBy === "name") {
+    if (b[orderBy].toLowerCase() < a[orderBy].toLowerCase()) {
+      return -1;
+    }
+    if (b[orderBy].toLowerCase() > a[orderBy].toLowerCase()) {
+      return 1;
+    }
+  } else {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
   }
   return 0;
 }
@@ -87,6 +107,67 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+function TablePaginationActions(props) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
+
+  const handleFirstPageButtonClick = (event) => {
+    onPageChange(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+    onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+    onPageChange(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+}
+
 export default function UserPage() {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
@@ -96,13 +177,10 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [token, setToken] = useState(Cookies.get("token"));
-  const [user, setUser] = useState([]);
   const [currentID, setCurrentID] = useState("");
   const [product, setProduct] = useState([]);
 
-  const [load, setLoad] = useState();
-
-  const limiter = 50;
+  const [update, setUpdate] = useState(false);
 
   const handleOpenMenu = (event, id) => {
     // console.log(id)
@@ -120,9 +198,10 @@ export default function UserPage() {
     setOrderBy(property);
   };
 
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = user.map((n) => n.name);
+      const newSelecteds = product.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -152,29 +231,42 @@ export default function UserPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - user.length) : 0;
-
-  const filteredUsers = applySortFilter(
-    user,
+  const filteredProducts = applySortFilter(
+    product,
     getComparator(order, orderBy),
     filterName
   );
+  // console.log(product)
+
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredProducts.length) : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // not found
+  const isNotFound = !filteredProducts.length && !!filterName;
 
   const handleDelete = (e) => {
     AxiosInstance.delete(`product/${currentID}`, {
       headers: { Authorization: `Bearer ` + token },
     }).then((res) => res);
-    const userIndex = user.findIndex((usr) => usr._id === currentID);
-    const updateUser = [
-      ...user.slice(0, userIndex),
-      ...user.slice(userIndex + 1),
+    const productIndex = product.findIndex((usr) => usr._id === currentID);
+    const updateProduct = [
+      ...product.slice(0, productIndex),
+      ...product.slice(productIndex + 1),
     ];
-    setUser(updateUser);
+    setProduct(updateProduct);
     setOpen(false);
   };
-
-  const isNotFound = !filteredUsers.length && !!filterName;
 
   useEffect(() => {
     AxiosInstance.get("product/by_type/daily", {
@@ -182,23 +274,24 @@ export default function UserPage() {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      // console.log(res)
-      setUser(res?.data?.data);
+      console.log(res)
+      setProduct(res?.data?.data);
+      console.log(product)
     });
   }, []);
+
+  // console.log(product)
 
   const handleOpen = () => setOpen(!true);
 
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> Produk | Daily </title>
       </Helmet>
 
       <Container
-        sx={{
-          width: 1400,
-        }}
+        className={styles.container}
       >
         <Stack
           direction="row"
@@ -206,35 +299,41 @@ export default function UserPage() {
           justifyContent="space-between"
           mb={5}
         >
-          <Typography variant="h3">Manajemen Produk</Typography>
+          <Typography variant="h3" gutterBottom>
+            Manajemen Produk
+          </Typography>
         </Stack>
-        <Typography variant="h4" className="ms-3">
-          Daily
-        </Typography>
 
         <Card>
+          <Typography variant="h4" className="ms-3">
+            Daily
+          </Typography>
           <UserListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
+
           <MenuItem className="produkBaruBtn" onClick={handleOpen}>
             <ProdukBaruModal id={currentID} />
           </MenuItem>
 
-          <TableContainer sx={{ width: 1150, height: 500 }}>
-            <Table>
+          <TableContainer className={styles.tableContainer}>
+            <Table className={styles.evenodd}>
               <UserListHead
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={user.length}
+                rowCount={product.length}
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={handleSelectAllClick}
               />
               <TableBody id="body-table">
-                {filteredUsers.map((row) => {
+                {(rowsPerPage > 0
+                  ? filteredProducts?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : filteredProducts
+                )?.map((row, index) => {
                   const {
                     code,
                     description,
@@ -245,22 +344,24 @@ export default function UserPage() {
                     _id,
                     icon_url,
                   } = row;
-                  const selectedUser = selected.indexOf(_id) !== -1;
+                  const selectedProduct = selected.indexOf(_id) !== -1;
                   return (
                     <TableRow
                       hover
                       key={_id}
                       tabIndex={-1}
                       role="checkbox"
-                      selected={selectedUser}
+                      selected={selectedProduct}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          checked={selectedUser}
+                          checked={selectedProduct}
                           onChange={(event) => handleClick(event, code)}
                         />
                       </TableCell>
-                      <TableCell id="user-data" align="left"></TableCell>
+                      <TableCell component="th" scope="row" width="20">
+                        {(page * rowsPerPage) + (index + 1)}
+                      </TableCell>
                       {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
@@ -336,6 +437,26 @@ export default function UserPage() {
                   </TableRow>
                 </TableBody>
               )}
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={7}
+                    count={filteredProducts.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        'aria-label': 'rows per page',
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </Card>
@@ -359,7 +480,7 @@ export default function UserPage() {
           },
         }}
       >
-        <DailyModal id={currentID} />
+        <DailyModal id={currentID} setUpdate={setUpdate} update={update} />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

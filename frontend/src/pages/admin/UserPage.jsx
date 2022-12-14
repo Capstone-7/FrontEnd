@@ -49,13 +49,13 @@ import styles from "../../assets/styles/UserPage.module.css"
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "number", headerClassName: 'super-app-theme--header', label: "#", alignRight: false },
+  { id: "number", label: "#", alignRight: false },
   // { id: "idPengguna", label: "ID PENGGUNA", alignRight: false },
-  { id: "name", headerClassName: 'super-app-theme--header', label: "Nama", alignRight: false },
-  { id: "email", headerClassName: 'super-app-theme--header', label: "Email", alignRight: false },
-  { id: "role", headerClassName: 'super-app-theme--header', label: "Tanggal Registrasi", alignRight: false },
-  { id: "status", headerClassName: 'super-app-theme--header', label: "Status", alignRight: false },
-  { id: "kosong", headerClassName: 'super-app-theme--header', label: "", alignRight: false },
+  { id: "name", label: "Nama", alignRight: false },
+  { id: "email", label: "Email", alignRight: false },
+  { id: "role", label: "Tanggal Registrasi", alignRight: false },
+  { id: "status", label: "Status", alignRight: false },
+  { id: "kosong", label: "", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -174,6 +174,9 @@ export default function UserPage() {
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
 
+
+  const [update, setUpdate] = useState(false);
+
   const [token, setToken] = useState(Cookies.get("token"));
   const [user, setUser] = useState([]);
   const [currentID, setCurrentID] = useState("");
@@ -234,6 +237,7 @@ export default function UserPage() {
     getComparator(order, orderBy),
     filterName
   );
+  // console.log(filteredUsers)
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -273,7 +277,7 @@ export default function UserPage() {
     }).then((res) => {
       setUser(res.data.data);
     });
-  }, []);
+  }, [update]);
 
   return (
     <>
@@ -282,9 +286,7 @@ export default function UserPage() {
       </Helmet>
 
       <Container
-        sx={{
-          width: 960,
-        }}
+        className={styles.container}
       >
         <Stack
           direction="row"
@@ -307,17 +309,9 @@ export default function UserPage() {
             onFilterName={handleFilterByName}
           />
 
-          <TableContainer sx={{
-            width: 900,
-            height: 520,
-          }} >
-            <Table>
+          <TableContainer className={styles.tableContainer} >
+            <Table className={styles.evenodd}>
               <UserListHead
-                sx={{
-                  '& .super-app-theme--header': {
-                    background: '#396EB0 !important',
-                  },
-                }}
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
@@ -326,11 +320,7 @@ export default function UserPage() {
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={handleSelectAllClick}
               />
-              <TableBody id="body-table" sx={{
-                '& .super-app-theme--header': {
-                  background: '#396EB0',
-                },
-              }}>
+              <TableBody id="body-table">
                 {/* {filteredUsers.map((row, index) */}
                 {(rowsPerPage > 0
                   ? filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -394,78 +384,6 @@ export default function UserPage() {
                     </TableRow>
                   );
                 })}
-                {/* {filteredUsers
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
-                      const {
-                        id,
-                        name,
-                        idPengguna,
-                        role,
-                        status,
-                        email,
-                        avatarUrl,
-                      } = row;
-                      const selectedUser = selected.indexOf(name) !== -1;
-
-                      return (
-                        <TableRow
-                          hover
-                          key={id}
-                          tabIndex={-1}
-                          role="checkbox"
-                          selected={selectedUser}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={selectedUser}
-                              onChange={(event) => handleClick(event, name)}
-                            />
-                          </TableCell>
-                          <TableCell align="left">{number}</TableCell>
-
-                          <TableCell align="left">{idPengguna}</TableCell>
-
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack
-                              direction="row"
-                              alignItems="center"
-                              spacing={2}
-                            >
-                              <Avatar alt={name} src={avatarUrl} />
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-
-                          <TableCell align="left">{email}</TableCell>
-
-                          <TableCell align="left">{role}</TableCell>
-
-                          <TableCell align="left">
-                            <Label
-                              color={
-                                (status === "Unverified" && "error") ||
-                                "success"
-                              }
-                            >
-                              {sentenceCase(status)}
-                            </Label>
-                          </TableCell>
-
-                          <TableCell align="right">
-                            <IconButton
-                              size="large"
-                              color="inherit"
-                              onClick={handleOpenMenu}
-                            >
-                              <Iconify icon={"eva:more-vertical-fill"} />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })} */}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
                     <TableCell colSpan={6} />
@@ -539,11 +457,9 @@ export default function UserPage() {
           },
         }}
       >
-        {/* <MenuItem>
-        <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
-        </MenuItem> */}
-        <ModalComponent id={currentID} />
+
+
+        <ModalComponent id={currentID} setUpdate={setUpdate} update={update} />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

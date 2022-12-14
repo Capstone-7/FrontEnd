@@ -4,7 +4,6 @@ import LandingPage from "../pages/LandingPage";
 import PageProduct from "../pages/PageProduct";
 import DashboardAppPage from "../pages/admin/DashboardPage";
 import Page404 from "../pages/admin/Page404";
-import ProductsPage from "../pages/admin/ProductsPage";
 import UserPage from "../pages/admin/UserPage";
 import Transaksi from "../pages/admin/Transaksi";
 import { Provider } from "react-redux";

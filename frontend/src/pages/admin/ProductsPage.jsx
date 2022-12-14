@@ -28,9 +28,9 @@ export default function ProductsPage() {
       </Helmet>
 
       <Container>
-          <Typography variant="h4" sx={{ mb: 5 }}>
-            Manage Products
-          </Typography>
+        <Typography variant="h4" sx={{ mb: 5 }}>
+          Manage Products
+        </Typography>
 
 
 
@@ -43,7 +43,7 @@ export default function ProductsPage() {
 
 
 
-{/* 
+        {/* 
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
             <ProductFilterSidebar

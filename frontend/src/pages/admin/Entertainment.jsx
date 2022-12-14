@@ -39,7 +39,7 @@ import DailyModal from "./DailyModal";
 import Cookies from "js-cookie";
 
 import EntertainmentModal from "./EntertaimentModal";
-import "../../assets/styles/ProdukBaru.css";
+import styles from "../../assets/styles/Products.module.css"
 import EntertainmentEditModal from "./EntertainmentEditModal";
 // ----------------------------------------------------------------------
 

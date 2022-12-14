@@ -15,6 +15,12 @@
     padding-bottom: 1.5em;
 }
 
+/* @media screen and (max-width: 1440px) {
+    .rowonecard {
+        width: 12rem;
+    }
+} */
+
 .rowtwocard {
     justify-content: center;
     text-align: center;

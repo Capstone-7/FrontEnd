@@ -1,3 +1,38 @@
 .tablehead {
     background-color: #396EB0 !important;
 }
+
+/* .evenodd {
+    background-color: #ebf1f7;
+} */
+
+.evenodd tr:nth-child(odd) {
+    background-color: #ebf1f7;
+}
+
+.evenodd tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.container {
+    width: 960;
+}
+
+.tableContainer {
+    background-color: #ebf1f7;
+    width: 900;
+    height: 520;
+}
+
+@media only screen and (max-width: 1440px) {
+    .container {
+        width: 1440;
+    }
+}
+
+@media only screen and (max-width: 1440px) {
+    .tableContainer {
+        width: 1440;
+        height: 800;
+    }
+}

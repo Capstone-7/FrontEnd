@@ -14,7 +14,7 @@ import {
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
 
 import React, { useState, useEffect } from "react";
-import "../../assets/styles/ProdukBaru.css";
+import styles from "../../assets/styles/Products.module.css"
 import DailyModal from "../../pages/admin/ProdukBaruModal";
 // ----------------------------------------------------------------------
 
