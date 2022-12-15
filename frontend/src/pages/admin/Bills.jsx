@@ -38,6 +38,17 @@ import "./DailyModal";
 import DailyModal from "./DailyModal";
 import Cookies from "js-cookie";
 
+// pagination
+import PropTypes from 'prop-types';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import { useTheme } from '@mui/material/styles';
+import TableFooter from '@mui/material/TableFooter';
+
+import ProdukBaruModal from "./ProdukBaruModal";
+
 import BillsModal from "./BillsModal";
 import styles from "../../assets/styles/Products.module.css"
 import BillsEditModal from "./BillsEditModal";
@@ -45,23 +56,32 @@ import BillsEditModal from "./BillsEditModal";
 
 const TABLE_HEAD = [
   { id: "number", label: "#", alignRight: false },
-  { id: "name", label: "Kode Produk", alignRight: false },
+  { id: "code", label: "Kode Produk", alignRight: false },
   { id: "role", label: "Deskripsi", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
-  { id: "status", label: "Nominal", alignRight: false },
-  { id: "status", label: "Kategori", alignRight: false },
-  { id: "status", label: "Harga (Rp)", alignRight: false },
-  { id: "status", label: "", alignRight: false },
+  { id: "nominal", label: "Nominal", alignRight: false },
+  { id: "kategori", label: "Kategori", alignRight: false },
+  { id: "harga", label: "Harga (Rp)", alignRight: false },
+  { id: "kosong", label: "", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
+  if (orderBy === "code") {
+    if (b[orderBy].toLowerCase() < a[orderBy].toLowerCase()) {
+      return -1;
+    }
+    if (b[orderBy].toLowerCase() > a[orderBy].toLowerCase()) {
+      return 1;
+    }
+  } else {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
   }
   return 0;
 }
@@ -82,28 +102,97 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.code.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
+function TablePaginationActions(props) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
+
+  const handleFirstPageButtonClick = (event) => {
+    onPageChange(event, 0);
+  };
+
+  const handleBackButtonClick = (event) => {
+    onPageChange(event, page - 1);
+  };
+
+  const handleNextButtonClick = (event) => {
+    onPageChange(event, page + 1);
+  };
+
+  const handleLastPageButtonClick = (event) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+}
+
 export default function Bills() {
   const [open, setOpen] = useState(false);
+
+  // pagination
   const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
   const [token, setToken] = useState(Cookies.get("token"));
-  const [user, setUser] = useState([]);
-  const [currentID, setCurrentID] = useState("");
-  const [product, setProduct] = useState([]);
+  // const [user, setUser] = useState([]);
+  const [currentID, setCurrentID] = useState("")
+    ;
+  const [products, setProducts] = useState([]);
 
-  const [load, setLoad] = useState();
+  const [update, setUpdate] = useState(false);
 
-  const limiter = 50;
+  // const [load, setLoad] = useState();
+
+  // const limiter = 50;
 
   const handleOpenMenu = (event, id) => {
     setOpen(event.currentTarget);
@@ -126,7 +215,7 @@ export default function Bills() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = user.map((n) => n.name);
+      const newSelecteds = products.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -156,30 +245,40 @@ export default function Bills() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - user.length) : 0;
-
-  const filteredUsers = applySortFilter(
-    user,
+  const filteredProducts = applySortFilter(
+    products,
     getComparator(order, orderBy),
     filterName
   );
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredProducts.length) : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // not found
+  const isNotFound = !filteredProducts.length && !!filterName;
 
   const handleDelete = (e) => {
     AxiosInstance.delete(`product/${currentID}`, {
       headers: { Authorization: `Bearer ` + token },
     }).then((res) => res);
-    const userIndex = user.findIndex((usr) => usr._id === currentID);
-    const updateUser = [
-      ...user.slice(0, userIndex),
-      ...user.slice(userIndex + 1),
+    const productIndex = products.findIndex((usr) => usr._id === currentID);
+    const updateProduct = [
+      ...products.slice(0, productIndex),
+      ...products.slice(productIndex + 1),
     ];
-    setUser(updateUser);
+    setProducts(updateProduct);
     setOpen(false);
   };
-  console.log(user)
-
-  const isNotFound = !filteredUsers.length && !!filterName;
 
   useEffect(() => {
     AxiosInstance.get("product/by_type/bills", {
@@ -187,22 +286,20 @@ export default function Bills() {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      setUser(res?.data?.data);
+      setProducts(res?.data?.data);
     });
-  }, []);
+  }, [update]);
 
   const handleOpen = () => setOpen(!true);
 
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> Produk | Bills </title>
       </Helmet>
 
       <Container
-        sx={{
-          width: 1400,
-        }}
+        className={styles.container}
       >
         <Stack
           direction="row"
@@ -210,35 +307,42 @@ export default function Bills() {
           justifyContent="space-between"
           mb={5}
         >
-          <Typography variant="h3">Manajemen Produk</Typography>
+          <Typography variant="h3" gutterBottom>
+            Manajemen Produk
+          </Typography>
         </Stack>
-        <Typography variant="h4" className="ms-3">
-          Bills
-        </Typography>
 
-        <Card>
+
+        <Card className={styles.box}>
+          <Typography sx={{ padding: "20px 0px 0px 25px" }} variant="h5" gutterBottom>
+            Bills
+          </Typography>
           <UserListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
+
           <MenuItem className="produkBaruBtn" onClick={handleOpen}>
-            <BillsModal id={currentID} />
+            <BillsModal id={currentID} setUpdate={setUpdate} update={update} />
           </MenuItem>
 
-          <TableContainer sx={{ width: 1150, height: 500 }}>
-            <Table>
+          <TableContainer className={styles.tableContainer}>
+            <Table className={styles.evenodd}>
               <UserListHead
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={user.length}
+                rowCount={products.length}
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={handleSelectAllClick}
               />
               <TableBody id="body-table">
-                {filteredUsers.map((row) => {
+                {(rowsPerPage > 0
+                  ? filteredProducts?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : filteredProducts
+                )?.map((row, index) => {
                   const {
                     code,
                     description,
@@ -249,22 +353,24 @@ export default function Bills() {
                     _id,
                     icon_url,
                   } = row;
-                  const selectedUser = selected.indexOf(_id) !== -1;
+                  const selectedProduct = selected.indexOf(_id) !== -1;
                   return (
                     <TableRow
                       hover
                       key={_id}
                       tabIndex={-1}
                       role="checkbox"
-                      selected={selectedUser}
+                      selected={selectedProduct}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          checked={selectedUser}
+                          checked={selectedProduct}
                           onChange={(event) => handleClick(event, code)}
                         />
                       </TableCell>
-                      <TableCell id="user-data" align="left"></TableCell>
+                      <TableCell component="th" scope="row" width="20">
+                        {(page * rowsPerPage) + (index + 1)}
+                      </TableCell>
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Typography variant="subtitle2" noWrap>
@@ -287,22 +393,22 @@ export default function Bills() {
                       <TableCell align="left">
                         <Label
                           color={
-                            status === "not_verified" ? "error" : "success"
+                            status === "Not Active" ? "error" : "success"
                           }
                         >
-                          {status}
+                          {sentenceCase(status)}
                         </Label>
                       </TableCell>
-                      <TableCell align="left">{nominal}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="left">{nominal}</TableCell>
                       <TableCell align="left">{category}</TableCell>
-                      <TableCell align="left">{price}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="right">{price}</TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
                           size="large"
                           color="inherit"
                           onClick={(e) => handleOpenMenu(e, _id)}
                         >
-                          <Iconify icon={"eva:more-vertical-fill"} />
+                          <Iconify icon={"eva:more-horizontal-fill"} />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -310,7 +416,7 @@ export default function Bills() {
                 })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
+                    <TableCell colSpan={9} />
                   </TableRow>
                 )}
               </TableBody>
@@ -318,10 +424,11 @@ export default function Bills() {
               {isNotFound && (
                 <TableBody>
                   <TableRow>
-                    <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                    <TableCell align="center" colSpan={9} sx={{ py: 3 }}>
                       <Paper
                         sx={{
                           textAlign: "center",
+                          backgroundColor: "#ebf1f7"
                         }}
                       >
                         <Typography variant="h6" paragraph>
@@ -338,16 +445,34 @@ export default function Bills() {
                   </TableRow>
                 </TableBody>
               )}
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={9}
+                    count={filteredProducts.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        'aria-label': 'rows per page',
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </Card>
       </Container>
-
       <Popover
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleCloseMenu}
-        // onClick={handleCloseMenu}
         anchorOrigin={{ vertical: "top", horizontal: "left" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         PaperProps={{
@@ -362,7 +487,7 @@ export default function Bills() {
           },
         }}
       >
-        <BillsEditModal id={currentID} />
+        <BillsEditModal id={currentID} setUpdate={setUpdate} update={update} setOpen={setOpen} />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

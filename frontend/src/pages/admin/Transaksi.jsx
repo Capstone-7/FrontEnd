@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Form from 'react-bootstrap/Form';
+import { sentenceCase } from "change-case";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -9,18 +10,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
-import TableFooter from '@mui/material/TableFooter';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import LastPageIcon from '@mui/icons-material/LastPage';
-import { useTheme } from '@mui/material/styles';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
-import { tableCellClasses } from '@mui/material/TableCell';
 import './Transaksi.css'
 import { ToastContainer, toast } from 'react-toastify';
 import { Container, Typography } from '@mui/material';
@@ -32,7 +24,89 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import moment from "moment/moment";
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
+import { Helmet } from "react-helmet-async";
+import { filter } from "lodash";
+
+// pagination
+import PropTypes from 'prop-types';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import { useTheme } from '@mui/material/styles';
+import TableFooter from '@mui/material/TableFooter';
+
+// sections
+import { UserListHead, UserListToolbar } from "../../section/user";
+
+// components
+import Label from "../../components/Admin-Component/label/Label";
+import Scrollbar from "../../components/Admin-Component/scrollbar/Scrollbar";
+
+// @mui
+import {
+  Card,
+  Stack,
+  Avatar,
+  Popover,
+  Checkbox,
+} from "@mui/material";
+
 import { changesTransactionStatus, getAllTransactions } from '../../store/features/TransactionSlice';
+
+const TABLE_HEAD = [
+  { id: "number", label: "#", alignRight: false },
+  { id: "user_email", label: "Email Pengguna", alignRight: false },
+  { id: "product_code", label: "Kode Produk", alignRight: false },
+  { id: "total_price", label: "Total Pembayaran", alignRight: false },
+  { id: "xendit_status", label: "Status Pembayaran", alignRight: false },
+  { id: "xendit_payment_channel", label: "Metode Pembayaran", alignRight: false },
+  { id: "status", label: "Status", alignRight: false },
+  { id: "created", label: "Tanggal Pembayaran", alignRight: false },
+  { id: "kosong", label: "", alignRight: false },
+];
+
+
+function descendingComparator(a, b, orderBy) {
+  if (orderBy === "user_email") {
+    if (b[orderBy].toLowerCase() < a[orderBy].toLowerCase()) {
+      return -1;
+    }
+    if (b[orderBy].toLowerCase() > a[orderBy].toLowerCase()) {
+      return 1;
+    }
+  } else {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  return order === "desc"
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function applySortFilter(array, comparator, query) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  if (query) {
+    return filter(
+      array,
+      (_user) => _user.user_email.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
+  }
+  return stabilizedThis.map((el) => el[0]);
+}
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -102,15 +176,81 @@ const Transaksi = () => {
     status: "",
   })
 
+  // filter and selected transactions
+  const [order, setOrder] = useState("asc");
+  const [selected, setSelected] = useState([]);
+  const [orderBy, setOrderBy] = useState("name");
+  const [filterName, setFilterName] = useState("");
+
+  // Menu
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  // Modal
+  const [modalShow, setModalShow] = React.useState(false);
+
+  // changes state
+  const [update, setUpdate] = useState(false);
 
   // call API using dispatch and use global state with using selector
   const dispatch = useDispatch()
-  const transactions = useSelector((state) => state?.TransactionSlice?.data)
+  const transactions = useSelector((state) => state?.TransactionSlice?.transaction)
 
+  useEffect(() => {
+    // console.log("ok")
+    dispatch(getAllTransactions())
+  }, [dispatch, update])
+
+  // console.log(transactions)
   // Pagination
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = transactions.map((n) => n.name);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClickSelect = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+    setSelected(newSelected);
+  };
+
+  const handleFilterByName = (event) => {
+    setPage(0);
+    setFilterName(event.target.value);
+  };
+
+  const filteredTransactions = applySortFilter(
+    transactions,
+    getComparator(order, orderBy),
+    filterName
+  );
+
+  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - transactions?.length) : 0;
 
@@ -123,22 +263,10 @@ const Transaksi = () => {
     setPage(0);
   };
 
-  // Menu
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  // not found
+  const isNotFound = !filteredTransactions.length && !!filterName;
 
-  // Modal
-  const [modalShow, setModalShow] = React.useState(false);
 
-  useEffect(() => {
-    dispatch(getAllTransactions())
-  }, [dispatch, transactions])
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#396EB0",
-      color: "#EBF1F7",
-    },
-  }));
 
   // Menu Logic
   const open = Boolean(anchorEl);
@@ -206,160 +334,216 @@ const Transaksi = () => {
         pauseOnHover
         theme="light"
       />
-      <Container>
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Manage Transaksi
-        </Typography>
-      </Container>
+      <Helmet>
+        <title>Transaksi</title>
+      </Helmet>
 
-      <Container className="ModalTransaksi">
-        <Typography id="modal-modal-title" variant="h6" component="h2" className="PrimaryModal pt-3">
-          <div className='d-flex justify-content-start align-items-center ModalChild'>
-            <span className="PrimaryModal__Data ms-2"> Data Transaksi</span>
-            <div className="wrapper d-flex flex-row ms-auto">
-              <div className="WrapperTransactions">
-                <h3 className='AllTransactions'>Semua Transaksi</h3>
-              </div>
-              <div className="WrapperSearch ms-3">
-                <h3 className='SearchText'>Search Here</h3>
-              </div>
-            </div>
-          </div>
-        </Typography>
-        <TableContainer component={Paper} style={{ paddingTop: "30px", backgroundColor: "#EBF1F7" }}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table" className="evenodd">
-            <TableHead className="theadcell">
-              <TableRow className="theadcell">
-                <StyledTableCell style={{ borderRadius: "10px 0 0 0" }}>#</StyledTableCell>
-                <StyledTableCell align="left">Email Pengguna</StyledTableCell>
-                <StyledTableCell align="left">Kode Produk</StyledTableCell>
-                <StyledTableCell align="left">Total Pembayaran</StyledTableCell>
-                <StyledTableCell align="left">Status Pembayaran</StyledTableCell>
-                <StyledTableCell align="left">Metode Pembayaran</StyledTableCell>
-                <StyledTableCell align="left">Status</StyledTableCell>
-                <StyledTableCell align="left">Tanggal Pembayaran</StyledTableCell>
-                <StyledTableCell style={{ borderRadius: "0 10px 0 0" }} align="left">&nbsp;*&nbsp;</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {(rowsPerPage > 0
-                ? transactions?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                : transactions
-              )?.map((row, index) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
+      <Container
+        className="container"
+      >
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={5}
+        >
+          <Typography variant="h4" sx={{ mb: 0 }}>
+            Manage Transaksi
+          </Typography>
+        </Stack>
 
-                  {/* // 1 - 1 + limit */}
-                  <TableCell component="th" scope="row">
-                    {(page * rowsPerPage) + (index + 1)}
-                  </TableCell>
-                  <TableCell align="left">{row.user_email}</TableCell>
-                  <TableCell align="left">{row.product_code}</TableCell>
-                  <TableCell style={{ color: "#396EB0" }} align="right">{row.total_price}</TableCell>
-                  <TableCell align="center">
-                    <div className={`${row.xendit_status === 'PAID' ? 'success' : 'cancel'}`}>
-                      {row.xendit_status}
-                    </div>
-                  </TableCell>
-                  <TableCell align="left">{row.xendit_payment_channel}</TableCell>
-                  <TableCell align="center">
-                    <div className={`${row.status === "SUCCESS" ? 'success' : row.status === "PENDING" ? 'pending' : 'cancel'}`}>
-                      {row.status}
-                    </div>
-                  </TableCell>
-                  <TableCell style={{ color: "#396EB0" }} align="left">{moment(row.created).subtract(10, "days").calendar()}</TableCell>
-                  <TableCell
-                    align="left"
-                  >
-                    <Image
-                      src={require("../../assets/icons/titiktiga.png")}
-                      alt="titiktiga"
-                      onClick={(event) => handleClick(row.id, event)}
-                      className='image'
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
+        <Card className="box">
+          <Typography sx={{ padding: "20px 0px 0px 25px" }} variant="h5" gutterBottom>
+            Daily
+          </Typography>
+          <UserListToolbar
+            numSelected={selected.length}
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+          />
+
+          <TableContainer className="tableContainer">
+            <Table className="evenodd">
+              <UserListHead
+                order={order}
+                orderBy={orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={transactions.length}
+                numSelected={selected.length}
+                onRequestSort={handleRequestSort}
+                onSelectAllClick={handleSelectAllClick}
+              />
+              <TableBody id="body-table">
+                {(rowsPerPage > 0
+                  ? filteredTransactions?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : filteredTransactions
+                )?.map((row, index) => {
+                  const selectedTransactions = selected.indexOf(row.id) !== -1;
+                  return (
+                    <TableRow
+                      hover
+                      key={row.id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      tabIndex={-1}
+                      role="checkbox"
+                      selected={selectedTransactions}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={selectedTransactions}
+                          onChange={(event) => handleClickSelect(event, row.user_email)}
+                        />
+                      </TableCell>
+                      <TableCell component="th" scope="row" width="20">
+                        {(page * rowsPerPage) + (index + 1)}
+                      </TableCell>
+                      <TableCell component="th" scope="row" padding="none">
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                          <Typography variant="subtitle2" noWrap>
+                            {row.user_email}
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align="left">{row.product_code}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="right">{row.total_price.toLocaleString(['id'])}</TableCell>
+                      <TableCell align="center">
+                        <Label
+                          color={
+                            row.xendit_status === "EXPIRED" ? "error" : "success"
+                          }
+                        >
+                          {sentenceCase(row.xendit_status)}
+                        </Label>
+                      </TableCell>
+                      <TableCell align="left">{row.xendit_payment_channel}</TableCell>
+                      <TableCell align="center">
+                        <Label
+                          color={
+                            row.status === "SUCCESS" ? "success" : row.status === "PENDING" ? "warning" : "error"
+                          }
+                        >
+                          {sentenceCase(row.status)}
+                        </Label>
+                      </TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="left">{moment(row.created).subtract(10, "days").calendar()}</TableCell>
+                      <TableCell align="right" width="50">
+                        <IconButton
+                          size="large"
+                          color="inherit"
+                          onClick={(event) => handleClick(row.id, event)}
+                        >
+                          <Iconify icon={"eva:more-horizontal-fill"} />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={10} />
+                  </TableRow>
+                )}
+              </TableBody>
+
+              {isNotFound && (
+                <TableBody>
+                  <TableRow>
+                    <TableCell align="center" colSpan={10} sx={{ py: 3 }}>
+                      <Paper
+                        sx={{
+                          textAlign: "center",
+                          backgroundColor: "#ebf1f7"
+                        }}
+                      >
+                        <Typography variant="h6" paragraph>
+                          Not found
+                        </Typography>
+
+                        <Typography variant="body2">
+                          No results found for &nbsp;
+                          <strong>&quot;{filterName}&quot;</strong>.
+                          <br /> Try checking for typos or using complete words.
+                        </Typography>
+                      </Paper>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
               )}
-              <Menu
-                style={{ marginRight: "20px" }}
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button',
-                }}
-              >
-                <MenuItem
 
-                  onClick={closeMenu}>
-                  <Iconify
-                    icon={"eva:edit-fill"}
-                    sx={{ mr: 2 }} />
-                  Edit
-                </MenuItem>
-              </Menu>
-              <Modal
-                size="md"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-                show={modalShow}
-                backdrop="static"
-                keyboard={false}
-                className="modal"
-              >
-                <Modal.Header>
-                  <Modal.Title id="contained-modal-title-vcenter">
-                    Ubah <span style={{ color: "#396EB0" }}>Status Transaksi</span>
-                  </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <Form>
-                    <h6>Status</h6>
-                    <Form.Select onChange={onChange} name="status" value={data.status} style={{ width: "130px" }} aria-label="Default select example">
-                      <option selected disabled>Pilih Disini</option>
-                      <option value="SUCCESS">Success</option>
-                      <option value="PENDING">Pending</option>
-                      <option value="CANCEL">Cancel</option>
-                    </Form.Select>
-                  </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button onClick={handleSubmit} style={{ backgroundColor: "#396EB0", border: "0" }} variant="primary">Simpan</Button>
-                  <Button style={{ border: "0" }} variant="danger" onClick={() => setModalShow(false)}>Close</Button>
-                </Modal.Footer>
-              </Modal>
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                  colSpan={9}
-                  count={transactions?.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    inputProps: {
-                      'aria-label': 'rows per page',
-                    },
-                    native: true,
-                  }}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={10}
+                    count={filteredTransactions.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        'aria-label': 'rows per page',
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        </Card>
       </Container>
+
+      <Menu
+        style={{ marginRight: "20px" }}
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem
+
+          onClick={closeMenu}>
+          <Iconify
+            icon={"eva:edit-fill"}
+            sx={{ mr: 2 }} />
+          Edit
+        </MenuItem>
+      </Menu>
+      <Modal
+        size="md"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        show={modalShow}
+        backdrop="static"
+        keyboard={false}
+        className="modal"
+      >
+        <Modal.Header>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Ubah <span style={{ color: "#396EB0" }}>Status Transaksi</span>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <h6>Status</h6>
+            <Form.Select onChange={onChange} name="status" value={data.status} style={{ width: "130px" }} aria-label="Default select example">
+              <option selected disabled>Pilih Disini</option>
+              <option value="SUCCESS">Success</option>
+              <option value="PENDING">Pending</option>
+              <option value="CANCEL">Cancel</option>
+            </Form.Select>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={handleSubmit} style={{ backgroundColor: "#396EB0", border: "0" }} variant="primary">Simpan</Button>
+          <Button style={{ border: "0" }} variant="danger" onClick={() => setModalShow(false)}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }

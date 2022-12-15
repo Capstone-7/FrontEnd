@@ -25,13 +25,13 @@ import {
   TableContainer,
   TablePagination,
 } from "@mui/material";
-import PropTypes from 'prop-types';
-import LastPageIcon from '@mui/icons-material/LastPage';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { useTheme } from '@mui/material/styles';
-import TableFooter from '@mui/material/TableFooter';
+import PropTypes from "prop-types";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import { useTheme } from "@mui/material/styles";
+import TableFooter from "@mui/material/TableFooter";
 // components
 import Label from "../../components/Admin-Component/label/Label";
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
@@ -44,7 +44,7 @@ import AxiosInstance from "../../configs/axios/AxiosInstance";
 import "./ModalComponent";
 import ModalComponent from "./ModalComponent";
 import Cookies from "js-cookie";
-import styles from "../../assets/styles/UserPage.module.css"
+import styles from "../../assets/styles/UserPage.module.css";
 
 // ----------------------------------------------------------------------
 
@@ -135,28 +135,36 @@ function TablePaginationActions(props) {
         disabled={page === 0}
         aria-label="first page"
       >
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label="previous page"
       >
-        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
       >
-        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
       >
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </Box>
   );
@@ -323,7 +331,10 @@ export default function UserPage() {
               <TableBody id="body-table">
                 {/* {filteredUsers.map((row, index) */}
                 {(rowsPerPage > 0
-                  ? filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  ? filteredUsers?.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
                   : filteredUsers
                 )?.map((row, index) => {
                   const { name, _id, created, status, email } = row;
@@ -343,15 +354,10 @@ export default function UserPage() {
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">
-                        {(page * rowsPerPage) + (index + 1)}
+                        {page * rowsPerPage + (index + 1)}
                       </TableCell>
-                      {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" width="70">
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          {/* <Avatar
-                              alt={name}
-                              src={urlFoto}
-                            /> */}
                           <Typography variant="subtitle2" noWrap>
                             {name}
                           </Typography>
@@ -375,10 +381,11 @@ export default function UserPage() {
                       <TableCell align="right" width="50">
                         <IconButton
                           size="large"
-                          color="inherit"
+                          color="#396EB0"
+                          width="54"
                           onClick={(e) => handleOpenMenu(e, _id)}
                         >
-                          <Iconify icon={"eva:more-vertical-fill"} />
+                          <Iconify icon={"eva:more-horizontal-fill"} />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -394,10 +401,11 @@ export default function UserPage() {
               {isNotFound && (
                 <TableBody>
                   <TableRow>
-                    <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                    <TableCell align="center" colSpan={7} sx={{ py: 3 }}>
                       <Paper
                         sx={{
                           textAlign: "center",
+                          backgroundColor: "#ebf1f7"
                         }}
                       >
                         <Typography variant="h6" paragraph>
@@ -424,7 +432,7 @@ export default function UserPage() {
                     page={page}
                     SelectProps={{
                       inputProps: {
-                        'aria-label': 'rows per page',
+                        "aria-label": "rows per page",
                       },
                       native: true,
                     }}

@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import TransactionAPIPayoll from "../../apis/TransactionPayOll.Api"
 
 const initialState = {
-    transaction: "",
+    transaction: [],
     status: 'idle',
     error: null
 };
@@ -20,6 +20,7 @@ const initialState = {
 export const getAllTransactions = createAsyncThunk("PayOll/getAllTransaction", async () => {
     try {
         const res = await TransactionAPIPayoll.getAllTransaction()
+        // console.log(res)
         return res.data.data
     } catch (error) {
         console.log(error)
@@ -59,7 +60,9 @@ export const TransactionSlice = createSlice({
             // })
             .addCase(getAllTransactions.fulfilled, (state, action) => {
                 state.status = "success"
-                state.data = action.payload
+                // console.log(state.transaction)
+                // console.log(action.payload)
+                state.transaction = action.payload
             })
             .addCase(changesTransactionStatus.fulfilled, (state, action) => {
                 state.status = "success"

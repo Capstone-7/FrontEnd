@@ -25,24 +25,15 @@ const style = {
     p: 4,
 };
 
-const BillsEditModal = ({ id }) => {
-    const [open, setOpen] = React.useState(false);
+const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
+    const [opens, setOpens] = React.useState(false);
     // const [anchorEl, setAnchorEl] = React.useState(null);
     const [isChecked, setChecked] = useState();
-    const [product, setproduct] = useState({
-        gambar: "",
-        kodeProduk: "",
-        deskripsi: "",
-        status: "Not Active",
-        nominals: "",
-        kategori: "",
-        details: "New Details",
-        harga: "",
-    });
+    const [product, setproduct] = useState({});
 
     const token = Cookies.get("token");
 
-    const handleOpen = () => setOpen(!open);
+    const handleOpen = () => setOpens(!opens);
 
     useEffect(() => {
         AxiosInstance.get(`product/${id}`, {
@@ -51,6 +42,7 @@ const BillsEditModal = ({ id }) => {
             },
         }).then((res) => {
             setproduct(res.data.data);
+            setChecked(res.data.data.status === 'Active' ? true : false)
         });
     }, []);
 
@@ -61,31 +53,18 @@ const BillsEditModal = ({ id }) => {
         });
     };
 
+    const handleChangePriceData = (e) => {
+        setproduct({
+            ...product,
+            [e.target.name]: Number(e.target.value),
+        });
+    };
+
     const UpdateState = async (data, e) => {
         e.preventDefault();
         try {
-            const response = await AxiosInstance.put(`/product/${data}`, {
-                icon_url: product.gambar,
-                code: product.kodeProduk,
-                description: product.deskripsi,
-                status: product.status,
-                nominal: product.nominals,
-                category: product.kategori,
-                type: product.type,
-                details: product.details,
-                active_period: product.period,
-                price: Number(product.harga),
-            });
-            setproduct({
-                gambar: "",
-                kodeProduk: "",
-                deskripsi: "",
-                status: "Not Active",
-                nominals: "",
-                kategori: "",
-                details: "New",
-                harga: "",
-            });
+            const response = await AxiosInstance.put(`/product/${data}`, product);
+            setUpdate(!update)
             setOpen(false)
             // setAnchorEl(null);
             return response;
@@ -100,7 +79,7 @@ const BillsEditModal = ({ id }) => {
                     Edit
                 </MenuItem>
                 <Modal
-                    open={open}
+                    open={opens}
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                     className="modalUser"

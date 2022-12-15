@@ -101,7 +101,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.code.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
@@ -279,12 +279,12 @@ export default function Daily() {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      console.log(res)
+      // console.log(res)
       setProducts(res?.data?.data);
     });
   }, [update]);
 
-  console.log(products)
+  // console.log(products)
 
   const handleOpen = () => setOpen(!true);
 
@@ -369,7 +369,6 @@ export default function Daily() {
                       {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          {/* <Avatar alt={name} src={urlFoto} /> */}
                           <Typography variant="subtitle2" noWrap>
                             {code.toUpperCase()}
                           </Typography>
@@ -390,7 +389,7 @@ export default function Daily() {
                       <TableCell align="left">
                         <Label
                           color={
-                            status === "not_verified" ? "error" : "success"
+                            status === "Not Active" ? "error" : "success"
                           }
                         >
                           {status}
@@ -405,7 +404,7 @@ export default function Daily() {
                           color="inherit"
                           onClick={(e) => handleOpenMenu(e, _id)}
                         >
-                          <Iconify icon={"eva:more-vertical-fill"} />
+                          <Iconify icon={"eva:more-horizontal-fill"} />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -421,10 +420,11 @@ export default function Daily() {
               {isNotFound && (
                 <TableBody>
                   <TableRow>
-                    <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                    <TableCell align="center" colSpan={9} sx={{ py: 3 }}>
                       <Paper
                         sx={{
                           textAlign: "center",
+                          backgroundColor: "#ebf1f7"
                         }}
                       >
                         <Typography variant="h6" paragraph>

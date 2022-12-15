@@ -26,8 +26,8 @@ const style = {
   p: 4,
 };
 
-const ProdukBaruModal = ({ id }) => {
-  const [open, setOpen] = React.useState(false);
+const BillsModal = ({ id, setUpdate, update, setOpen }) => {
+  const [opens, setOpens] = React.useState(false);
   const [isChecked, setChecked] = useState();
   const [product, setproduct] = useState({});
 
@@ -58,7 +58,7 @@ const ProdukBaruModal = ({ id }) => {
 
   const token = Cookies.get("token");
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => setOpens(!opens);
 
   useEffect(() => {
     setChecked(product.status === "active" ? true : false);
@@ -97,6 +97,7 @@ const ProdukBaruModal = ({ id }) => {
         detail: "Detail Here",
         period: 0,
       });
+      setUpdate(!update)
       return response;
     } catch (err) { }
   };
@@ -108,7 +109,7 @@ const ProdukBaruModal = ({ id }) => {
           + Produk Baru
         </MenuItem>
         <Modal
-          open={open}
+          open={opens}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           className="modalUser"
@@ -254,4 +255,4 @@ const ProdukBaruModal = ({ id }) => {
   );
 };
 
-export default ProdukBaruModal;
+export default BillsModal;

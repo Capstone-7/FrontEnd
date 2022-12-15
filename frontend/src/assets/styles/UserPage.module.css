@@ -1,11 +1,11 @@
 .tablehead {
-    background-color: #396EB0 !important;
+  background-color: #396EB0 !important;
 }
 
 .box {
-    background: #FAFAFA;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
+  background: #FAFAFA;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
 }
 
 /* .evenodd {
@@ -13,32 +13,36 @@
 } */
 
 .evenodd tr:nth-child(odd) {
-    background-color: #ebf1f7;
+  background-color: #ebf1f7;
 }
 
 .evenodd tr:nth-child(even) {
-    background-color: #ffffff;
+  background-color: #ffffff;
 }
 
 .container {
-    width: 960;
+  width: 960;
 }
 
 .tableContainer {
-    background-color: transparent;
-    width: 900;
-    height: 520;
+  background-color: transparent;
+  width: 900;
+  height: 520;
 }
 
 @media only screen and (max-width: 1440px) {
-    .container {
-        width: 1440;
-    }
+  .container {
+    width: 1440;
+  }
 }
 
 @media only screen and (max-width: 1440px) {
-    .tableContainer {
-        width: 1440;
-        height: 800;
-    }
+  .tableContainer {
+    width: 1440;
+    height: 800;
+  }
 }
+
+/* .error {
+  color: #FF4128;
+} */
