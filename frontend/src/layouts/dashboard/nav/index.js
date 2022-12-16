@@ -46,7 +46,6 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const admin = useSelector((state) => state?.UserSlice?.admin);
-  // console.log(admin)
 
   const { pathname } = useLocation();
 
@@ -56,7 +55,6 @@ export default function Nav({ openNav, onCloseNav }) {
     if (openNav) {
       onCloseNav();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const renderContent = (
