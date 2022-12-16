@@ -2,15 +2,6 @@ import axios from "axios";
 import CONST from "../../utils/Constants";
 import { errorHandler, requestHandler, successHandler } from "../Interceptors";
 
-// const AxiosInstance = axios.create({
-//     baseURL: CONST.BASE_URL_API,
-//     headers: {
-//         accept: 'application/json',
-//         'Content-Type': 'application/json',
-//         'Authorization': `Bearer ${Cookies.get('token')}`
-//     }
-// });
-
 const config = {
     baseURL: CONST.BASE_URL_API,
 };

@@ -41,8 +41,9 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
+      console.log(res)
       setproduct(res.data.data);
-      setChecked(res.data.data.status === "Active" ? true : false);
+      setChecked(res.data.data.status === "active" ? true : false);
     });
   }, []);
 
@@ -68,7 +69,7 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
       setOpen(false);
       // setAnchorEl(null);
       return response;
-    } catch (err) {}
+    } catch (err) { }
   };
 
   return (
@@ -113,10 +114,10 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                   <Form.Label>Gambar</Form.Label>
                   <Form.Control
                     onChange={handleChangeFormData}
-                    name="gambar"
+                    name="icon_url"
                     value={product?.icon_url}
                     type="text"
-                    // placeholder={product?.icon_url}
+                  // placeholder={product?.icon_url}
                   />
                 </Form.Group>
 
@@ -124,20 +125,20 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                   <Form.Label>Kode Produk</Form.Label>
                   <Form.Control
                     onChange={handleChangeFormData}
-                    name="kodeProduk"
+                    name="code"
                     value={product?.code}
                     type="text"
-                    // placeholder={product?.code}
+                  // placeholder={product?.code}
                   />
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
                   <Form.Label>Deskripsi</Form.Label>
                   <Form.Control
                     onChange={handleChangeFormData}
-                    name="deskripsi"
+                    name="description"
                     value={product?.description}
                     type="text"
-                    // placeholder={product?.description}
+                  // placeholder={product?.description}
                   />
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicEmail">
@@ -157,21 +158,21 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                   <Form.Label>Nominal</Form.Label>
                   <Form.Control
                     onChange={handleChangeFormData}
-                    name="nominals"
+                    name="nominal"
                     value={product?.nominal}
                     type="text"
-                    // placeholder={product?.nominal}
+                  // placeholder={product?.nominal}
                   />
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicPassword">
                   <Form.Label>Kategori</Form.Label>
                   <Form.Select
                     onChange={handleChangeFormData}
-                    name="kategori"
+                    name="category"
                     style={{ width: "130px" }}
                     aria-label="Default select example"
                     value={product?.category}
-                    // onSelect={product?.category}
+                  // onSelect={product?.category}
                   >
                     <option value="token">Token</option>
                     <option value="Tagihan Air">Tagihan Air</option>

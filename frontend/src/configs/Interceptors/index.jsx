@@ -24,10 +24,6 @@ export const requestHandler = async (config) => {
         if (token) {
             config.headers["Authorization"] = `Bearer ${token}`;
         }
-        // else if (!exceptionApiUrlforRT(config)) {
-        //     Auth.storeUserInfoToCookie(newToken.data.data);
-        //     config.headers.token = newToken.data.data.access.token;
-        // }
     }
     return config;
 };

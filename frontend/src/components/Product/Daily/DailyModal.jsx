@@ -109,7 +109,10 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
               <Form>
                 <Form.Group className="mb-1" controlId="formBasicEmail">
                   <Form.Label>Gambar</Form.Label>
-                  <Form.Control onChange={handleChangeFormData} name="icon_url" value={product?.icon_url} type="text" />
+                  <Form.Control onChange={handleChangeFormData}
+                    name="icon_url"
+                    value={product?.icon_url}
+                    type="text" />
                 </Form.Group>
 
                 <Form.Group className="mb-1" controlId="formBasicPassword">

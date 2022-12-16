@@ -29,7 +29,7 @@ const Navigation = () => {
       <Stack className={styles.ContainerMainContent}>
         <Navbar collapseOnSelect expand="lg" className={styles.MainContent} >
           <Container>
-            <Navbar.Brand href="#home"><img src={logo} alt="Logo Brand" style={{ width: "73px", height: "97" }} className={styles.Logo} /></Navbar.Brand>
+            <Navbar.Brand onClick={toHome}><img src={logo} alt="Logo Brand" style={{ width: "73px", height: "97" }} className={styles.Logo} /></Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className={styles.NavItem}>
