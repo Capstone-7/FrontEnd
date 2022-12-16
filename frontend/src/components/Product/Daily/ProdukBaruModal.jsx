@@ -96,9 +96,9 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
         detail: "Detail Here",
         period: 0,
       });
-      setUpdate(!update)
+      setUpdate(!update);
       return response;
-    } catch (err) { }
+    } catch (err) {}
   };
 
   return (
