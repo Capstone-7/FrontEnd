@@ -1,0 +1,60 @@
+.blockfooter {
+    background-color: #1F3D61;
+    color: #E8F2FE;
+    padding: 5em 0em 5em 0em;
+    font-family: 'Poppins';
+}
+
+.rowfooter {
+    justify-content: center;
+    align-items: center;
+    padding: 0em 0em 0em 0em;
+}
+
+.logo {
+    width: 90px;
+    padding-bottom: 15px;
+}
+
+.columnone {
+    padding-bottom: 15px;
+    font-size: 11px;
+}
+
+.columnone div {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 750px) {
+    .columnone div {
+        width: 10px;
+        /* height: 3em; */
+    }
+}
+
+.line {
+    border: 2px solid #EBF1F7;
+    width: 1px;
+    height: 150px;
+    /* margin: 0px 10px 0px 10px; */
+    /* margin-left: 50px; */
+}
+
+
+/* @media only screen and (max-width: 750px) {
+    .columntwo {
+        width: 100px;
+    }
+} */
+
+/* .columntwo {
+    width: 80px;
+} */
+
+/* 
+.linerow {
+    text-align: center;
+    float: right;
+    justify-content: center;
+    align-items: center;
+} */

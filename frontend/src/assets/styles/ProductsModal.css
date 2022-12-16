@@ -1,0 +1,92 @@
+.modalUser {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    overflow: scroll;
+}
+
+.boxModal {
+    background: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    padding: 25px;
+    gap: 20px;
+}
+
+.PrimaryModal {
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 33px;
+    line-height: 50px;
+}
+
+.PrimaryModal__Data {
+    font-family: "Poppins" !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    font-size: 30px !important;
+    line-height: 20px !important;
+    color: #396eb0 !important;
+}
+
+.EditModal {
+    font-family: "Poppins" !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    font-size: 30px !important;
+    line-height: 50px !important;
+}
+
+.ModalChild {
+    background: #ffffff;
+    border-bottom: 1px solid #c2d2e7;
+    border-radius: 5px;
+    width: 100%;
+    height: 50px;
+}
+
+.TombolReset {
+    width: 303.5px;
+    height: 40px;
+    background: #ffffff;
+    border-radius: 8px;
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: 1.25px;
+    text-transform: uppercase;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    color: #396eb0;
+}
+
+.TombolSimpan {
+    width: 303.5px;
+    height: 40px;
+    background-color: #396eb0 !important;
+    border-radius: 8px;
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: 1.25px;
+    text-transform: uppercase;
+    color: #ffffff !important;
+}
+
+.TombolSimpan:hover {
+    background: #396eb0;
+    color: #ffffff;
+}
+
+
+
+/* @media only screen and (max-width: 1920px) {
+    . {
+        width: 851;
+        height: 700;
+    }
+} */

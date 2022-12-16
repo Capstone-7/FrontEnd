@@ -1,0 +1,64 @@
+.BackgroundProduct {
+    background-image: linear-gradient(
+        0deg,
+        rgba(40, 78, 125, 0.5),
+        rgba(40, 78, 125, 0.5)
+      ),
+      url("../../assets/images/daily.jpg");
+    background-position: 50% 50%;
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    border-radius: 0px;
+    box-shadow: 2px -9px 20px 14px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 2px -9px 20px 14px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px -9px 20px 14px rgba(0,0,0,0.75);
+  }
+
+  /* .Content {
+    margin-top: 200px;
+  } */
+
+  .btnDownload {
+    margin-inline: auto;
+    width: 25% !important;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 500px) {
+    .deskripsi {
+      width: 80% !important;
+    }
+  }
+
+  @media screen and (min-width: 500px) {
+    .deskripsi {
+      width: 50% !important;
+    }
+  }
+
+
+  .Content{
+    width: 70%;
+  }
+
+  .hrModel {
+    opacity: 1;
+    color: white;
+    border-top: 2.5px solid;
+    width: 25%;
+  }
+
+  .SecondaryDeskripsi {
+    width: 50%;
+    color: #C2D2E7;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 100%;
+    line-height: 25px;
+  }
+
+  /* .deskripsi {
+    width: 35% !important;
+  } */
