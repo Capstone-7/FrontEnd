@@ -4,13 +4,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
+import Iconify from "../../Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
 import swal from "sweetalert";
 
-import AxiosInstance from "../../configs/axios/AxiosInstance";
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
 
-import "./modalUser.css";
+import "../../../assets/styles/modalUser.css";
 
 import Cookies from "js-cookie";
 
@@ -100,36 +100,6 @@ const ProdukBaruModal = ({ id }) => {
       return response;
     } catch (err) { }
   };
-
-  // const UpdateStatus = (prop) => {
-  //   const {
-  //     code,
-  //     description,
-  //     nominal,
-  //     price,
-  //     type,
-  //     category,
-  //     status,
-  //     icon_rul,
-  //   } = prop;
-  //   AxiosInstance.post(
-  //     `product/${id}`,
-  //     {
-  //       code: code,
-  //       description: description,
-  //       nominal: nominal,
-  //       price: price,
-  //       type: type,
-  //       category: category,
-  //       status: isChecked ? "active" : "not active",
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: "Bearer " + token,
-  //       },
-  //     }
-  //   );
-  // };
 
   return (
     <>

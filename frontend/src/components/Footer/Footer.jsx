@@ -12,7 +12,7 @@ const Footer = () => {
     return (
         <Container fluid className={styles.blockfooter}>
             <Row className={styles.rowfooter}>
-                <Col lg={3} sm={3}>
+                <Col lg={3} sm={3} md={3}>
                     <Stack direction="horizontal" gap={3}>
                         <div>
                             <Image src={require("../../assets/icons/logo.png")} alt="logo" fluid className={styles.logo} />
@@ -23,7 +23,7 @@ const Footer = () => {
                                 <div>
                                     License
                                 </div>
-                                <div>
+                                <div >
                                     About
                                 </div>
                                 <div>
@@ -43,8 +43,8 @@ const Footer = () => {
                 </Col>
                 {/* <Col lg={1} className={styles.linerow}>
                 </Col> */}
-                <Col lg={4} sm={4} style={{ textAlign: "center", fontSize: "13px" }}>
-                    <Stack direction="horizontal" gap={5}>
+                <Col lg={4} sm={4} md={4} style={{ textAlign: "center", fontSize: "13px" }} className={styles.columntwo}>
+                    <Stack direction="horizontal" gap={5} className={styles.columntwo}>
                         <div className={styles.line}></div>
                         <div>
                             <h5 style={{ paddingBottom: "12px", color: "#B7D7FD" }}>
@@ -73,7 +73,7 @@ const Footer = () => {
                 </Col>
                 {/* <Col lg={1} className={styles.linerow}>
                 </Col> */}
-                <Col lg={3} sm={3}>
+                <Col lg={3} sm={3} md={3}>
                     <div style={{ color: "#B7D7FD", paddingBottom: "12px", }}>
                         Get in app
                     </div>

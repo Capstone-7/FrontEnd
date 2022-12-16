@@ -49,11 +49,11 @@ const navConfig = [
     path: "/admin/transaksi",
     icon: icon("ic_transaksi"),
   },
-  {
-    title: "Not found",
-    path: "/admin/404",
-    icon: icon("ic_disabled"),
-  },
+  // {
+  //   title: "Not found",
+  //   path: "/admin/404",
+  //   icon: icon("ic_disabled"),
+  // },
 ];
 
 export default navConfig;

@@ -26,20 +26,20 @@ import {
   TablePagination,
 } from "@mui/material";
 // components
-import Label from "../../components/Admin-Component/label/Label";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
-import Scrollbar from "../../components/Admin-Component/scrollbar/Scrollbar";
+import Label from "../../Admin-Component/label/Label";
+import Iconify from "../../Admin-Component/iconify/Iconify";
+import Scrollbar from "../../Admin-Component/scrollbar/Scrollbar";
 // sections
-import { UserListHead, UserListToolbar } from "../../section/user";
+import { UserListHead, UserListToolbar } from "../../../section/user";
 // mock
-import AxiosInstance from "../../configs/axios/AxiosInstance";
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
 
-import "./DailyModal";
-import DailyModal from "./DailyModal";
+import "../Daily/DailyModal";
+import DailyModal from "../Daily/DailyModal";
 import Cookies from "js-cookie";
 
 import EntertainmentModal from "./EntertaimentModal";
-import "../../assets/styles/ProdukBaru.css";
+import styles from "../../../assets/styles/Products.module.css"
 import EntertainmentEditModal from "./EntertainmentEditModal";
 // ----------------------------------------------------------------------
 
@@ -88,7 +88,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserPage() {
+export default function Entertainment() {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");

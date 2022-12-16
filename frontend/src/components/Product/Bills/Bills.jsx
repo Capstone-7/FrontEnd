@@ -4,7 +4,7 @@ import { sentenceCase } from "change-case";
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Image from "react-bootstrap/Image";
+
 // @mui
 import {
   Card,
@@ -25,73 +25,51 @@ import {
   TableContainer,
   TablePagination,
 } from "@mui/material";
-import PropTypes from "prop-types";
-import LastPageIcon from "@mui/icons-material/LastPage";
-import FirstPageIcon from "@mui/icons-material/FirstPage";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import { useTheme } from "@mui/material/styles";
-import TableFooter from "@mui/material/TableFooter";
 // components
-import Label from "../../components/Admin-Component/label/Label";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
-import Scrollbar from "../../components/Admin-Component/scrollbar/Scrollbar";
+import Label from "../../Admin-Component/label/Label";
+import Iconify from "../../Admin-Component/iconify/Iconify";
+import Scrollbar from "../../Admin-Component/scrollbar/Scrollbar";
 // sections
-import { UserListHead, UserListToolbar } from "../../section/user";
+import { UserListHead, UserListToolbar } from "../../../section/user";
 // mock
-import AxiosInstance from "../../configs/axios/AxiosInstance";
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
 
-import "./ModalComponent";
-import ModalComponent from "./ModalComponent";
+import "../Daily/DailyModal";
+import DailyModal from "../Daily/DailyModal";
 import Cookies from "js-cookie";
-import styles from "../../assets/styles/UserPage.module.css";
 
+// pagination
+import PropTypes from 'prop-types';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import { useTheme } from '@mui/material/styles';
+import TableFooter from '@mui/material/TableFooter';
+
+import ProdukBaruModal from "../Daily/ProdukBaruModal";
+
+import BillsModal from "./BillsModal";
+import styles from "../../../assets/styles/Products.module.css"
+import BillsEditModal from "./BillsEditModal";
+import ProductSearchBar from "../../SearchBar/ProductSearchBar";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  {
-    id: "number",
-    headerClassName: "super-app-theme--header",
-    label: "#",
-    alignRight: false,
-  },
-  // { id: "idPengguna", label: "ID PENGGUNA", alignRight: false },
-  {
-    id: "name",
-    headerClassName: "super-app-theme--header",
-    label: "Nama",
-    alignRight: false,
-  },
-  {
-    id: "email",
-    headerClassName: "super-app-theme--header",
-    label: "Email",
-    alignRight: false,
-  },
-  {
-    id: "role",
-    headerClassName: "super-app-theme--header",
-    label: "Tanggal Registrasi",
-    alignRight: false,
-  },
-  {
-    id: "status",
-    headerClassName: "super-app-theme--header",
-    label: "Status",
-    alignRight: false,
-  },
-  {
-    id: "kosong",
-    headerClassName: "super-app-theme--header",
-    label: "",
-    alignRight: false,
-  },
+  { id: "number", label: "#", alignRight: false },
+  { id: "code", label: "Kode Produk", alignRight: false },
+  { id: "role", label: "Deskripsi", alignRight: false },
+  { id: "status", label: "Status", alignRight: false },
+  { id: "nominal", label: "Nominal", alignRight: false },
+  { id: "kategori", label: "Kategori", alignRight: false },
+  { id: "harga", label: "Harga (Rp)", alignRight: false },
+  { id: "kosong", label: "", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (orderBy === "name") {
+  if (orderBy === "code") {
     if (b[orderBy].toLowerCase() < a[orderBy].toLowerCase()) {
       return -1;
     }
@@ -125,7 +103,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.code.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
@@ -165,60 +143,57 @@ function TablePaginationActions(props) {
         disabled={page === 0}
         aria-label="first page"
       >
-        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label="previous page"
       >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
       >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
       >
-        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </Box>
   );
 }
 
-export default function UserPage() {
+export default function Bills() {
   const [open, setOpen] = useState(false);
 
-  // custom pagination actions
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  // pagination
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
 
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
   const [token, setToken] = useState(Cookies.get("token"));
-  const [user, setUser] = useState([]);
-  const [currentID, setCurrentID] = useState("");
+  // const [user, setUser] = useState([]);
+  const [currentID, setCurrentID] = useState("")
+    ;
+  const [products, setProducts] = useState([]);
 
-  const [load, setLoad] = useState();
+  const [update, setUpdate] = useState(false);
 
-  const limiter = 50;
+  // const [load, setLoad] = useState();
+
+  // const limiter = 50;
 
   const handleOpenMenu = (event, id) => {
     setOpen(event.currentTarget);
@@ -229,6 +204,10 @@ export default function UserPage() {
     setOpen(null);
   };
 
+  // const handleMenu = () => {
+  //   setOpen(false)
+  // }
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -237,7 +216,7 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = user.map((n) => n.name);
+      const newSelecteds = products.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -267,15 +246,15 @@ export default function UserPage() {
     setFilterName(event.target.value);
   };
 
-  const filteredUsers = applySortFilter(
-    user,
+  const filteredProducts = applySortFilter(
+    products,
     getComparator(order, orderBy),
     filterName
   );
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredUsers.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredProducts.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -286,40 +265,43 @@ export default function UserPage() {
     setPage(0);
   };
 
+  // not found
+  const isNotFound = !filteredProducts.length && !!filterName;
+
   const handleDelete = (e) => {
-    AxiosInstance.delete(`user/${currentID}`, {
+    AxiosInstance.delete(`product/${currentID}`, {
       headers: { Authorization: `Bearer ` + token },
-    }).then((res) => console.log(res));
-    const userIndex = user.findIndex((usr) => usr._id === currentID);
-    console.log(userIndex);
-    const updateUser = [
-      ...user.slice(0, userIndex),
-      ...user.slice(userIndex + 1),
+    }).then((res) => res);
+    const productIndex = products.findIndex((usr) => usr._id === currentID);
+    const updateProduct = [
+      ...products.slice(0, productIndex),
+      ...products.slice(productIndex + 1),
     ];
-    setUser(updateUser);
+    setProducts(updateProduct);
     setOpen(false);
   };
-  // console.log(currentID);
-
-  const isNotFound = !filteredUsers.length && !!filterName;
 
   useEffect(() => {
-    AxiosInstance.get("user/all", {
+    AxiosInstance.get("product/by_type/bills", {
       headers: {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      setUser(res.data.data);
+      setProducts(res?.data?.data);
     });
-  }, []);
+  }, [update]);
+
+  const handleOpen = () => setOpen(!true);
 
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> Produk | Bills </title>
       </Helmet>
 
-      <Container className={styles.container}>
+      <Container
+        className={styles.container}
+      >
         <Stack
           direction="row"
           alignItems="center"
@@ -327,110 +309,107 @@ export default function UserPage() {
           mb={5}
         >
           <Typography variant="h3" gutterBottom>
-            Manajemen Pengguna
+            Manajemen Produk
           </Typography>
         </Stack>
 
-        <Card>
-          <Typography
-            sx={{ padding: "20px 0px 0px 25px" }}
-            variant="h5"
-            gutterBottom
-          >
-            Data Pengguna
+
+        <Card className={styles.box}>
+          <Typography sx={{ padding: "20px 0px 0px 25px" }} variant="h5" gutterBottom>
+            Bills
           </Typography>
-          <UserListToolbar
+          <ProductSearchBar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
 
+          <MenuItem className="produkBaruBtn" onClick={handleOpen}>
+            <BillsModal id={currentID} setUpdate={setUpdate} update={update} />
+          </MenuItem>
+
           <TableContainer className={styles.tableContainer}>
-            <Table>
+            <Table className={styles.evenodd}>
               <UserListHead
-                sx={{
-                  "& .super-app-theme--header": {
-                    background: "#396EB0 !important",
-                  },
-                }}
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={user.length}
+                rowCount={products.length}
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={handleSelectAllClick}
               />
-              <TableBody
-                id="body-table"
-                sx={{
-                  "& .super-app-theme--header": {
-                    background: "#396EB0",
-                  },
-                }}
-              >
-                {/* {filteredUsers.map((row, index) */}
+              <TableBody id="body-table">
                 {(rowsPerPage > 0
-                  ? filteredUsers?.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : filteredUsers
+                  ? filteredProducts?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : filteredProducts
                 )?.map((row, index) => {
-                  const { name, _id, created, status, email } = row;
-                  const selectedUser = selected.indexOf(name) !== -1;
+                  const {
+                    code,
+                    description,
+                    status,
+                    nominal,
+                    category,
+                    price,
+                    _id,
+                    icon_url,
+                  } = row;
+                  const selectedProduct = selected.indexOf(_id) !== -1;
                   return (
                     <TableRow
                       hover
                       key={_id}
                       tabIndex={-1}
                       role="checkbox"
-                      selected={selectedUser}
+                      selected={selectedProduct}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          checked={selectedUser}
-                          onChange={(event) => handleClick(event, name)}
+                          checked={selectedProduct}
+                          onChange={(event) => handleClick(event, code)}
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">
-                        {page * rowsPerPage + (index + 1)}
+                        {(page * rowsPerPage) + (index + 1)}
                       </TableCell>
-                      <TableCell component="th" scope="row" width="70">
+                      <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Typography variant="subtitle2" noWrap>
-                            {name}
+                            {code.toUpperCase()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align="left" width="100">
-                        {email}
+                      <TableCell align="left">
+                        <div className="d-flex flex-row align-items-center">
+                          <img
+                            src={icon_url}
+                            alt="Produk"
+                            width="60"
+                            className="pb-2"
+                            style={{ paddingInline: "auto" }}
+                          />
+                          <div className="me-0">{description}</div>
+                        </div>
                       </TableCell>
-                      <TableCell align="left" width="50">
-                        {new Date(created).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell align="left" width="50">
+                      <TableCell align="left">
                         <Label
                           color={
-                            status === "not_verified" ? "error" : "success"
+                            status === "Not Active" ? "error" : "success"
                           }
                         >
                           {sentenceCase(status)}
                         </Label>
                       </TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="left">{nominal}</TableCell>
+                      <TableCell align="left">{category}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="right">{price}</TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
                           size="large"
-                          color="#396EB0"
-                          width="54"
+                          color="inherit"
                           onClick={(e) => handleOpenMenu(e, _id)}
                         >
-                          <Image
-                            src={require("../../assets/icons/titiktiga.png")}
-                            alt="titiktiga"
-                            onClick={(event) => handleClick(row.id, event)}
-                            className="image"
-                          />
+                          <Iconify icon={"eva:more-horizontal-fill"} />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -438,7 +417,7 @@ export default function UserPage() {
                 })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
+                    <TableCell colSpan={9} />
                   </TableRow>
                 )}
               </TableBody>
@@ -446,10 +425,11 @@ export default function UserPage() {
               {isNotFound && (
                 <TableBody>
                   <TableRow>
-                    <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                    <TableCell align="center" colSpan={9} sx={{ py: 3 }}>
                       <Paper
                         sx={{
                           textAlign: "center",
+                          backgroundColor: "#ebf1f7"
                         }}
                       >
                         <Typography variant="h6" paragraph>
@@ -469,19 +449,14 @@ export default function UserPage() {
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    rowsPerPageOptions={[
-                      5,
-                      10,
-                      25,
-                      { label: "All", value: -1 },
-                    ]}
-                    colSpan={7}
-                    count={filteredUsers.length}
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={9}
+                    count={filteredProducts.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     SelectProps={{
                       inputProps: {
-                        "aria-label": "rows per page",
+                        'aria-label': 'rows per page',
                       },
                       native: true,
                     }}
@@ -495,7 +470,6 @@ export default function UserPage() {
           </TableContainer>
         </Card>
       </Container>
-
       <Popover
         open={Boolean(open)}
         anchorEl={open}
@@ -514,11 +488,7 @@ export default function UserPage() {
           },
         }}
       >
-        {/* <MenuItem>
-        <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
-        </MenuItem> */}
-        <ModalComponent id={currentID} />
+        <BillsEditModal id={currentID} setUpdate={setUpdate} update={update} setOpen={setOpen} />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

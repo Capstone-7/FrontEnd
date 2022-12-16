@@ -16,7 +16,7 @@ const StyledContent = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   flexDirection: "column",
-  padding: theme.spacing(12, 0),
+  padding: theme.spacing(5, 0),
 }));
 
 // ----------------------------------------------------------------------
@@ -28,9 +28,9 @@ export default function Page404() {
     lottie.loadAnimation({
       container: container.current,
       renderer: "svg",
-      loop: true,
+      // loop: false,
       autoplay: true,
-      animationData: require("./404.json"),
+      animationData: require("../utils/404.json"),
     });
   });
   return (

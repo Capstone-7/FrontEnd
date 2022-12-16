@@ -44,7 +44,10 @@ function NavItem({ item }) {
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panelia-content"
           id="panelia-header"
-          sx={{ padding: 0 }}
+          sx={{
+            padding: 0,
+            backgroundColor: "#EBF1F7",
+          }}
         >
           <StyledNavItem
             component={RouterLink}
@@ -64,7 +67,17 @@ function NavItem({ item }) {
             <ListItemText disableTypography primary={title} />
           </StyledNavItem>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails sx={{
+          backgroundColor: "#EBF1F7",
+          "&:hover": {
+            color: "text.primary",
+          },
+          "&.active": {
+            color: "text.primary",
+            bgcolor: "action.selected",
+            fontWeight: "fontWeightBold",
+          },
+        }}>
           {paths.map((item) => {
             const { title, path, icon, info } = item;
             return (
@@ -102,12 +115,14 @@ function NavItem({ item }) {
       sx={{
         "&:hover": {
           color: "text.primary",
+          // bgcolor: "action.selected",
+          // fontWeight: "fontWeightBold",
         },
-        "&.active": {
-          color: "text.primary",
-          bgcolor: "action.selected",
-          fontWeight: "fontWeightBold",
-        },
+        // "&.active": {
+        //   color: "text.primary",
+        //   bgcolor: "action.selected",
+        //   fontWeight: "fontWeightBold",
+        // },
       }}
     >
       <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>

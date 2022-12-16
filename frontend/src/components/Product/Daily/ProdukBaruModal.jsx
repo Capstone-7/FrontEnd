@@ -4,12 +4,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
+import Iconify from "../../Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
 
-import AxiosInstance from "../../configs/axios/AxiosInstance";
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
 
-import "./modalUser.css";
+import "../../../assets/styles/modalUser.css";
 
 import Cookies from "js-cookie";
 
@@ -25,7 +25,7 @@ const style = {
   p: 4,
 };
 
-const ProdukBaruModal = ({ id }) => {
+const ProdukBaruModal = ({ id, setUpdate, update }) => {
   const [open, setOpen] = React.useState(false);
   const [isChecked, setChecked] = useState();
   const [product, setproduct] = useState({});
@@ -96,10 +96,10 @@ const ProdukBaruModal = ({ id }) => {
         detail: "Detail Here",
         period: 0,
       });
+      setUpdate(!update);
       return response;
     } catch (err) {}
   };
-
 
   return (
     <>
@@ -177,7 +177,7 @@ const ProdukBaruModal = ({ id }) => {
                   <Form.Check
                     type="switch"
                     id="custom-switch"
-                    label={"status"}
+                    label={isChecked ? "Active" : "Not Active"}
                     checked={isChecked}
                     value={status}
                     onClick={() => setChecked(!isChecked)}
@@ -213,7 +213,7 @@ const ProdukBaruModal = ({ id }) => {
                     <option selected disabled>
                       Pilih Disini
                     </option>
-                    <option value="Paket Data">Paket Data</option>
+                    <option value="data">Paket Data</option>
                     <option value="pulsa">Pulsa</option>
                     <option value="Top up">Top Up</option>
                   </Form.Select>

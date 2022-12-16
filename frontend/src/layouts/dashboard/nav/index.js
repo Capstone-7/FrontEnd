@@ -46,7 +46,7 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const admin = useSelector((state) => state?.UserSlice?.admin);
-  console.log(admin);
+  // console.log(admin)
 
   const { pathname } = useLocation();
 
@@ -67,7 +67,7 @@ export default function Nav({ openNav, onCloseNav }) {
           height: 1,
           display: "flex",
           flexDirection: "column",
-          backgroudColor: "red",
+          backgroundColor: "#EBF1F7"
         },
       }}
     >
@@ -101,7 +101,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
       <NavSection data={navConfig} />
 
-      <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{ flexGrow: 1, backgroundColor: "#EBF1F7" }} />
 
       {/* <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
         <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
@@ -135,6 +135,7 @@ export default function Nav({ openNav, onCloseNav }) {
       sx={{
         flexShrink: { lg: 0 },
         width: { lg: NAV_WIDTH },
+        backgroundColor: "#EBF1F7"
       }}
     >
       {isDesktop ? (
@@ -144,7 +145,7 @@ export default function Nav({ openNav, onCloseNav }) {
           PaperProps={{
             sx: {
               width: NAV_WIDTH,
-              bgcolor: "background.default",
+              bgcolor: "#EBF1F7",
               borderRightStyle: "dashed",
             },
           }}
@@ -159,7 +160,7 @@ export default function Nav({ openNav, onCloseNav }) {
             keepMounted: true,
           }}
           PaperProps={{
-            sx: { width: NAV_WIDTH },
+            sx: { width: NAV_WIDTH, backgroundColor: "#EBF1F7" },
           }}
         >
           {renderContent}

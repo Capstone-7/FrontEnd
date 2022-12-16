@@ -8,10 +8,6 @@
   border-radius: 20px;
 }
 
-/* .evenodd {
-    background-color: #ebf1f7;
-} */
-
 .evenodd tr:nth-child(odd) {
   background-color: #ebf1f7;
 }
@@ -42,6 +38,7 @@
     height: 800;
   }
 }
+
 
 /* .error {
   color: #FF4128;

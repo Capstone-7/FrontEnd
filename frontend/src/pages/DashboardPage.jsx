@@ -4,7 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import { Grid, Container, Typography } from "@mui/material";
 
 import React, { useState, useEffect } from "react";
-import AxiosInstance from "../../configs/axios/AxiosInstance";
+import AxiosInstance from "../configs/axios/AxiosInstance";
 import Cookies from "js-cookie";
 // components
 // sections
@@ -12,17 +12,16 @@ import {
   AppCurrentVisits,
   AppWebsiteVisits,
   AppWidgetSummary,
-} from "../../section";
+} from "../section";
 
 // styles
-// import styles from '../../assets/styles/DashboardPage.module.css'
-import "./DashboardPage.css";
+import "../assets/styles/DashboardPage.css";
 
-import ProductDashboard from "../../assets/images/Product_dashboard.png";
-import TransaksiDashboard from "../../assets/images/Transaction_dashboard.png";
-import UserDashboard from "../../assets/images/User_dashboard.png";
+import ProductDashboard from "../assets/images/Product_dashboard.png";
+import TransaksiDashboard from "../assets/images/Transaction_dashboard.png";
+import UserDashboard from "../assets/images/User_dashboard.png";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentAdmins } from "../../store/features/UserSlice";
+import { getCurrentAdmins } from "../store/features/UserSlice";
 
 // ----------------------------------------------------------------------
 
