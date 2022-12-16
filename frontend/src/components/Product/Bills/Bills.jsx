@@ -39,18 +39,18 @@ import DailyModal from "../Daily/DailyModal";
 import Cookies from "js-cookie";
 
 // pagination
-import PropTypes from 'prop-types';
-import LastPageIcon from '@mui/icons-material/LastPage';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { useTheme } from '@mui/material/styles';
-import TableFooter from '@mui/material/TableFooter';
+import PropTypes from "prop-types";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import { useTheme } from "@mui/material/styles";
+import TableFooter from "@mui/material/TableFooter";
 
 import ProdukBaruModal from "../Daily/ProdukBaruModal";
 
 import BillsModal from "./BillsModal";
-import styles from "../../../assets/styles/Products.module.css"
+import styles from "../../../assets/styles/Products.module.css";
 import BillsEditModal from "./BillsEditModal";
 import ProductSearchBar from "../../SearchBar/ProductSearchBar";
 // ----------------------------------------------------------------------
@@ -143,28 +143,36 @@ function TablePaginationActions(props) {
         disabled={page === 0}
         aria-label="first page"
       >
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label="previous page"
       >
-        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
       >
-        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
       >
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </Box>
   );
@@ -172,6 +180,7 @@ function TablePaginationActions(props) {
 
 export default function Bills() {
   const [open, setOpen] = useState(false);
+  const [update, setUpdate] = useState(false);
 
   // pagination
   const [page, setPage] = useState(0);
@@ -181,19 +190,9 @@ export default function Bills() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
-
-  // const [rowsPerPage, setRowsPerPage] = useState(10);
   const [token, setToken] = useState(Cookies.get("token"));
-  // const [user, setUser] = useState([]);
-  const [currentID, setCurrentID] = useState("")
-    ;
+  const [currentID, setCurrentID] = useState("");
   const [products, setProducts] = useState([]);
-
-  const [update, setUpdate] = useState(false);
-
-  // const [load, setLoad] = useState();
-
-  // const limiter = 50;
 
   const handleOpenMenu = (event, id) => {
     setOpen(event.currentTarget);
@@ -203,10 +202,6 @@ export default function Bills() {
   const handleCloseMenu = () => {
     setOpen(null);
   };
-
-  // const handleMenu = () => {
-  //   setOpen(false)
-  // }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -254,7 +249,9 @@ export default function Bills() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredProducts.length) : 0;
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - filteredProducts.length)
+      : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -289,7 +286,7 @@ export default function Bills() {
     }).then((res) => {
       setProducts(res?.data?.data);
     });
-  }, [update]);
+  }, [update]); // ON PROGRESSSSSSSSSSSSSSSSSSSS
 
   const handleOpen = () => setOpen(!true);
 
@@ -299,9 +296,7 @@ export default function Bills() {
         <title> Produk | Bills </title>
       </Helmet>
 
-      <Container
-        className={styles.container}
-      >
+      <Container className={styles.container}>
         <Stack
           direction="row"
           alignItems="center"
@@ -313,9 +308,12 @@ export default function Bills() {
           </Typography>
         </Stack>
 
-
         <Card className={styles.box}>
-          <Typography sx={{ padding: "20px 0px 0px 25px" }} variant="h5" gutterBottom>
+          <Typography
+            sx={{ padding: "20px 0px 0px 25px" }}
+            variant="h5"
+            gutterBottom
+          >
             Bills
           </Typography>
           <ProductSearchBar
@@ -341,7 +339,10 @@ export default function Bills() {
               />
               <TableBody id="body-table">
                 {(rowsPerPage > 0
-                  ? filteredProducts?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  ? filteredProducts?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
                   : filteredProducts
                 )?.map((row, index) => {
                   const {
@@ -370,7 +371,7 @@ export default function Bills() {
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">
-                        {(page * rowsPerPage) + (index + 1)}
+                        {page * rowsPerPage + (index + 1)}
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
@@ -393,16 +394,18 @@ export default function Bills() {
                       </TableCell>
                       <TableCell align="left">
                         <Label
-                          color={
-                            status === "Not Active" ? "error" : "success"
-                          }
+                          color={status === "Not Active" ? "error" : "success"}
                         >
                           {sentenceCase(status)}
                         </Label>
                       </TableCell>
-                      <TableCell style={{ color: "#396EB0" }} align="left">{nominal}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="left">
+                        {nominal}
+                      </TableCell>
                       <TableCell align="left">{category}</TableCell>
-                      <TableCell style={{ color: "#396EB0" }} align="right">{price}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="right">
+                        {price}
+                      </TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
                           size="large"
@@ -429,7 +432,7 @@ export default function Bills() {
                       <Paper
                         sx={{
                           textAlign: "center",
-                          backgroundColor: "#ebf1f7"
+                          backgroundColor: "#ebf1f7",
                         }}
                       >
                         <Typography variant="h6" paragraph>
@@ -449,14 +452,19 @@ export default function Bills() {
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    rowsPerPageOptions={[
+                      5,
+                      10,
+                      25,
+                      { label: "All", value: -1 },
+                    ]}
                     colSpan={9}
                     count={filteredProducts.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     SelectProps={{
                       inputProps: {
-                        'aria-label': 'rows per page',
+                        "aria-label": "rows per page",
                       },
                       native: true,
                     }}
@@ -488,7 +496,12 @@ export default function Bills() {
           },
         }}
       >
-        <BillsEditModal id={currentID} setUpdate={setUpdate} update={update} setOpen={setOpen} />
+        <BillsEditModal
+          id={currentID}
+          setUpdate={setUpdate}
+          update={update}
+          setOpen={setOpen}
+        />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

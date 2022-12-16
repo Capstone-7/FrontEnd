@@ -39,7 +39,7 @@ import DailyModal from "../Daily/DailyModal";
 import Cookies from "js-cookie";
 
 import EntertainmentModal from "./EntertaimentModal";
-import styles from "../../../assets/styles/Products.module.css"
+import styles from "../../../assets/styles/Products.module.css";
 import EntertainmentEditModal from "./EntertainmentEditModal";
 // ----------------------------------------------------------------------
 
@@ -90,6 +90,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function Entertainment() {
   const [open, setOpen] = useState(false);
+  const [update, setUpdate] = useState(false);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);

@@ -41,7 +41,7 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      console.log(res)
+      console.log(res);
       setproduct(res.data.data);
       setChecked(res.data.data.status === "active" ? true : false);
     });
@@ -69,7 +69,7 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
       setOpen(false);
       // setAnchorEl(null);
       return response;
-    } catch (err) { }
+    } catch (err) {}
   };
 
   return (
@@ -117,7 +117,6 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                     name="icon_url"
                     value={product?.icon_url}
                     type="text"
-                  // placeholder={product?.icon_url}
                   />
                 </Form.Group>
 
@@ -128,7 +127,6 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                     name="code"
                     value={product?.code}
                     type="text"
-                  // placeholder={product?.code}
                   />
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
@@ -138,7 +136,6 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                     name="description"
                     value={product?.description}
                     type="text"
-                  // placeholder={product?.description}
                   />
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicEmail">
@@ -161,7 +158,6 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                     name="nominal"
                     value={product?.nominal}
                     type="text"
-                  // placeholder={product?.nominal}
                   />
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicPassword">
@@ -172,11 +168,10 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                     style={{ width: "130px" }}
                     aria-label="Default select example"
                     value={product?.category}
-                  // onSelect={product?.category}
+                    // onSelect={product?.category}
                   >
                     <option value="token">Token</option>
                     <option value="Tagihan Air">Tagihan Air</option>
-                    {/* <option value="Internet & Tv">Internet & Tv</option> */}
                     <option value="Pendidikan">Pendidikan</option>
                   </Form.Select>
                 </Form.Group>
