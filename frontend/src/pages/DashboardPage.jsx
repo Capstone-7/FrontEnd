@@ -4,7 +4,7 @@ import { useTheme } from "@mui/material/styles";
 import { Grid, Container, Typography } from "@mui/material";
 
 import React, { useState, useEffect } from "react";
-import AxiosInstance from "../../configs/axios/AxiosInstance";
+import AxiosInstance from "../configs/axios/AxiosInstance";
 import Cookies from "js-cookie";
 // components
 // sections
@@ -12,32 +12,34 @@ import {
   AppCurrentVisits,
   AppWebsiteVisits,
   AppWidgetSummary,
-} from "../../section";
+} from "../section";
 
 // styles
-// import styles from '../../assets/styles/DashboardPage.module.css'
-import "./DashboardPage.css";
+import "../assets/styles/DashboardPage.css";
 
-import ProductDashboard from "../../assets/images/Product_dashboard.png";
-import TransaksiDashboard from "../../assets/images/Transaction_dashboard.png";
-import UserDashboard from "../../assets/images/User_dashboard.png";
-import { useDispatch } from "react-redux";
-import { getCurrentAdmins } from "../../store/features/UserSlice";
+import ProductDashboard from "../assets/images/Product_dashboard.png";
+import TransaksiDashboard from "../assets/images/Transaction_dashboard.png";
+import UserDashboard from "../assets/images/User_dashboard.png";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrentAdmins } from "../store/features/UserSlice";
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+  const [token, setToken] = useState(Cookies.get("token"));
+  const [user, setUser] = useState(0);
+  const [product, setProduct] = useState(0);
+  const [transaksi, setTransaksi] = useState(0);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getCurrentAdmins());
   }, []);
 
-  const [token, setToken] = useState(Cookies.get("token"));
-  const [user, setUser] = useState(0);
-  const [product, setProduct] = useState(0);
-  const [transaksi, setTransaksi] = useState(0);
+  const admin = useSelector((state) => state?.UserSlice?.admin);
+  const [pieChart, setPieChart] = useState(0);
 
   useEffect(() => {
     AxiosInstance.get("user/count", {
@@ -63,7 +65,14 @@ export default function DashboardAppPage() {
     }).then((res) => setProduct(res.data.data));
   }, []);
 
-  // console.log(user)
+  useEffect(() => {
+    AxiosInstance.get("transaction/topbycategory", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }).then((res) => setPieChart(res.data.data));
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -72,27 +81,10 @@ export default function DashboardAppPage() {
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Halo, Selamat Datang Admin
+          Halo, Selamat Datang {admin?.data?.name}
         </Typography>
 
         <Grid container spacing={3}>
-          {/* <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="Weekly Sales"
-              total={714000}
-              icon={"ant-design:android-filled"}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="New Users"
-              total={1352831}
-              color="info"
-              icon={"ant-design:apple-filled"}
-            />
-          </Grid> */}
-
           <div className="container dashboardPage">
             <div className="row d-flex flex-row justify-content-between content">
               <h3 className="dataStatistik">

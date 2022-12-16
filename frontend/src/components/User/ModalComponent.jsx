@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 
 import AxiosInstance from "../../configs/axios/AxiosInstance";
 
-import "./modalUser.css";
+import "../../assets/styles/modalUser.css";
 
 import Cookies from "js-cookie";
 
@@ -80,8 +80,8 @@ const ModalComponent = ({ id }) => {
         >
           <Box
             sx={{
-              width: 851,
-              height: 550,
+              width: 600,
+              height: 300,
             }}
             className="boxModal"
           >
@@ -99,7 +99,6 @@ const ModalComponent = ({ id }) => {
                 <h3 className="mt-3 ms-auto" onClick={handleOpen}>
                   X
                 </h3>
-                <h3 onClick={() => console.log(user.status)}>Test</h3>
               </div>
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -115,9 +114,6 @@ const ModalComponent = ({ id }) => {
                   />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-5">
-                  {/* <button type="button" class="btn TombolReset">
-                    Reset
-                  </button> */}
                   <button
                     type="button"
                     class="btn TombolSimpan"

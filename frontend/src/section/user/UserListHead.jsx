@@ -42,8 +42,11 @@ export default function UserListHead({
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        <TableCell
+          sx={{ background: '#396EB0 !important', }}
+          padding="checkbox">
           <Checkbox
+            sx={{ color: '#EBF1F7 !important' }}
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
@@ -51,11 +54,29 @@ export default function UserListHead({
         </TableCell>
         {headLabel.map((headCell) => (
           <TableCell
+            sx={{
+              background: '#396EB0 !important',
+              color: "#EBF1F7",
+
+
+            }}
             key={headCell.id}
             align={headCell.alignRight ? 'right' : 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
+              sx={{
+                color: '#EBF1F7 !important',
+                "&:hover": {
+                  color: "#EBF1F7 !important",
+                },
+                "&.Mui-active": {
+                  color: "#EBF1F7 !important"
+                },
+                '& .MuiTableSortLabel-icon': {
+                  color: '#EBF1F7 !important',
+                },
+              }}
               hideSortIcon
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}

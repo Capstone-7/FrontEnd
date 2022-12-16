@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import TransactionAPIPayoll from "../../apis/TransactionPayOll.Api"
 
 const initialState = {
-    transaction: "",
+    transaction: [],
     status: 'idle',
     error: null
 };
@@ -20,12 +20,19 @@ const initialState = {
 export const getAllTransactions = createAsyncThunk("PayOll/getAllTransaction", async () => {
     try {
         const res = await TransactionAPIPayoll.getAllTransaction()
+        // console.log(res)
         return res.data.data
     } catch (error) {
         console.log(error)
     }
 })
 
+export const changesTransactionStatus = createAsyncThunk("PayOll/changeTransactionStatus", async (data) => {
+    // console.log(data)
+    const res = await TransactionAPIPayoll.changeTransactionStatus(data)
+    return res.data.data
+    // console.log(res)
+})
 // export const getTotalTransactions = createAsyncThunk("PayOll/getTotalTransaction", async () => {
 //     const res = await TransactionAPIPayoll.getTotalTransaction()
 // })
@@ -38,9 +45,6 @@ export const getAllTransactions = createAsyncThunk("PayOll/getAllTransaction", a
 //     const res = await TransactionAPIPayoll.submitTransaction()
 // })
 
-// export const changesTransactionStatus = createAsyncThunk("PayOll/changeTransactionStatus", async () => {
-//     const res = await TransactionAPIPayoll.changeTransactionStatus()
-// })
 
 export const TransactionSlice = createSlice({
     name: "transaction",
@@ -56,7 +60,12 @@ export const TransactionSlice = createSlice({
             // })
             .addCase(getAllTransactions.fulfilled, (state, action) => {
                 state.status = "success"
-                state.data = action.payload
+                // console.log(state.transaction)
+                // console.log(action.payload)
+                state.transaction = action.payload
+            })
+            .addCase(changesTransactionStatus.fulfilled, (state, action) => {
+                state.status = "success"
             })
         // .addCase(getTotalTransactions.fulfilled, (state, action) => {
         //     state.status = "success"
@@ -65,9 +74,6 @@ export const TransactionSlice = createSlice({
         //     state.status = "success"
         // })
         // .addCase(submitTransactions.fulfilled, (state, action) => {
-        //     state.status = "success"
-        // })
-        // .addCase(changesTransactionStatus.fulfilled, (state, action) => {
         //     state.status = "success"
         // })
     }

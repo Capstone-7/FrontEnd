@@ -22,7 +22,7 @@ export default function NavSection({ data = [], ...other }) {
     <Box {...other}>
       <List disablePadding sx={{ p: 1 }}>
         {data.map((item) => (
-          <NavItem key={item.title} item={item} />
+          <NavItem key={item.title} item={item} sx={{ marginTop: 5 }} />
         ))}
       </List>
     </Box>
@@ -44,7 +44,10 @@ function NavItem({ item }) {
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panelia-content"
           id="panelia-header"
-          sx={{ padding: 0 }}
+          sx={{
+            padding: 0,
+            backgroundColor: "#EBF1F7",
+          }}
         >
           <StyledNavItem
             component={RouterLink}
@@ -53,18 +56,28 @@ function NavItem({ item }) {
               "&:hover": {
                 color: "text.primary",
               },
-              "&.active": {
-                color: "text.primary",
-                bgcolor: "action.selected",
-                fontWeight: "fontWeightBold",
-              },
+              // "&.active": {
+              //   color: "text.primary",
+              //   bgcolor: "action.selected",
+              //   fontWeight: "fontWeightBold",
+              // },
             }}
           >
             <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>
             <ListItemText disableTypography primary={title} />
           </StyledNavItem>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails sx={{
+          backgroundColor: "#EBF1F7",
+          "&:hover": {
+            color: "text.primary",
+          },
+          "&.active": {
+            color: "text.primary",
+            bgcolor: "action.selected",
+            fontWeight: "fontWeightBold",
+          },
+        }}>
           {paths.map((item) => {
             const { title, path, icon, info } = item;
             return (
@@ -102,12 +115,14 @@ function NavItem({ item }) {
       sx={{
         "&:hover": {
           color: "text.primary",
+          // bgcolor: "action.selected",
+          // fontWeight: "fontWeightBold",
         },
-        "&.active": {
-          color: "text.primary",
-          bgcolor: "action.selected",
-          fontWeight: "fontWeightBold",
-        },
+        // "&.active": {
+        //   color: "text.primary",
+        //   bgcolor: "action.selected",
+        //   fontWeight: "fontWeightBold",
+        // },
       }}
     >
       <StyledNavItemIcon>{icon && icon}</StyledNavItemIcon>

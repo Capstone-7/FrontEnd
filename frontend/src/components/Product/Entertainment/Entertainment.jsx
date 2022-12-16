@@ -26,23 +26,25 @@ import {
   TablePagination,
 } from "@mui/material";
 // components
-import Label from "../../components/Admin-Component/label/Label";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
-import Scrollbar from "../../components/Admin-Component/scrollbar/Scrollbar";
+import Label from "../../Admin-Component/label/Label";
+import Iconify from "../../Admin-Component/iconify/Iconify";
+import Scrollbar from "../../Admin-Component/scrollbar/Scrollbar";
 // sections
-import { UserListHead, UserListToolbar } from "../../section/user";
+import { UserListHead, UserListToolbar } from "../../../section/user";
 // mock
-import AxiosInstance from "../../configs/axios/AxiosInstance";
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
 
-import "./ModalComponent";
-import ModalComponent from "./ModalComponent";
+import "../Daily/DailyModal";
+import DailyModal from "../Daily/DailyModal";
 import Cookies from "js-cookie";
 
+import EntertainmentModal from "./EntertaimentModal";
+import styles from "../../../assets/styles/Products.module.css";
+import EntertainmentEditModal from "./EntertainmentEditModal";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: "number", label: "#", alignRight: false },
-  // { id: "idPengguna", label: "ID PENGGUNA", alignRight: false },
   { id: "name", label: "Kode Produk", alignRight: false },
   { id: "role", label: "Deskripsi", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
@@ -86,8 +88,9 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserPage() {
+export default function Entertainment() {
   const [open, setOpen] = useState(false);
+  const [update, setUpdate] = useState(false);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
@@ -145,15 +148,6 @@ export default function UserPage() {
     setSelected(newSelected);
   };
 
-  // const handleChangePage = (event, newPage) => {
-  //   setPage(newPage);
-  // };
-
-  // const handleChangeRowsPerPage = (event) => {
-  //   setPage(0);
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  // };
-
   const handleFilterByName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
@@ -168,27 +162,32 @@ export default function UserPage() {
     filterName
   );
 
-  const handleDelete = (e, id) => {
-    // e.preventDefault();
-    // setLoad(true);
-    // AxiosInstance.delete(`user/${id}`).then((res) => setLoad(false));
-    AxiosInstance.delete(`user/${id}`, {
+  const handleDelete = (e) => {
+    AxiosInstance.delete(`product/${currentID}`, {
       headers: { Authorization: `Bearer ` + token },
-    }).then((res) => console.log(res));
-    console.log(AxiosInstance.deleteuser(currentID));
+    }).then((res) => res);
+    const userIndex = user.findIndex((usr) => usr._id === currentID);
+    const updateUser = [
+      ...user.slice(0, userIndex),
+      ...user.slice(userIndex + 1),
+    ];
+    setUser(updateUser);
+    setOpen(false);
   };
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
   useEffect(() => {
-    AxiosInstance.get("product/all", {
+    AxiosInstance.get("product/by_type/entertaiment", {
       headers: {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      setUser(res.data);
+      setUser(res?.data?.data);
     });
   }, []);
+
+  const handleOpen = () => setOpen(!true);
 
   return (
     <>
@@ -198,7 +197,7 @@ export default function UserPage() {
 
       <Container
         sx={{
-          width: 1300,
+          width: 1400,
         }}
       >
         <Stack
@@ -207,11 +206,11 @@ export default function UserPage() {
           justifyContent="space-between"
           mb={5}
         >
-          <Typography variant="h4" gutterBottom>
-            Manajemen Produk
-            <div onClick={() => console.log(user)}>test</div>
-          </Typography>
+          <Typography variant="h3">Manajemen Produk</Typography>
         </Stack>
+        <Typography variant="h4" className="ms-3">
+          Entertainment
+        </Typography>
 
         <Card>
           <UserListToolbar
@@ -219,6 +218,9 @@ export default function UserPage() {
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
+          <MenuItem className="produkBaruBtn" onClick={handleOpen}>
+            <EntertainmentModal id={currentID} />
+          </MenuItem>
 
           <TableContainer sx={{ width: 1150, height: 500 }}>
             <Table>
@@ -259,10 +261,8 @@ export default function UserPage() {
                         />
                       </TableCell>
                       <TableCell id="user-data" align="left"></TableCell>
-                      {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          {/* <Avatar alt={name} src={urlFoto} /> */}
                           <Typography variant="subtitle2" noWrap>
                             {code.toUpperCase()}
                           </Typography>
@@ -292,93 +292,21 @@ export default function UserPage() {
                       <TableCell align="left">{nominal}</TableCell>
                       <TableCell align="left">{category}</TableCell>
                       <TableCell align="left">{price}</TableCell>
-                      <TableCell align="right">
+                      <TableCell align="right" width="50">
                         <IconButton
                           size="large"
                           color="inherit"
                           onClick={(e) => handleOpenMenu(e, _id)}
                         >
-                          <Iconify icon={"eva:more-vertical-fill"} />
+                          <Iconify icon={"eva:more-horizontal-fill"} />
                         </IconButton>
                       </TableCell>
                     </TableRow>
                   );
                 })}
-                {/* {filteredUsers
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
-                      const {
-                        id,
-                        name,
-                        idPengguna,
-                        role,
-                        status,
-                        email,
-                        avatarUrl,
-                      } = row;
-                      const selectedUser = selected.indexOf(name) !== -1;
-
-                      return (
-                        <TableRow
-                          hover
-                          key={id}
-                          tabIndex={-1}
-                          role="checkbox"
-                          selected={selectedUser}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={selectedUser}
-                              onChange={(event) => handleClick(event, name)}
-                            />
-                          </TableCell>
-                          <TableCell align="left">{number}</TableCell>
-
-                          <TableCell align="left">{idPengguna}</TableCell>
-
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack
-                              direction="row"
-                              alignItems="center"
-                              spacing={2}
-                            >
-                              <Avatar alt={name} src={avatarUrl} />
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-
-                          <TableCell align="left">{email}</TableCell>
-
-                          <TableCell align="left">{role}</TableCell>
-
-                          <TableCell align="left">
-                            <Label
-                              color={
-                                (status === "Unverified" && "error") ||
-                                "success"
-                              }
-                            >
-                              {sentenceCase(status)}
-                            </Label>
-                          </TableCell>
-
-                          <TableCell align="right">
-                            <IconButton
-                              size="large"
-                              color="inherit"
-                              onClick={handleOpenMenu}
-                            >
-                              <Iconify icon={"eva:more-vertical-fill"} />
-                            </IconButton>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })} */}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={5} />
+                    <TableCell colSpan={6} />
                   </TableRow>
                 )}
               </TableBody>
@@ -408,17 +336,6 @@ export default function UserPage() {
               )}
             </Table>
           </TableContainer>
-
-          {/* <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={user.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            sx={{ float: "left" }}
-          /> */}
         </Card>
       </Container>
 
@@ -440,16 +357,9 @@ export default function UserPage() {
           },
         }}
       >
-        {/* <MenuItem>
-        <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
-        </MenuItem> */}
-        <ModalComponent id={currentID} />
+        <EntertainmentEditModal id={currentID} />
 
-        <MenuItem
-          sx={{ color: "error.main" }}
-          onClick={(e) => handleDelete(e, currentID)}
-        >
+        <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
           Delete
         </MenuItem>

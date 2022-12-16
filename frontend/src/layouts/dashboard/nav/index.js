@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // @mui
 import { styled, alpha } from "@mui/material/styles";
+import { useSelector } from "react-redux";
+import account from "../../../_mock/account";
 import {
   Box,
   Link,
@@ -12,13 +14,11 @@ import {
   Avatar,
   Stack,
 } from "@mui/material";
-// mock
-import account from '../../../_mock/account';
 // hooks
 import useResponsive from "../../../hooks/useResponsive";
 // components
 // import Logo from "../../../components/Admin-Component/logo/Logo";
-import Logo from '../../../assets/icons/logo.png'
+import Logo from "../../../assets/icons/logo.png";
 import Scrollbar from "../../../components/Admin-Component/scrollbar";
 import NavSection from "../../../components/Admin-Component/nav-section";
 //
@@ -45,6 +45,8 @@ Nav.propTypes = {
 };
 
 export default function Nav({ openNav, onCloseNav }) {
+  const admin = useSelector((state) => state?.UserSlice?.admin);
+
   const { pathname } = useLocation();
 
   const isDesktop = useResponsive("up", "lg");
@@ -53,7 +55,6 @@ export default function Nav({ openNav, onCloseNav }) {
     if (openNav) {
       onCloseNav();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const renderContent = (
@@ -64,11 +65,18 @@ export default function Nav({ openNav, onCloseNav }) {
           height: 1,
           display: "flex",
           flexDirection: "column",
+          backgroundColor: "#EBF1F7"
         },
       }}
     >
-      <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
-        <img src={Logo} alt="Logo PayOll" style={{height: "100px", marginInline: 'auto'}} />
+      <Box
+        sx={{ px: 2.5, py: 3, display: "inline-flex", backgroudColor: "red" }}
+      >
+        <img
+          src={Logo}
+          alt="Logo PayOll"
+          style={{ height: "100px", marginInline: "auto" }}
+        />
       </Box>
 
       <Box sx={{ mb: 5, mx: 2.5 }}>
@@ -78,11 +86,11 @@ export default function Nav({ openNav, onCloseNav }) {
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                {account.displayName}
+                {admin?.data?.name}
               </Typography>
 
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {account.role}
+                {admin?.data?.role.toUpperCase()}
               </Typography>
             </Box>
           </StyledAccount>
@@ -91,7 +99,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
       <NavSection data={navConfig} />
 
-      <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{ flexGrow: 1, backgroundColor: "#EBF1F7" }} />
 
       {/* <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
         <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
@@ -125,6 +133,7 @@ export default function Nav({ openNav, onCloseNav }) {
       sx={{
         flexShrink: { lg: 0 },
         width: { lg: NAV_WIDTH },
+        backgroundColor: "#EBF1F7"
       }}
     >
       {isDesktop ? (
@@ -134,7 +143,7 @@ export default function Nav({ openNav, onCloseNav }) {
           PaperProps={{
             sx: {
               width: NAV_WIDTH,
-              bgcolor: "background.default",
+              bgcolor: "#EBF1F7",
               borderRightStyle: "dashed",
             },
           }}
@@ -149,7 +158,7 @@ export default function Nav({ openNav, onCloseNav }) {
             keepMounted: true,
           }}
           PaperProps={{
-            sx: { width: NAV_WIDTH },
+            sx: { width: NAV_WIDTH, backgroundColor: "#EBF1F7" },
           }}
         >
           {renderContent}

@@ -22,20 +22,20 @@ import { getCurrentAdmins } from "../../../store/features/UserSlice";
 
 // ----------------------------------------------------------------------
 
-const MENU_OPTIONS = [
-  {
-    label: "Home",
-    icon: "eva:home-fill",
-  },
-  {
-    label: "Profile",
-    icon: "eva:person-fill",
-  },
-  {
-    label: "Settings",
-    icon: "eva:settings-2-fill",
-  },
-];
+// const MENU_OPTIONS = [
+//   {
+//     label: "Home",
+//     icon: "eva:home-fill",
+//   },
+//   {
+//     label: "Profile",
+//     icon: "eva:person-fill",
+//   },
+//   {
+//     label: "Settings",
+//     icon: "eva:settings-2-fill",
+//   },
+// ];
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +50,6 @@ export default function AccountPopover() {
 
   const admin = useSelector((state) => state?.UserSlice?.admin);
 
-  // console.log(admin)
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -60,27 +59,6 @@ export default function AccountPopover() {
   const handleClose = () => {
     setOpen(null);
   };
-
-  // const navigate = useNavigate();
-  // const handleLogout = () => {
-  //   Auth.signOut();
-  //   navigate("/admin/login");
-  // };
-
-  // const [token, setToken] = useState(Cookies.get("token"));
-  // const [name, setName] = useState();
-  // const [email, setEmail] = useState();
-
-  // useEffect(() => {
-  //   AxiosInstance.get("user/profile", {
-  //     headers: {
-  //       Authorization: "Bearer " + token,
-  //     },
-  //   }).then((res) => {
-  //     setName(res.data.data.name);
-  //     setEmail(res.data.data.email);
-  //   });
-  // }, []);
 
   const handleLogOut = () => {
     Auth.signOut();
@@ -139,13 +117,13 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: "dashed" }} />
 
-        <Stack sx={{ p: 1 }}>
+        {/* <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
             <MenuItem key={option.label} onClick={handleClose}>
               {option.label}
             </MenuItem>
           ))}
-        </Stack>
+        </Stack> */}
 
         <Divider sx={{ borderStyle: "dashed" }} />
 
