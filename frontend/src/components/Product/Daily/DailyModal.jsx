@@ -41,8 +41,9 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
+      console.log(res)
       setproduct(res.data.data);
-      setChecked(res.data.data.status === 'Active' ? true : false)
+      setChecked(res.data.data.status === 'active' ? true : false)
     });
   }, []);
 
@@ -51,6 +52,7 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
       ...product,
       [e.target.name]: e.target.value,
     });
+    // console.log(e.target.value)
   };
 
   const handleChangePriceData = (e) => {
@@ -142,7 +144,7 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
                     name="category"
                     style={{ width: "130px" }}
                     aria-label="Default select example"
-                    value={product.category}
+                    value={product?.category}
                   // onSelect={product?.category}
                   >
                     <option disabled value="">Pilih Disini</option>
