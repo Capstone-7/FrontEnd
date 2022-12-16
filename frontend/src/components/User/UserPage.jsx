@@ -33,9 +33,9 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import { useTheme } from "@mui/material/styles";
 import TableFooter from "@mui/material/TableFooter";
 // components
-import Label from "../../components/Admin-Component/label/Label";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
-import Scrollbar from "../../components/Admin-Component/scrollbar/Scrollbar";
+import Label from "../Admin-Component/label/Label";
+import Iconify from "../Admin-Component/iconify/Iconify";
+import Scrollbar from "../Admin-Component/scrollbar/Scrollbar";
 // sections
 import { UserListHead, UserListToolbar } from "../../section/user";
 // mock

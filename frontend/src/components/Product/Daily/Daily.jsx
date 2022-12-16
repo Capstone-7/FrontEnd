@@ -25,17 +25,19 @@ import {
   TableContainer,
   TablePagination,
 } from "@mui/material";
-// components
-import Label from "../../components/Admin-Component/label/Label";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
-import Scrollbar from "../../components/Admin-Component/scrollbar/Scrollbar";
-// sections
-import { UserListHead, UserListToolbar } from "../../section/user";
-// mock
-import AxiosInstance from "../../configs/axios/AxiosInstance";
 
-import "./DailyModal";
-import DailyModal from "./DailyModal";
+// components
+import Label from "../../Admin-Component/label/Label";
+import Iconify from "../../Admin-Component/iconify/Iconify";
+import Scrollbar from "../../Admin-Component/scrollbar/Scrollbar";
+
+// sections
+import { UserListHead, UserListToolbar } from "../../../section/user";
+// mock
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
+
+import "../Daily/DailyModal";
+import DailyModal from "../Daily/DailyModal";
 import Cookies from "js-cookie";
 
 // pagination
@@ -48,10 +50,8 @@ import { useTheme } from '@mui/material/styles';
 import TableFooter from '@mui/material/TableFooter';
 
 import ProdukBaruModal from "./ProdukBaruModal";
-
-import BillsModal from "./BillsModal";
-import styles from "../../assets/styles/Products.module.css"
-import BillsEditModal from "./BillsEditModal";
+import styles from "../../../assets/styles/Products.module.css"
+import ProductSearchBar from "../../SearchBar/ProductSearchBar";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -169,7 +169,7 @@ function TablePaginationActions(props) {
   );
 }
 
-export default function Bills() {
+export default function Daily() {
   const [open, setOpen] = useState(false);
 
   // pagination
@@ -181,20 +181,15 @@ export default function Bills() {
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
 
-  // const [rowsPerPage, setRowsPerPage] = useState(10);
   const [token, setToken] = useState(Cookies.get("token"));
-  // const [user, setUser] = useState([]);
-  const [currentID, setCurrentID] = useState("")
-    ;
+  const [currentID, setCurrentID] = useState("");
+
   const [products, setProducts] = useState([]);
 
   const [update, setUpdate] = useState(false);
 
-  // const [load, setLoad] = useState();
-
-  // const limiter = 50;
-
   const handleOpenMenu = (event, id) => {
+    // console.log(id)
     setOpen(event.currentTarget);
     setCurrentID(id);
   };
@@ -203,15 +198,12 @@ export default function Bills() {
     setOpen(null);
   };
 
-  // const handleMenu = () => {
-  //   setOpen(false)
-  // }
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -250,6 +242,8 @@ export default function Bills() {
     getComparator(order, orderBy),
     filterName
   );
+  // console.log(product)
+
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -281,21 +275,24 @@ export default function Bills() {
   };
 
   useEffect(() => {
-    AxiosInstance.get("product/by_type/bills", {
+    AxiosInstance.get("product/by_type/daily", {
       headers: {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
+      // console.log(res)
       setProducts(res?.data?.data);
     });
   }, [update]);
+
+  // console.log(products)
 
   const handleOpen = () => setOpen(!true);
 
   return (
     <>
       <Helmet>
-        <title> Produk | Bills </title>
+        <title> Produk | Daily </title>
       </Helmet>
 
       <Container
@@ -312,21 +309,20 @@ export default function Bills() {
           </Typography>
         </Stack>
 
-
         <Card className={styles.box}>
           <Typography sx={{ padding: "20px 0px 0px 25px" }} variant="h5" gutterBottom>
-            Bills
+            Daily
           </Typography>
-          <UserListToolbar
+          <ProductSearchBar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
 
           <MenuItem className="produkBaruBtn" onClick={handleOpen}>
-            <BillsModal id={currentID} setUpdate={setUpdate} update={update} />
+            <ProdukBaruModal id={currentID} setUpdate={setUpdate} update={update} />
           </MenuItem>
-
+          {/*  */}
           <TableContainer className={styles.tableContainer}>
             <Table className={styles.evenodd}>
               <UserListHead
@@ -371,6 +367,7 @@ export default function Bills() {
                       <TableCell component="th" scope="row" width="20">
                         {(page * rowsPerPage) + (index + 1)}
                       </TableCell>
+                      {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Typography variant="subtitle2" noWrap>
@@ -396,12 +393,12 @@ export default function Bills() {
                             status === "Not Active" ? "error" : "success"
                           }
                         >
-                          {sentenceCase(status)}
+                          {status}
                         </Label>
                       </TableCell>
                       <TableCell style={{ color: "#396EB0" }} align="left">{nominal}</TableCell>
                       <TableCell align="left">{category}</TableCell>
-                      <TableCell style={{ color: "#396EB0" }} align="right">{price}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="right">{price.toLocaleString(['id'])}</TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
                           size="large"
@@ -469,6 +466,7 @@ export default function Bills() {
           </TableContainer>
         </Card>
       </Container>
+
       <Popover
         open={Boolean(open)}
         anchorEl={open}
@@ -487,7 +485,7 @@ export default function Bills() {
           },
         }}
       >
-        <BillsEditModal id={currentID} setUpdate={setUpdate} update={update} setOpen={setOpen} />
+        <DailyModal id={currentID} setUpdate={setUpdate} update={update} setOpen={setOpen} />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

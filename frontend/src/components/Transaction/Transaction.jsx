@@ -1,44 +1,30 @@
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import MenuItem from '@mui/material/MenuItem';
+import Form from 'react-bootstrap/Form';
+import { sentenceCase } from "change-case";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TablePagination from '@mui/material/TablePagination';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import { ToastContainer, toast } from 'react-toastify';
+import { Container, Typography } from '@mui/material';
+import { useSelector, useDispatch } from "react-redux"
+import Image from 'react-bootstrap/Image'
+import { Slide, Zoom, Flip, Bounce } from 'react-toastify';
+import Menu from '@mui/material/Menu';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import moment from "moment/moment";
+import Iconify from "../../components/Admin-Component/iconify/Iconify";
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
-import { sentenceCase } from "change-case";
-import React, { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-
-// @mui
-import {
-  Card,
-  Table,
-  Stack,
-  Paper,
-  Avatar,
-  Button,
-  Popover,
-  Checkbox,
-  TableRow,
-  MenuItem,
-  TableBody,
-  TableCell,
-  Container,
-  Typography,
-  IconButton,
-  TableContainer,
-  TablePagination,
-} from "@mui/material";
-
-// components
-import Label from "../../components/Admin-Component/label/Label";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
-import Scrollbar from "../../components/Admin-Component/scrollbar/Scrollbar";
-
-// sections
-import { UserListHead, UserListToolbar } from "../../section/user";
-// mock
-import AxiosInstance from "../../configs/axios/AxiosInstance";
-
-import "./DailyModal";
-import DailyModal from "./DailyModal";
-import Cookies from "js-cookie";
 
 // pagination
 import PropTypes from 'prop-types';
@@ -49,25 +35,41 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { useTheme } from '@mui/material/styles';
 import TableFooter from '@mui/material/TableFooter';
 
-import ProdukBaruModal from "./ProdukBaruModal";
-import styles from "../../assets/styles/Products.module.css"
-// ----------------------------------------------------------------------
+// sections
+import { UserListHead, UserListToolbar } from "../../section/user";
+
+// components
+import Label from "../../components/Admin-Component/label/Label";
+import Scrollbar from "../../components/Admin-Component/scrollbar/Scrollbar";
+
+// @mui
+import {
+  Card,
+  Stack,
+  Avatar,
+  Popover,
+  Checkbox,
+} from "@mui/material";
+
+import { changesTransactionStatus, getAllTransactions } from '../../store/features/TransactionSlice';
+import TransactionSearchBar from '../../components/SearchBar/TransactionSearchBar';
+import '../../assets/styles/Transaction.css'
 
 const TABLE_HEAD = [
   { id: "number", label: "#", alignRight: false },
-  { id: "code", label: "Kode Produk", alignRight: false },
-  { id: "role", label: "Deskripsi", alignRight: false },
+  { id: "user_email", label: "Email Pengguna", alignRight: false },
+  { id: "product_code", label: "Kode Produk", alignRight: false },
+  { id: "total_price", label: "Total Pembayaran", alignRight: false },
+  { id: "xendit_status", label: "Status Pembayaran", alignRight: false },
+  { id: "xendit_payment_channel", label: "Metode Pembayaran", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
-  { id: "nominal", label: "Nominal", alignRight: false },
-  { id: "kategori", label: "Kategori", alignRight: false },
-  { id: "harga", label: "Harga (Rp)", alignRight: false },
+  { id: "created", label: "Tanggal Pembayaran", alignRight: false },
   { id: "kosong", label: "", alignRight: false },
 ];
 
-// ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (orderBy === "code") {
+  if (orderBy === "user_email") {
     if (b[orderBy].toLowerCase() < a[orderBy].toLowerCase()) {
       return -1;
     }
@@ -101,7 +103,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.code.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.user_email.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
@@ -125,13 +127,6 @@ function TablePaginationActions(props) {
 
   const handleLastPageButtonClick = (event) => {
     onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  TablePaginationActions.propTypes = {
-    count: PropTypes.number.isRequired,
-    onPageChange: PropTypes.func.isRequired,
-    page: PropTypes.number.isRequired,
-    rowsPerPage: PropTypes.number.isRequired,
   };
 
   return (
@@ -168,34 +163,46 @@ function TablePaginationActions(props) {
   );
 }
 
-export default function Daily() {
-  const [open, setOpen] = useState(false);
+TablePaginationActions.propTypes = {
+  count: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+};
 
-  // pagination
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+const Transaction = () => {
+  // initialData
+  const [data, setData] = useState({
+    id: "",
+    status: "",
+  })
 
+  // filter and selected transactions
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
 
-  const [token, setToken] = useState(Cookies.get("token"));
-  const [currentID, setCurrentID] = useState("");
+  // Menu
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const [products, setProducts] = useState([]);
+  // Modal
+  const [modalShow, setModalShow] = React.useState(false);
 
+  // changes state
   const [update, setUpdate] = useState(false);
 
-  const handleOpenMenu = (event, id) => {
-    // console.log(id)
-    setOpen(event.currentTarget);
-    setCurrentID(id);
-  };
+  // call API using dispatch and use global state with using selector
+  const dispatch = useDispatch()
+  const transactions = useSelector((state) => state?.TransactionSlice?.transaction)
 
-  const handleCloseMenu = () => {
-    setOpen(null);
-  };
+  useEffect(() => {
+    dispatch(getAllTransactions())
+  }, [dispatch, update])
+
+  // Pagination
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -206,14 +213,14 @@ export default function Daily() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = products.map((n) => n.name);
+      const newSelecteds = transactions.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
+  const handleClickSelect = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
     if (selectedIndex === -1) {
@@ -236,17 +243,15 @@ export default function Daily() {
     setFilterName(event.target.value);
   };
 
-  const filteredProducts = applySortFilter(
-    products,
+  const filteredTransactions = applySortFilter(
+    transactions,
     getComparator(order, orderBy),
     filterName
   );
-  // console.log(product)
-
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredProducts.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - transactions?.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -258,44 +263,85 @@ export default function Daily() {
   };
 
   // not found
-  const isNotFound = !filteredProducts.length && !!filterName;
+  const isNotFound = !filteredTransactions.length && !!filterName;
 
-  const handleDelete = (e) => {
-    AxiosInstance.delete(`product/${currentID}`, {
-      headers: { Authorization: `Bearer ` + token },
-    }).then((res) => res);
-    const productIndex = products.findIndex((usr) => usr._id === currentID);
-    const updateProduct = [
-      ...products.slice(0, productIndex),
-      ...products.slice(productIndex + 1),
-    ];
-    setProducts(updateProduct);
-    setOpen(false);
+
+
+  // Menu Logic
+  const open = Boolean(anchorEl);
+
+  const handleClick = (id, status, event) => {
+    // console.log(status)
+    setAnchorEl(event.currentTarget);
+    setData({
+      id,
+      status
+    })
   };
 
-  useEffect(() => {
-    AxiosInstance.get("product/by_type/daily", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }).then((res) => {
-      // console.log(res)
-      setProducts(res?.data?.data);
-    });
-  }, [update]);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-  // console.log(products)
+  const closeMenu = () => {
+    setModalShow(true)
+    setAnchorEl(null);
+  }
 
-  const handleOpen = () => setOpen(!true);
+  // onChange and Submit to initialData
+  const onChange = e => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (data.status !== "") {
+      dispatch(changesTransactionStatus({
+        status: data.status,
+        id: data.id
+      }))
+      setModalShow(false)
+      setUpdate(!update)
+      // console.log("ok")
+      toast.success('Edit Berhasil', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } else {
+      alert("masukkan gagal")
+    }
+  }
+
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Helmet>
-        <title> Produk | Daily </title>
+        <title>Transaksi</title>
       </Helmet>
 
       <Container
-        className={styles.container}
+        className="container"
       >
         <Stack
           direction="row"
@@ -304,115 +350,99 @@ export default function Daily() {
           mb={5}
         >
           <Typography variant="h3" gutterBottom>
-            Manajemen Produk
+            Manage Transaksi
           </Typography>
         </Stack>
 
-        <Card className={styles.box}>
+        <Card className="box">
           <Typography sx={{ padding: "20px 0px 0px 25px" }} variant="h5" gutterBottom>
-            Daily
+            Data Transaksi
           </Typography>
-          <UserListToolbar
+          <TransactionSearchBar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
 
-          <MenuItem className="produkBaruBtn" onClick={handleOpen}>
-            <ProdukBaruModal id={currentID} setUpdate={setUpdate} update={update} />
-          </MenuItem>
-          {/*  */}
-          <TableContainer className={styles.tableContainer}>
-            <Table className={styles.evenodd}>
+          <TableContainer className="tableContainer">
+            <Table className="evenodd">
               <UserListHead
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={products.length}
+                rowCount={transactions.length}
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={handleSelectAllClick}
               />
               <TableBody id="body-table">
                 {(rowsPerPage > 0
-                  ? filteredProducts?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  : filteredProducts
+                  ? filteredTransactions?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : filteredTransactions
                 )?.map((row, index) => {
-                  const {
-                    code,
-                    description,
-                    status,
-                    nominal,
-                    category,
-                    price,
-                    _id,
-                    icon_url,
-                  } = row;
-                  const selectedProduct = selected.indexOf(_id) !== -1;
+                  const selectedTransactions = selected.indexOf(row.id) !== -1;
                   return (
                     <TableRow
                       hover
-                      key={_id}
+                      key={row.id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                       tabIndex={-1}
                       role="checkbox"
-                      selected={selectedProduct}
+                      selected={selectedTransactions}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          checked={selectedProduct}
-                          onChange={(event) => handleClick(event, code)}
+                          checked={selectedTransactions}
+                          onChange={(event) => handleClickSelect(event, row.user_email)}
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">
                         {(page * rowsPerPage) + (index + 1)}
                       </TableCell>
-                      {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Typography variant="subtitle2" noWrap>
-                            {code.toUpperCase()}
+                            {row.user_email}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align="left">
-                        <div className="d-flex flex-row align-items-center">
-                          <img
-                            src={icon_url}
-                            alt="Produk"
-                            width="60"
-                            className="pb-2"
-                            style={{ paddingInline: "auto" }}
-                          />
-                          <div className="me-0">{description}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell align="left">
+                      <TableCell align="left">{row.product_code}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="right">{row.total_price.toLocaleString(['id'])}</TableCell>
+                      <TableCell align="center">
                         <Label
                           color={
-                            status === "Not Active" ? "error" : "success"
+                            row.xendit_status === "EXPIRED" ? "error" : "success"
                           }
                         >
-                          {status}
+                          {sentenceCase(row.xendit_status)}
                         </Label>
                       </TableCell>
-                      <TableCell style={{ color: "#396EB0" }} align="left">{nominal}</TableCell>
-                      <TableCell align="left">{category}</TableCell>
-                      <TableCell style={{ color: "#396EB0" }} align="right">{price.toLocaleString(['id'])}</TableCell>
+                      <TableCell align="left">{row.xendit_payment_channel}</TableCell>
+                      <TableCell align="center">
+                        <Label
+                          color={
+                            row.status === "SUCCESS" ? "success" : row.status === "PENDING" ? "warning" : "error"
+                          }
+                        >
+                          {sentenceCase(row.status)}
+                        </Label>
+                      </TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="left">{moment(row.created).subtract(10, "days").calendar()}</TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
                           size="large"
                           color="inherit"
-                          onClick={(e) => handleOpenMenu(e, _id)}
+                          onClick={(event) => handleClick(row.id, row.status, event)}
                         >
                           <Iconify icon={"eva:more-horizontal-fill"} />
                         </IconButton>
                       </TableCell>
                     </TableRow>
-                  );
+                  )
                 })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={9} />
+                    <TableCell colSpan={10} />
                   </TableRow>
                 )}
               </TableBody>
@@ -420,7 +450,7 @@ export default function Daily() {
               {isNotFound && (
                 <TableBody>
                   <TableRow>
-                    <TableCell align="center" colSpan={9} sx={{ py: 3 }}>
+                    <TableCell align="center" colSpan={10} sx={{ py: 3 }}>
                       <Paper
                         sx={{
                           textAlign: "center",
@@ -441,12 +471,13 @@ export default function Daily() {
                   </TableRow>
                 </TableBody>
               )}
+
               <TableFooter>
                 <TableRow>
                   <TablePagination
                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                    colSpan={9}
-                    count={filteredProducts.length}
+                    colSpan={10}
+                    count={filteredTransactions.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     SelectProps={{
@@ -466,31 +497,56 @@ export default function Daily() {
         </Card>
       </Container>
 
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: "top", horizontal: "left" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            "& .MuiMenuItem-root": {
-              px: 1,
-              typography: "body2",
-              borderRadius: 0.75,
-            },
-          },
+      <Menu
+        style={{ marginRight: "20px" }}
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
         }}
       >
-        <DailyModal id={currentID} setUpdate={setUpdate} update={update} setOpen={setOpen} />
-
-        <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
-          <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
-          Delete
+        <MenuItem
+          onClick={closeMenu}>
+          <Iconify
+            icon={"eva:edit-fill"}
+            sx={{ mr: 2 }} />
+          Edit
         </MenuItem>
-      </Popover>
+      </Menu>
+      <Modal
+        size="md"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        show={modalShow}
+        backdrop="static"
+        keyboard={false}
+        className="modal"
+      >
+        <Modal.Header>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Ubah <span style={{ color: "#396EB0" }}>Status Transaksi</span>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <h6>Status</h6>
+            <Form.Select onChange={onChange} name="status" value={data.status} style={{ width: "130px" }} aria-label="Default select example">
+              <option selected disabled>Pilih Disini</option>
+              <option value="SUCCESS">Success</option>
+              <option value="PENDING">Pending</option>
+              <option value="CANCEL">Cancel</option>
+            </Form.Select>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={handleSubmit} style={{ backgroundColor: "#396EB0", border: "0" }} variant="primary">Simpan</Button>
+          <Button style={{ border: "0" }} variant="danger" onClick={() => setModalShow(false)}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     </>
-  );
+  )
 }
+
+export default Transaction

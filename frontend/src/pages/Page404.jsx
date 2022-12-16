@@ -30,7 +30,7 @@ export default function Page404() {
       renderer: "svg",
       // loop: false,
       autoplay: true,
-      animationData: require("./404.json"),
+      animationData: require("../utils/404.json"),
     });
   });
   return (

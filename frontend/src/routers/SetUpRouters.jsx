@@ -2,18 +2,18 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LandingPage from "../pages/LandingPage";
 import PageProduct from "../pages/PageProduct";
-import DashboardAppPage from "../pages/admin/DashboardPage";
-import Page404 from "../pages/admin/Page404";
-import UserPage from "../pages/admin/UserPage";
-import Transaksi from "../pages/admin/Transaksi";
+import DashboardAppPage from "../pages/DashboardPage";
+import Page404 from "../pages/Page404";
+import UserPage from "../components/User/UserPage";
+import Transaction from "../components/Transaction/Transaction";
 import { Provider } from "react-redux";
 import ProtectedRoute from "./ProtectedRoute";
 import { store } from "../store/Store";
 import PrivateRoute from "./PrivateRoute";
 import { ProductLayout } from "../layouts/dashboard";
-import Daily from "../pages/admin/Daily";
-import Bills from "../pages/admin/Bills";
-import Entertainment from "../pages/admin/Entertainment";
+import Daily from "../components/Product/Daily/Daily"
+import Bills from "../components/Product/Bills/Bills";
+import Entertainment from "../components/Product/Entertainment/Entertainment";
 
 const SetUpRouters = () => {
   return (
@@ -37,7 +37,7 @@ const SetUpRouters = () => {
                 element={<Entertainment />}
               />
             </Route>
-            <Route path="/admin/transaksi" element={<Transaksi />} />
+            <Route path="/admin/transaksi" element={<Transaction />} />
             <Route path="/admin/user" element={<UserPage />} />
           </Route>
         </Routes>

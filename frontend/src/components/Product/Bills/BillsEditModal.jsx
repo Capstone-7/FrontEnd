@@ -4,12 +4,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
+import Iconify from "../../Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
 
-import AxiosInstance from "../../configs/axios/AxiosInstance";
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
 
-import "./modalUser.css";
+import "../../../assets/styles/modalUser.css";
 
 import Cookies from "js-cookie";
 
@@ -25,24 +25,15 @@ const style = {
     p: 4,
 };
 
-const EntertainmentEditModal = ({ id }) => {
-    const [open, setOpen] = React.useState(false);
+const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
+    const [opens, setOpens] = React.useState(false);
     // const [anchorEl, setAnchorEl] = React.useState(null);
     const [isChecked, setChecked] = useState();
-    const [product, setproduct] = useState({
-        gambar: "",
-        kodeProduk: "",
-        deskripsi: "",
-        status: "Not Active",
-        nominals: "",
-        kategori: "",
-        details: "New Details",
-        harga: "",
-    });
+    const [product, setproduct] = useState({});
 
     const token = Cookies.get("token");
 
-    const handleOpen = () => setOpen(!open);
+    const handleOpen = () => setOpens(!opens);
 
     useEffect(() => {
         AxiosInstance.get(`product/${id}`, {
@@ -51,6 +42,7 @@ const EntertainmentEditModal = ({ id }) => {
             },
         }).then((res) => {
             setproduct(res.data.data);
+            setChecked(res.data.data.status === 'Active' ? true : false)
         });
     }, []);
 
@@ -61,31 +53,18 @@ const EntertainmentEditModal = ({ id }) => {
         });
     };
 
+    const handleChangePriceData = (e) => {
+        setproduct({
+            ...product,
+            [e.target.name]: Number(e.target.value),
+        });
+    };
+
     const UpdateState = async (data, e) => {
         e.preventDefault();
         try {
-            const response = await AxiosInstance.put(`/product/${data}`, {
-                icon_url: product.gambar,
-                code: product.kodeProduk,
-                description: product.deskripsi,
-                status: product.status,
-                nominal: product.nominals,
-                category: product.kategori,
-                type: product.type,
-                details: product.details,
-                active_period: product.period,
-                price: Number(product.harga),
-            });
-            setproduct({
-                gambar: "",
-                kodeProduk: "",
-                deskripsi: "",
-                status: "Not Active",
-                nominals: "",
-                kategori: "",
-                details: "New",
-                harga: "",
-            });
+            const response = await AxiosInstance.put(`/product/${data}`, product);
+            setUpdate(!update)
             setOpen(false)
             // setAnchorEl(null);
             return response;
@@ -100,7 +79,7 @@ const EntertainmentEditModal = ({ id }) => {
                     Edit
                 </MenuItem>
                 <Modal
-                    open={open}
+                    open={opens}
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
                     className="modalUser"
@@ -121,7 +100,7 @@ const EntertainmentEditModal = ({ id }) => {
                             <div className="d-flex justify-content-start align-items-center ModalChild">
                                 <h3 className="EditModal ms-3">
                                     Ubah Data
-                                    <span className="PrimaryModal__Data ms-2">Entertainment</span>
+                                    <span className="PrimaryModal__Data ms-2">Bills</span>
                                 </h3>
                                 <h3 className="mt-3 ms-auto" onClick={handleOpen}>
                                     X
@@ -170,11 +149,10 @@ const EntertainmentEditModal = ({ id }) => {
                                         value={product?.kategori}
                                     // onSelect={product?.category}
                                     >
-                                        <option selected disabled>
-                                            Pilih Disini
-                                        </option>
-                                        <option value="Games">Games</option>
-                                        {/* <option value="Digital Voucher">Digital Voucher</option> */}
+                                        <option value="token">Token</option>
+                                        <option value="Tagihan Air">Tagihan Air</option>
+                                        {/* <option value="Internet & Tv">Internet & Tv</option> */}
+                                        <option value="Pendidikan">Pendidikan</option>
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group className="mb-1" controlId="formBasicPassword">
@@ -202,4 +180,4 @@ const EntertainmentEditModal = ({ id }) => {
     );
 };
 
-export default EntertainmentEditModal;
+export default BillsEditModal;

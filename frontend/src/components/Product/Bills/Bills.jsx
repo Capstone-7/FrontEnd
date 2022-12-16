@@ -1,31 +1,42 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
-import MenuItem from '@mui/material/MenuItem';
-import Form from 'react-bootstrap/Form';
-import { sentenceCase } from "change-case";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TablePagination from '@mui/material/TablePagination';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
-import './Transaksi.css'
-import { ToastContainer, toast } from 'react-toastify';
-import { Container, Typography } from '@mui/material';
-import { useSelector, useDispatch } from "react-redux"
-import Image from 'react-bootstrap/Image'
-import { Slide, Zoom, Flip, Bounce } from 'react-toastify';
-import Menu from '@mui/material/Menu';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import moment from "moment/moment";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
+import { sentenceCase } from "change-case";
+import React, { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+
+// @mui
+import {
+  Card,
+  Table,
+  Stack,
+  Paper,
+  Avatar,
+  Button,
+  Popover,
+  Checkbox,
+  TableRow,
+  MenuItem,
+  TableBody,
+  TableCell,
+  Container,
+  Typography,
+  IconButton,
+  TableContainer,
+  TablePagination,
+} from "@mui/material";
+// components
+import Label from "../../Admin-Component/label/Label";
+import Iconify from "../../Admin-Component/iconify/Iconify";
+import Scrollbar from "../../Admin-Component/scrollbar/Scrollbar";
+// sections
+import { UserListHead, UserListToolbar } from "../../../section/user";
+// mock
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
+
+import "../Daily/DailyModal";
+import DailyModal from "../Daily/DailyModal";
+import Cookies from "js-cookie";
 
 // pagination
 import PropTypes from 'prop-types';
@@ -36,39 +47,29 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { useTheme } from '@mui/material/styles';
 import TableFooter from '@mui/material/TableFooter';
 
-// sections
-import { UserListHead, UserListToolbar } from "../../section/user";
+import ProdukBaruModal from "../Daily/ProdukBaruModal";
 
-// components
-import Label from "../../components/Admin-Component/label/Label";
-import Scrollbar from "../../components/Admin-Component/scrollbar/Scrollbar";
-
-// @mui
-import {
-  Card,
-  Stack,
-  Avatar,
-  Popover,
-  Checkbox,
-} from "@mui/material";
-
-import { changesTransactionStatus, getAllTransactions } from '../../store/features/TransactionSlice';
+import BillsModal from "./BillsModal";
+import styles from "../../../assets/styles/Products.module.css"
+import BillsEditModal from "./BillsEditModal";
+import ProductSearchBar from "../../SearchBar/ProductSearchBar";
+// ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: "number", label: "#", alignRight: false },
-  { id: "user_email", label: "Email Pengguna", alignRight: false },
-  { id: "product_code", label: "Kode Produk", alignRight: false },
-  { id: "total_price", label: "Total Pembayaran", alignRight: false },
-  { id: "xendit_status", label: "Status Pembayaran", alignRight: false },
-  { id: "xendit_payment_channel", label: "Metode Pembayaran", alignRight: false },
+  { id: "code", label: "Kode Produk", alignRight: false },
+  { id: "role", label: "Deskripsi", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
-  { id: "created", label: "Tanggal Pembayaran", alignRight: false },
+  { id: "nominal", label: "Nominal", alignRight: false },
+  { id: "kategori", label: "Kategori", alignRight: false },
+  { id: "harga", label: "Harga (Rp)", alignRight: false },
   { id: "kosong", label: "", alignRight: false },
 ];
 
+// ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (orderBy === "user_email") {
+  if (orderBy === "code") {
     if (b[orderBy].toLowerCase() < a[orderBy].toLowerCase()) {
       return -1;
     }
@@ -102,7 +103,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.user_email.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.code.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
@@ -126,6 +127,13 @@ function TablePaginationActions(props) {
 
   const handleLastPageButtonClick = (event) => {
     onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
+
+  TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
   };
 
   return (
@@ -162,48 +170,43 @@ function TablePaginationActions(props) {
   );
 }
 
-TablePaginationActions.propTypes = {
-  count: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
-};
+export default function Bills() {
+  const [open, setOpen] = useState(false);
 
-const Transaksi = () => {
-  // initialData
-  const [data, setData] = useState({
-    id: "",
-    status: "",
-  })
+  // pagination
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  // filter and selected transactions
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
 
-  // Menu
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [token, setToken] = useState(Cookies.get("token"));
+  // const [user, setUser] = useState([]);
+  const [currentID, setCurrentID] = useState("")
+    ;
+  const [products, setProducts] = useState([]);
 
-  // Modal
-  const [modalShow, setModalShow] = React.useState(false);
-
-  // changes state
   const [update, setUpdate] = useState(false);
 
-  // call API using dispatch and use global state with using selector
-  const dispatch = useDispatch()
-  const transactions = useSelector((state) => state?.TransactionSlice?.transaction)
+  // const [load, setLoad] = useState();
 
-  useEffect(() => {
-    // console.log("ok")
-    dispatch(getAllTransactions())
-  }, [dispatch, update])
+  // const limiter = 50;
 
-  // console.log(transactions)
-  // Pagination
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const handleOpenMenu = (event, id) => {
+    setOpen(event.currentTarget);
+    setCurrentID(id);
+  };
+
+  const handleCloseMenu = () => {
+    setOpen(null);
+  };
+
+  // const handleMenu = () => {
+  //   setOpen(false)
+  // }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -211,17 +214,16 @@ const Transaksi = () => {
     setOrderBy(property);
   };
 
-
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = transactions.map((n) => n.name);
+      const newSelecteds = products.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClickSelect = (event, name) => {
+  const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
     if (selectedIndex === -1) {
@@ -244,15 +246,15 @@ const Transaksi = () => {
     setFilterName(event.target.value);
   };
 
-  const filteredTransactions = applySortFilter(
-    transactions,
+  const filteredProducts = applySortFilter(
+    products,
     getComparator(order, orderBy),
     filterName
   );
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - transactions?.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredProducts.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -264,82 +266,41 @@ const Transaksi = () => {
   };
 
   // not found
-  const isNotFound = !filteredTransactions.length && !!filterName;
+  const isNotFound = !filteredProducts.length && !!filterName;
 
-
-
-  // Menu Logic
-  const open = Boolean(anchorEl);
-
-  const handleClick = (id, event) => {
-    setAnchorEl(event.currentTarget);
-    setData({
-      id
-    })
+  const handleDelete = (e) => {
+    AxiosInstance.delete(`product/${currentID}`, {
+      headers: { Authorization: `Bearer ` + token },
+    }).then((res) => res);
+    const productIndex = products.findIndex((usr) => usr._id === currentID);
+    const updateProduct = [
+      ...products.slice(0, productIndex),
+      ...products.slice(productIndex + 1),
+    ];
+    setProducts(updateProduct);
+    setOpen(false);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  useEffect(() => {
+    AxiosInstance.get("product/by_type/bills", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }).then((res) => {
+      setProducts(res?.data?.data);
+    });
+  }, [update]);
 
-  const closeMenu = () => {
-    setModalShow(true)
-    setAnchorEl(null);
-  }
-
-  // onChange and Submit to initialData
-  const onChange = e => {
-    setData({
-      ...data,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (data.status !== "") {
-      dispatch(changesTransactionStatus({
-        status: data.status,
-        id: data.id
-      }))
-      setModalShow(false)
-      console.log("ok")
-      toast.success('Edit Berhasil', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    } else {
-      alert("masukkan gagal")
-    }
-  }
-
+  const handleOpen = () => setOpen(!true);
 
   return (
     <>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       <Helmet>
-        <title>Transaksi</title>
+        <title> Produk | Bills </title>
       </Helmet>
 
       <Container
-        className="container"
+        className={styles.container}
       >
         <Stack
           direction="row"
@@ -347,51 +308,65 @@ const Transaksi = () => {
           justifyContent="space-between"
           mb={5}
         >
-          <Typography variant="h4" sx={{ mb: 0 }}>
-            Manage Transaksi
+          <Typography variant="h3" gutterBottom>
+            Manajemen Produk
           </Typography>
         </Stack>
 
-        <Card className="box">
+
+        <Card className={styles.box}>
           <Typography sx={{ padding: "20px 0px 0px 25px" }} variant="h5" gutterBottom>
-            Daily
+            Bills
           </Typography>
-          <UserListToolbar
+          <ProductSearchBar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
 
-          <TableContainer className="tableContainer">
-            <Table className="evenodd">
+          <MenuItem className="produkBaruBtn" onClick={handleOpen}>
+            <BillsModal id={currentID} setUpdate={setUpdate} update={update} />
+          </MenuItem>
+
+          <TableContainer className={styles.tableContainer}>
+            <Table className={styles.evenodd}>
               <UserListHead
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={transactions.length}
+                rowCount={products.length}
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={handleSelectAllClick}
               />
               <TableBody id="body-table">
                 {(rowsPerPage > 0
-                  ? filteredTransactions?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  : filteredTransactions
+                  ? filteredProducts?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : filteredProducts
                 )?.map((row, index) => {
-                  const selectedTransactions = selected.indexOf(row.id) !== -1;
+                  const {
+                    code,
+                    description,
+                    status,
+                    nominal,
+                    category,
+                    price,
+                    _id,
+                    icon_url,
+                  } = row;
+                  const selectedProduct = selected.indexOf(_id) !== -1;
                   return (
                     <TableRow
                       hover
-                      key={row.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      key={_id}
                       tabIndex={-1}
                       role="checkbox"
-                      selected={selectedTransactions}
+                      selected={selectedProduct}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          checked={selectedTransactions}
-                          onChange={(event) => handleClickSelect(event, row.user_email)}
+                          checked={selectedProduct}
+                          onChange={(event) => handleClick(event, code)}
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">
@@ -400,47 +375,49 @@ const Transaksi = () => {
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Typography variant="subtitle2" noWrap>
-                            {row.user_email}
+                            {code.toUpperCase()}
                           </Typography>
                         </Stack>
                       </TableCell>
-                      <TableCell align="left">{row.product_code}</TableCell>
-                      <TableCell style={{ color: "#396EB0" }} align="right">{row.total_price.toLocaleString(['id'])}</TableCell>
-                      <TableCell align="center">
+                      <TableCell align="left">
+                        <div className="d-flex flex-row align-items-center">
+                          <img
+                            src={icon_url}
+                            alt="Produk"
+                            width="60"
+                            className="pb-2"
+                            style={{ paddingInline: "auto" }}
+                          />
+                          <div className="me-0">{description}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell align="left">
                         <Label
                           color={
-                            row.xendit_status === "EXPIRED" ? "error" : "success"
+                            status === "Not Active" ? "error" : "success"
                           }
                         >
-                          {sentenceCase(row.xendit_status)}
+                          {sentenceCase(status)}
                         </Label>
                       </TableCell>
-                      <TableCell align="left">{row.xendit_payment_channel}</TableCell>
-                      <TableCell align="center">
-                        <Label
-                          color={
-                            row.status === "SUCCESS" ? "success" : row.status === "PENDING" ? "warning" : "error"
-                          }
-                        >
-                          {sentenceCase(row.status)}
-                        </Label>
-                      </TableCell>
-                      <TableCell style={{ color: "#396EB0" }} align="left">{moment(row.created).subtract(10, "days").calendar()}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="left">{nominal}</TableCell>
+                      <TableCell align="left">{category}</TableCell>
+                      <TableCell style={{ color: "#396EB0" }} align="right">{price}</TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
                           size="large"
                           color="inherit"
-                          onClick={(event) => handleClick(row.id, event)}
+                          onClick={(e) => handleOpenMenu(e, _id)}
                         >
                           <Iconify icon={"eva:more-horizontal-fill"} />
                         </IconButton>
                       </TableCell>
                     </TableRow>
-                  )
+                  );
                 })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={10} />
+                    <TableCell colSpan={9} />
                   </TableRow>
                 )}
               </TableBody>
@@ -448,7 +425,7 @@ const Transaksi = () => {
               {isNotFound && (
                 <TableBody>
                   <TableRow>
-                    <TableCell align="center" colSpan={10} sx={{ py: 3 }}>
+                    <TableCell align="center" colSpan={9} sx={{ py: 3 }}>
                       <Paper
                         sx={{
                           textAlign: "center",
@@ -469,13 +446,12 @@ const Transaksi = () => {
                   </TableRow>
                 </TableBody>
               )}
-
               <TableFooter>
                 <TableRow>
                   <TablePagination
                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                    colSpan={10}
-                    count={filteredTransactions.length}
+                    colSpan={9}
+                    count={filteredProducts.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     SelectProps={{
@@ -494,58 +470,31 @@ const Transaksi = () => {
           </TableContainer>
         </Card>
       </Container>
-
-      <Menu
-        style={{ marginRight: "20px" }}
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
+      <Popover
+        open={Boolean(open)}
+        anchorEl={open}
+        onClose={handleCloseMenu}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        PaperProps={{
+          sx: {
+            p: 1,
+            width: 140,
+            "& .MuiMenuItem-root": {
+              px: 1,
+              typography: "body2",
+              borderRadius: 0.75,
+            },
+          },
         }}
       >
-        <MenuItem
+        <BillsEditModal id={currentID} setUpdate={setUpdate} update={update} setOpen={setOpen} />
 
-          onClick={closeMenu}>
-          <Iconify
-            icon={"eva:edit-fill"}
-            sx={{ mr: 2 }} />
-          Edit
+        <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
+          <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
+          Delete
         </MenuItem>
-      </Menu>
-      <Modal
-        size="md"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        show={modalShow}
-        backdrop="static"
-        keyboard={false}
-        className="modal"
-      >
-        <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Ubah <span style={{ color: "#396EB0" }}>Status Transaksi</span>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <h6>Status</h6>
-            <Form.Select onChange={onChange} name="status" value={data.status} style={{ width: "130px" }} aria-label="Default select example">
-              <option selected disabled>Pilih Disini</option>
-              <option value="SUCCESS">Success</option>
-              <option value="PENDING">Pending</option>
-              <option value="CANCEL">Cancel</option>
-            </Form.Select>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={handleSubmit} style={{ backgroundColor: "#396EB0", border: "0" }} variant="primary">Simpan</Button>
-          <Button style={{ border: "0" }} variant="danger" onClick={() => setModalShow(false)}>Close</Button>
-        </Modal.Footer>
-      </Modal>
+      </Popover>
     </>
-  )
+  );
 }
-
-export default Transaksi

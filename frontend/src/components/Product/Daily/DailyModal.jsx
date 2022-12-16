@@ -4,12 +4,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
+import Iconify from "../../Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
 // import styles from "../../assets/styles/ProductsModal.module.css"
-import AxiosInstance from "../../configs/axios/AxiosInstance";
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
 
-import "../../assets/styles/ProductsModal.css";
+import "../../../assets/styles/modalUser.css";
 
 import Cookies from "js-cookie";
 

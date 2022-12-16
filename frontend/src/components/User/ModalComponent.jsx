@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 
 import AxiosInstance from "../../configs/axios/AxiosInstance";
 
-import "./modalUser.css";
+import "../../assets/styles/modalUser.css";
 
 import Cookies from "js-cookie";
 

@@ -14,8 +14,6 @@ import {
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
 
 import React, { useState, useEffect } from "react";
-import styles from "../../assets/styles/Products.module.css"
-import DailyModal from "../../pages/admin/ProdukBaruModal";
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled(Toolbar)(({ theme }) => ({
@@ -74,7 +72,7 @@ export default function UserListToolbar({
         <StyledSearch
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search user..."
+          placeholder="Cari Nama..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify
@@ -94,14 +92,9 @@ export default function UserListToolbar({
       ) : (
         <Tooltip title="Filter list" style={{ marginInline: "auto" }}>
           <IconButton>
-            {/* <Iconify icon="ic:round-filter-list" /> */}
           </IconButton>
         </Tooltip>
       )}
-
-      {/* <MenuItem className="produkBaruBtn" onClick={handleOpen}>
-        <DailyModal id={currentID} />
-      </MenuItem> */}
     </StyledRoot>
   );
 }

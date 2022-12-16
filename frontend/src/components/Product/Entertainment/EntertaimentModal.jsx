@@ -4,13 +4,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
-import Iconify from "../../components/Admin-Component/iconify/Iconify";
+import Iconify from "../../Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
 import swal from "sweetalert";
 
-import AxiosInstance from "../../configs/axios/AxiosInstance";
+import AxiosInstance from "../../../configs/axios/AxiosInstance";
 
-import "./modalUser.css";
+import "../../../assets/styles/modalUser.css";
 
 import Cookies from "js-cookie";
 
@@ -26,8 +26,8 @@ const style = {
   p: 4,
 };
 
-const BillsModal = ({ id, setUpdate, update, setOpen }) => {
-  const [opens, setOpens] = React.useState(false);
+const ProdukBaruModal = ({ id }) => {
+  const [open, setOpen] = React.useState(false);
   const [isChecked, setChecked] = useState();
   const [product, setproduct] = useState({});
 
@@ -38,7 +38,7 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
     status: "Not Active",
     nominal: "",
     harga: "",
-    type: "bills",
+    type: "entertaiment",
     detail: "Detail Here",
     period: 0,
   });
@@ -58,7 +58,7 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
 
   const token = Cookies.get("token");
 
-  const handleOpen = () => setOpens(!opens);
+  const handleOpen = () => setOpen(!open);
 
   useEffect(() => {
     setChecked(product.status === "active" ? true : false);
@@ -97,7 +97,6 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
         detail: "Detail Here",
         period: 0,
       });
-      setUpdate(!update)
       return response;
     } catch (err) { }
   };
@@ -109,7 +108,7 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
           + Produk Baru
         </MenuItem>
         <Modal
-          open={opens}
+          open={open}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           className="modalUser"
@@ -130,7 +129,7 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
               <div className="d-flex justify-content-start align-items-center ModalChild">
                 <h3 className="EditModal ms-3">
                   Tambah Produk
-                  <span className="PrimaryModal__Data ms-2">Bills</span>
+                  <span className="PrimaryModal__Data ms-2">Entertainment</span>
                 </h3>
                 <h3 className="mt-3 ms-auto" onClick={handleOpen}>
                   X
@@ -178,7 +177,7 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
                   <Form.Check
                     type="switch"
                     id="custom-switch"
-                    label={isChecked ? "Active" : "Not Active"}
+                    label={"status"}
                     checked={isChecked}
                     value={status}
                     onClick={() => setChecked(!isChecked)}
@@ -214,10 +213,8 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
                     <option selected disabled>
                       Pilih Disini
                     </option>
-                    <option value="token">Token</option>
-                    <option value="Tagihan Air">Tagihan Air</option>
-                    {/* <option value="Internet & Tv">Internet & Tv</option> */}
-                    <option value="Pendidikan">Pendidikan</option>
+                    <option value="Games">Games</option>
+                    {/* <option value="Digital Voucher">Digital Voucher</option> */}
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
@@ -255,4 +252,4 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
   );
 };
 
-export default BillsModal;
+export default ProdukBaruModal;
