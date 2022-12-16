@@ -4,7 +4,7 @@ import { sentenceCase } from "change-case";
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-
+import Image from "react-bootstrap/Image";
 // @mui
 import {
   Card,
@@ -425,7 +425,12 @@ export default function UserPage() {
                           width="54"
                           onClick={(e) => handleOpenMenu(e, _id)}
                         >
-                          <Iconify icon={"eva:more-horizontal-fill"} />
+                          <Image
+                            src={require("../../assets/icons/titiktiga.png")}
+                            alt="titiktiga"
+                            onClick={(event) => handleClick(row.id, event)}
+                            className="image"
+                          />
                         </IconButton>
                       </TableCell>
                     </TableRow>

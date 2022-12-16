@@ -100,35 +100,6 @@ const ProdukBaruModal = ({ id }) => {
     } catch (err) {}
   };
 
-  // const UpdateStatus = (prop) => {
-  //   const {
-  //     code,
-  //     description,
-  //     nominal,
-  //     price,
-  //     type,
-  //     category,
-  //     status,
-  //     icon_rul,
-  //   } = prop;
-  //   AxiosInstance.post(
-  //     `product/${id}`,
-  //     {
-  //       code: code,
-  //       description: description,
-  //       nominal: nominal,
-  //       price: price,
-  //       type: type,
-  //       category: category,
-  //       status: isChecked ? "active" : "not active",
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: "Bearer " + token,
-  //       },
-  //     }
-  //   );
-  // };
 
   return (
     <>
