@@ -182,16 +182,14 @@ export default function UserPage() {
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
 
+  const [arrayId, setArrayId] = useState([])
+
 
   const [update, setUpdate] = useState(false);
 
   const [token, setToken] = useState(Cookies.get("token"));
   const [user, setUser] = useState([]);
   const [currentID, setCurrentID] = useState("");
-
-  const [load, setLoad] = useState();
-
-  const limiter = 50;
 
   const handleOpenMenu = (event, id) => {
     setOpen(event.currentTarget);
@@ -217,11 +215,14 @@ export default function UserPage() {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, name, id) => {
+    console.log(name)
+    // console.log(id)
+    setArrayId(id)
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -235,6 +236,8 @@ export default function UserPage() {
     setSelected(newSelected);
   };
 
+  console.log(selected)
+
   const handleFilterByName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
@@ -245,7 +248,6 @@ export default function UserPage() {
     getComparator(order, orderBy),
     filterName
   );
-  // console.log(filteredUsers)
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -312,6 +314,10 @@ export default function UserPage() {
             Data Pengguna
           </Typography>
           <UserListToolbar
+            user={user}
+            setUser={setUser}
+            id={arrayId}
+            setSelected={setSelected}
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -338,7 +344,7 @@ export default function UserPage() {
                   : filteredUsers
                 )?.map((row, index) => {
                   const { name, _id, created, status, email } = row;
-                  const selectedUser = selected.indexOf(name) !== -1;
+                  const selectedUser = selected.indexOf(_id) !== -1;
                   return (
                     <TableRow
                       hover
@@ -350,7 +356,7 @@ export default function UserPage() {
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={selectedUser}
-                          onChange={(event) => handleClick(event, name)}
+                          onChange={(event) => handleClick(event, name, _id)}
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">
@@ -388,7 +394,6 @@ export default function UserPage() {
                           <Image
                             src={require("../../assets/icons/titiktiga.png")}
                             alt="titiktiga"
-                            onClick={(event) => handleClick(row.id, event)}
                             className="image"
                           />
                         </IconButton>
@@ -472,7 +477,7 @@ export default function UserPage() {
       >
 
 
-        <ModalComponent id={currentID} setUpdate={setUpdate} update={update} />
+        <ModalComponent id={currentID} setUpdate={setUpdate} update={update} open={open} setOpen={setOpen} />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

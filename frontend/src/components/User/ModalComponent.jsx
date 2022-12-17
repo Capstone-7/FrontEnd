@@ -6,6 +6,7 @@ import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
+import { ToastContainer, toast } from 'react-toastify';
 
 import AxiosInstance from "../../configs/axios/AxiosInstance";
 
@@ -25,14 +26,17 @@ const style = {
   p: 4,
 };
 
-const ModalComponent = ({ id }) => {
-  const [open, setOpen] = React.useState(false);
+const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
+  const [opens, setOpens] = React.useState(false);
   const [isChecked, setChecked] = useState();
   const [user, setUser] = useState({});
 
   const token = Cookies.get("token");
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => {
+    setOpens(!opens);
+  }
+
 
   useEffect(() => {
     AxiosInstance.get(`user/${id}`, {
@@ -46,9 +50,23 @@ const ModalComponent = ({ id }) => {
 
   useEffect(() => {
     setChecked(user.status === "verified" ? true : false);
-  }, [user]);
+  }, []);
+
+  const animateToast = () => {
+    toast.success('Edit Berhasil', {
+      position: "top-center",
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
+  }
 
   const UpdateStatus = (prop) => {
+    // console.log(e)
     const { email, name } = prop;
     AxiosInstance.put(
       `user/${id}`,
@@ -63,17 +81,36 @@ const ModalComponent = ({ id }) => {
         },
       }
     );
+
+    // handleOpen()
+    setOpen(!open)
+    animateToast()
+    setTimeout(() => {
+      setUpdate(!update)
+    }, 100);
   };
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div>
         <MenuItem onClick={handleOpen}>
           <Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
           Edit
         </MenuItem>
         <Modal
-          open={open}
+          open={opens}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           className="modalUser"

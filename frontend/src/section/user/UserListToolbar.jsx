@@ -14,6 +14,8 @@ import {
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
 
 import React, { useState, useEffect } from "react";
+import AxiosInstance from "../../configs/axios/AxiosInstance";
+import Cookies from "js-cookie";
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled(Toolbar)(({ theme }) => ({
@@ -48,13 +50,35 @@ UserListToolbar.propTypes = {
 };
 
 export default function UserListToolbar({
+  id,
+  user,
+  setUser,
   numSelected,
   filterName,
   onFilterName,
+  setSelected,
 }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(!true);
+  const [token, setToken] = useState(Cookies.get("token"));
   const [currentID, setCurrentID] = useState("");
+
+  const handleDelete = (e) => {
+    AxiosInstance.delete(`user/${id}`, {
+      headers: { Authorization: `Bearer ` + token },
+    }).then((res) => console.log(res));
+    const userIndex = user.findIndex((usr) => usr._id === id);
+    console.log(userIndex);
+    const updateUser = [
+      ...user.slice(0, userIndex),
+      ...user.slice(userIndex + 1),
+    ];
+    setUser(updateUser);
+    setSelected([])
+    // numSelected === 0;
+    // setOpen(false);
+  };
+
   return (
     <StyledRoot
       sx={{
@@ -85,7 +109,7 @@ export default function UserListToolbar({
       )}
       {numSelected > 0 ? (
         <Tooltip title="Delete" style={{ marginInline: "auto" }}>
-          <IconButton>
+          <IconButton onClick={(e) => handleDelete(e, id)}>
             <Iconify icon="eva:trash-2-fill" />
           </IconButton>
         </Tooltip>
