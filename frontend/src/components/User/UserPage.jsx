@@ -184,7 +184,6 @@ export default function UserPage() {
 
   const [arrayId, setArrayId] = useState([])
 
-
   const [update, setUpdate] = useState(false);
 
   const [token, setToken] = useState(Cookies.get("token"));
@@ -216,8 +215,6 @@ export default function UserPage() {
   };
 
   const handleClick = (event, name, id) => {
-    console.log(name)
-    // console.log(id)
     setArrayId(id)
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -235,8 +232,6 @@ export default function UserPage() {
     }
     setSelected(newSelected);
   };
-
-  console.log(selected)
 
   const handleFilterByName = (event) => {
     setPage(0);

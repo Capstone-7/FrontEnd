@@ -189,6 +189,8 @@ export default function Daily() {
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
 
+  const [arrayId, setArrayId] = useState([])
+
   const [token, setToken] = useState(Cookies.get("token"));
   const [currentID, setCurrentID] = useState("");
 
@@ -221,11 +223,12 @@ export default function Daily() {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    setArrayId(id)
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -281,6 +284,8 @@ export default function Daily() {
     setOpen(false);
   };
 
+  console.log(selected)
+
   useEffect(() => {
     AxiosInstance.get("product/by_type/daily", {
       headers: {
@@ -323,6 +328,11 @@ export default function Daily() {
             Daily
           </Typography>
           <ProductSearchBar
+            products={products}
+            setProducts={setProducts}
+            id={arrayId}
+            selected={selected}
+            setSelected={setSelected}
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -343,6 +353,7 @@ export default function Daily() {
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
                 rowCount={products.length}
+
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={handleSelectAllClick}
@@ -350,9 +361,9 @@ export default function Daily() {
               <TableBody id="body-table">
                 {(rowsPerPage > 0
                   ? filteredProducts?.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
                   : filteredProducts
                 )?.map((row, index) => {
                   const {
@@ -377,7 +388,7 @@ export default function Daily() {
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={selectedProduct}
-                          onChange={(event) => handleClick(event, code)}
+                          onChange={(event) => handleClick(event, _id)}
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">

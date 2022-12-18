@@ -102,7 +102,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.code.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
@@ -190,11 +190,6 @@ export default function Entertainment() {
   // const [user, setUser] = useState([]);
   const [products, setProducts] = useState([]);
   const [currentID, setCurrentID] = useState("");
-  const [product, setProduct] = useState([]);
-
-  const [load, setLoad] = useState();
-
-  const limiter = 50;
 
   const handleOpenMenu = (event, id) => {
     setOpen(event.currentTarget);
@@ -283,6 +278,7 @@ export default function Entertainment() {
   };
 
   const isNotFound = !filteredProducts.length && !!filterName;
+
   useEffect(() => {
     AxiosInstance.get("product/by_type/entertainment", {
       headers: {
@@ -298,7 +294,7 @@ export default function Entertainment() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> Produk | Entertainment </title>
       </Helmet>
 
       <Container className={styles.container}>
@@ -349,9 +345,9 @@ export default function Entertainment() {
               <TableBody id="body-table">
                 {(rowsPerPage > 0
                   ? filteredProducts?.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
                   : filteredProducts
                 )?.map((row, index) => {
                   const {
@@ -439,6 +435,7 @@ export default function Entertainment() {
                       <Paper
                         sx={{
                           textAlign: "center",
+                          backgroundColor: "#ebf1f7",
                         }}
                       >
                         <Typography variant="h6" paragraph>

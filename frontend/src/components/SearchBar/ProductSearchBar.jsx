@@ -14,6 +14,8 @@ import {
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
 
 import React, { useState, useEffect } from "react";
+import AxiosInstance from "../../configs/axios/AxiosInstance";
+import Cookies from "js-cookie";
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled(Toolbar)(({ theme }) => ({
@@ -51,10 +53,35 @@ export default function ProductSearchBar({
     numSelected,
     filterName,
     onFilterName,
+    products,
+    setProducts,
+    id,
+    setSelected,
+    selected,
 }) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(!true);
+    const [token, setToken] = useState(Cookies.get("token"));
     const [currentID, setCurrentID] = useState("");
+
+    // console.log(selected)
+
+    const handleDelete = (e, id) => {
+        selected.map((id) => {
+            AxiosInstance.delete(`product/${id}`, {
+                headers: { Authorization: `Bearer ` + token },
+            }).then((res) => res);
+            const productIndex = products.findIndex((usr) => usr._id === id);
+            const updateProduct = [
+                ...products.slice(0, productIndex),
+                ...products.slice(productIndex + 1),
+            ];
+            setProducts(updateProduct);
+            setSelected([]);
+        })
+
+    };
+
     return (
         <StyledRoot
             sx={{
@@ -85,7 +112,7 @@ export default function ProductSearchBar({
             )}
             {numSelected > 0 ? (
                 <Tooltip title="Delete" style={{ marginInline: "auto" }}>
-                    <IconButton>
+                    <IconButton onClick={(e) => handleDelete(e, id)}>
                         <Iconify icon="eva:trash-2-fill" />
                     </IconButton>
                 </Tooltip>
