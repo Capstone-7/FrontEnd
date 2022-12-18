@@ -49,8 +49,8 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import { useTheme } from "@mui/material/styles";
 import TableFooter from "@mui/material/TableFooter";
 
-import ProdukBaruModal from "./ProdukBaruModal";
 import styles from "../../../assets/styles/Products.module.css";
+import ProdukBaruModal from "./ProdukBaruModal";
 import ProductSearchBar from "../../SearchBar/ProductSearchBar";
 // ----------------------------------------------------------------------
 
@@ -249,7 +249,6 @@ export default function Daily() {
     getComparator(order, orderBy),
     filterName
   );
-  // console.log(product)
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =

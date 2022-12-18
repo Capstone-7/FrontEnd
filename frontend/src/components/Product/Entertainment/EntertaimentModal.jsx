@@ -26,20 +26,20 @@ const style = {
   p: 4,
 };
 
-const EntertaimentModal = ({ id, setUpdate, update, setOpen }) => {
+const EntertaimentModal = ({ id, setUpdate, update }) => {
   const [opens, setOpens] = React.useState(false);
   const [isChecked, setChecked] = useState();
-  const [product, setproduct] = useState({});
+  // const [product, setproduct] = useState({});
 
   const [formData, setFormData] = useState({
     gambar: "",
     kodeProduk: "",
     deskripsi: "",
-    kategori: "",
-    status: "",
+    status: "Not Active",
     nominal: "",
+    kategori: "",
     harga: "",
-    type: "entertaiment",
+    type: "entertainment",
     detail: "Detail Here",
     period: 0,
   });
@@ -51,7 +51,7 @@ const EntertaimentModal = ({ id, setUpdate, update, setOpen }) => {
     status,
     nominal,
     kategori,
-    value,
+    // value,
     harga,
     type,
     detail,
@@ -63,8 +63,8 @@ const EntertaimentModal = ({ id, setUpdate, update, setOpen }) => {
   const handleOpen = () => setOpens(!opens);
 
   useEffect(() => {
-    setChecked(product.status === "active" ? true : false);
-  }, [product]);
+    setChecked(formData.status === "active" ? true : false);
+  }, []);
 
   const handleChangeFormData = (label, newValue) => {
     setFormData({
@@ -92,14 +92,15 @@ const EntertaimentModal = ({ id, setUpdate, update, setOpen }) => {
         gambar: "",
         kodeProduk: "",
         deskripsi: "",
-        kategori: "",
-        status: "",
+        status: "Not Active",
         nominal: "",
+        kategori: "",
         harga: "",
-        type: "daily",
+        type: "entertainment",
         detail: "Detail Here",
         period: 0,
       });
+      setChecked(false);
       setUpdate(!update);
       return response;
     } catch (err) {}
@@ -183,7 +184,7 @@ const EntertaimentModal = ({ id, setUpdate, update, setOpen }) => {
                     id="custom-switch"
                     label={isChecked ? "Active" : "Not Active"}
                     checked={isChecked}
-                    value={status}
+                    value={formData.status === "active" ? true : false}
                     onClick={() => setChecked(!isChecked)}
                     onChange={(e) =>
                       handleChangeFormData(
@@ -209,16 +210,15 @@ const EntertaimentModal = ({ id, setUpdate, update, setOpen }) => {
                   <Form.Select
                     style={{ width: "130px" }}
                     aria-label="Default select example"
-                    value={value}
+                    value={kategori}
                     onChange={(e) =>
                       handleChangeFormData("kategori", e.currentTarget.value)
                     }
                   >
-                    <option selected disabled>
+                    <option value="" selected disabled>
                       Pilih Disini
                     </option>
                     <option value="Games">Games</option>
-                    {/* <option value="Digital Voucher">Digital Voucher</option> */}
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
