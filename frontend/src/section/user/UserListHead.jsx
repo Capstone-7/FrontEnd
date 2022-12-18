@@ -57,8 +57,6 @@ export default function UserListHead({
             sx={{
               background: '#396EB0 !important',
               color: "#EBF1F7",
-
-
             }}
             key={headCell.id}
             align={headCell.alignRight ? 'right' : 'left'}

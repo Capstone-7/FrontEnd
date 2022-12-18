@@ -54,6 +54,7 @@ import {
 import { changesTransactionStatus, getAllTransactions } from '../../store/features/TransactionSlice';
 import TransactionSearchBar from '../../components/SearchBar/TransactionSearchBar';
 import '../../assets/styles/Transaction.css'
+import TransactionListHead from '../../section/user/TransactionListHead';
 
 const TABLE_HEAD = [
   { id: "number", label: "#", alignRight: false },
@@ -304,11 +305,9 @@ const Transaction = () => {
         id: data.id
       }))
       setModalShow(false)
-      setUpdate(!update)
-      // console.log("ok")
       toast.success('Edit Berhasil', {
         position: "top-center",
-        autoClose: 5000,
+        autoClose: 1500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -316,6 +315,9 @@ const Transaction = () => {
         progress: undefined,
         theme: "light",
       });
+      setTimeout(() => {
+        setUpdate(!update)
+      }, 100);
     } else {
       alert("masukkan gagal")
     }
@@ -326,7 +328,7 @@ const Transaction = () => {
     <>
       <ToastContainer
         position="top-center"
-        autoClose={5000}
+        autoClose={1500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -366,7 +368,7 @@ const Transaction = () => {
 
           <TableContainer className="tableContainer">
             <Table className="evenodd">
-              <UserListHead
+              <TransactionListHead
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
@@ -391,10 +393,10 @@ const Transaction = () => {
                       selected={selectedTransactions}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox
+                        {/* <Checkbox
                           checked={selectedTransactions}
                           onChange={(event) => handleClickSelect(event, row.user_email)}
-                        />
+                        /> */}
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">
                         {(page * rowsPerPage) + (index + 1)}
@@ -411,7 +413,7 @@ const Transaction = () => {
                       <TableCell align="center">
                         <Label
                           color={
-                            row.xendit_status === "EXPIRED" ? "error" : "success"
+                            row.xendit_status === "EXPIRED" ? "error" : row.xendit_status === "PENDING" ? "warning" : "success"
                           }
                         >
                           {sentenceCase(row.xendit_status)}
