@@ -53,8 +53,6 @@ export default function ProductSearchBar({
     numSelected,
     filterName,
     onFilterName,
-    products,
-    setProducts,
     id,
     setSelected,
     selected,

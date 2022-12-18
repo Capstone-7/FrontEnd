@@ -328,8 +328,6 @@ export default function Daily() {
             Daily
           </Typography>
           <ProductSearchBar
-            products={products}
-            setProducts={setProducts}
             id={arrayId}
             selected={selected}
             setUpdate={setUpdate}
