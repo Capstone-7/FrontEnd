@@ -26,8 +26,8 @@ const style = {
   p: 4,
 };
 
-const ProdukBaruModal = ({ id }) => {
-  const [open, setOpen] = React.useState(false);
+const EntertaimentModal = ({ id, setUpdate, update, setOpen }) => {
+  const [opens, setOpens] = React.useState(false);
   const [isChecked, setChecked] = useState();
   const [product, setproduct] = useState({});
 
@@ -35,7 +35,8 @@ const ProdukBaruModal = ({ id }) => {
     gambar: "",
     kodeProduk: "",
     deskripsi: "",
-    status: "Not Active",
+    kategori: "",
+    status: "",
     nominal: "",
     harga: "",
     type: "entertaiment",
@@ -49,6 +50,7 @@ const ProdukBaruModal = ({ id }) => {
     deskripsi,
     status,
     nominal,
+    kategori,
     value,
     harga,
     type,
@@ -58,7 +60,7 @@ const ProdukBaruModal = ({ id }) => {
 
   const token = Cookies.get("token");
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => setOpens(!opens);
 
   useEffect(() => {
     setChecked(product.status === "active" ? true : false);
@@ -80,7 +82,7 @@ const ProdukBaruModal = ({ id }) => {
         description: formData.deskripsi,
         status: formData.status,
         nominal: formData.nominal,
-        category: formData.category,
+        category: formData.kategori,
         type: formData.type,
         details: formData.detail,
         active_period: formData.period,
@@ -90,15 +92,17 @@ const ProdukBaruModal = ({ id }) => {
         gambar: "",
         kodeProduk: "",
         deskripsi: "",
-        status: "Not Active",
+        kategori: "",
+        status: "",
         nominal: "",
         harga: "",
         type: "daily",
         detail: "Detail Here",
         period: 0,
       });
+      setUpdate(!update);
       return response;
-    } catch (err) { }
+    } catch (err) {}
   };
 
   return (
@@ -108,7 +112,7 @@ const ProdukBaruModal = ({ id }) => {
           + Produk Baru
         </MenuItem>
         <Modal
-          open={open}
+          open={opens}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           className="modalUser"
@@ -177,7 +181,7 @@ const ProdukBaruModal = ({ id }) => {
                   <Form.Check
                     type="switch"
                     id="custom-switch"
-                    label={"status"}
+                    label={isChecked ? "Active" : "Not Active"}
                     checked={isChecked}
                     value={status}
                     onClick={() => setChecked(!isChecked)}
@@ -207,7 +211,7 @@ const ProdukBaruModal = ({ id }) => {
                     aria-label="Default select example"
                     value={value}
                     onChange={(e) =>
-                      handleChangeFormData("category", e.currentTarget.value)
+                      handleChangeFormData("kategori", e.currentTarget.value)
                     }
                   >
                     <option selected disabled>
@@ -252,4 +256,4 @@ const ProdukBaruModal = ({ id }) => {
   );
 };
 
-export default ProdukBaruModal;
+export default EntertaimentModal;

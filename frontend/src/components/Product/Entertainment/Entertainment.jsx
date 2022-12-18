@@ -5,6 +5,8 @@ import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
+import Swal from "sweetalert2";
+
 // @mui
 import {
   Card,
@@ -45,13 +47,13 @@ import EntertainmentEditModal from "./EntertainmentEditModal";
 
 const TABLE_HEAD = [
   { id: "number", label: "#", alignRight: false },
-  { id: "name", label: "Kode Produk", alignRight: false },
+  { id: "code", label: "Kode Produk", alignRight: false },
   { id: "role", label: "Deskripsi", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
-  { id: "status", label: "Nominal", alignRight: false },
-  { id: "status", label: "Kategori", alignRight: false },
-  { id: "status", label: "Harga (Rp)", alignRight: false },
-  { id: "status", label: "", alignRight: false },
+  { id: "nominal", label: "Nominal", alignRight: false },
+  { id: "kategori", label: "Kategori", alignRight: false },
+  { id: "harga", label: "Harga (Rp)", alignRight: false },
+  { id: "kosong", label: "", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -98,7 +100,8 @@ export default function Entertainment() {
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [token, setToken] = useState(Cookies.get("token"));
-  const [user, setUser] = useState([]);
+  // const [user, setUser] = useState([]);
+  const [products, setProducts] = useState([]);
   const [currentID, setCurrentID] = useState("");
   const [product, setProduct] = useState([]);
 
@@ -123,7 +126,7 @@ export default function Entertainment() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = user.map((n) => n.name);
+      const newSelecteds = products.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -154,10 +157,10 @@ export default function Entertainment() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - user.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
 
   const filteredUsers = applySortFilter(
-    user,
+    products,
     getComparator(order, orderBy),
     filterName
   );
@@ -166,26 +169,25 @@ export default function Entertainment() {
     AxiosInstance.delete(`product/${currentID}`, {
       headers: { Authorization: `Bearer ` + token },
     }).then((res) => res);
-    const userIndex = user.findIndex((usr) => usr._id === currentID);
-    const updateUser = [
-      ...user.slice(0, userIndex),
-      ...user.slice(userIndex + 1),
+    const productIndex = products.findIndex((usr) => usr._id === currentID);
+    const updateProduct = [
+      ...products.slice(0, productIndex),
+      ...products.slice(productIndex + 1),
     ];
-    setUser(updateUser);
+    setProducts(updateProduct);
     setOpen(false);
   };
 
   const isNotFound = !filteredUsers.length && !!filterName;
-
   useEffect(() => {
     AxiosInstance.get("product/by_type/entertaiment", {
       headers: {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      setUser(res?.data?.data);
+      setProducts(res?.data?.data);
     });
-  }, []);
+  }, [update]);
 
   const handleOpen = () => setOpen(!true);
 
@@ -219,7 +221,11 @@ export default function Entertainment() {
             onFilterName={handleFilterByName}
           />
           <MenuItem className="produkBaruBtn" onClick={handleOpen}>
-            <EntertainmentModal id={currentID} />
+            <EntertainmentModal
+              id={currentID}
+              setUpdate={setUpdate}
+              update={update}
+            />
           </MenuItem>
 
           <TableContainer sx={{ width: 1150, height: 500 }}>
@@ -228,7 +234,7 @@ export default function Entertainment() {
                 order={order}
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={user.length}
+                rowCount={products.length}
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={handleSelectAllClick}
@@ -357,7 +363,12 @@ export default function Entertainment() {
           },
         }}
       >
-        <EntertainmentEditModal id={currentID} />
+        <EntertainmentEditModal
+          id={currentID}
+          setUpdate={setUpdate}
+          update={update}
+          setOpen={setOpen}
+        />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

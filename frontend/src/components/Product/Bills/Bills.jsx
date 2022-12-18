@@ -286,7 +286,7 @@ export default function Bills() {
     }).then((res) => {
       setProducts(res?.data?.data);
     });
-  }, [update]); // ON PROGRESSSSSSSSSSSSSSSSSSSS
+  }, [update]);
 
   const handleOpen = () => setOpen(!true);
 

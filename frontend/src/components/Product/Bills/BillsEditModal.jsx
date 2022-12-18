@@ -168,7 +168,6 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                     style={{ width: "130px" }}
                     aria-label="Default select example"
                     value={product?.category}
-                    // onSelect={product?.category}
                   >
                     <option value="token">Token</option>
                     <option value="Tagihan Air">Tagihan Air</option>
