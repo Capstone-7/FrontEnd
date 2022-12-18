@@ -58,28 +58,24 @@ export default function ProductSearchBar({
     id,
     setSelected,
     selected,
+    setUpdate,
+    update
 }) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(!true);
     const [token, setToken] = useState(Cookies.get("token"));
     const [currentID, setCurrentID] = useState("");
 
-    // console.log(selected)
-
     const handleDelete = (e, id) => {
         selected.map((id) => {
             AxiosInstance.delete(`product/${id}`, {
                 headers: { Authorization: `Bearer ` + token },
             }).then((res) => res);
-            const productIndex = products.findIndex((usr) => usr._id === id);
-            const updateProduct = [
-                ...products.slice(0, productIndex),
-                ...products.slice(productIndex + 1),
-            ];
-            setProducts(updateProduct);
-            setSelected([]);
         })
-
+        setSelected([]);
+        setTimeout(() => {
+            setUpdate(!update)
+        }, 1000);
     };
 
     return (

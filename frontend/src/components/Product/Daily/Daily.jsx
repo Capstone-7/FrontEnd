@@ -284,7 +284,7 @@ export default function Daily() {
     setOpen(false);
   };
 
-  console.log(selected)
+  // console.log(selected)
 
   useEffect(() => {
     AxiosInstance.get("product/by_type/daily", {
@@ -332,6 +332,8 @@ export default function Daily() {
             setProducts={setProducts}
             id={arrayId}
             selected={selected}
+            setUpdate={setUpdate}
+            update={update}
             setSelected={setSelected}
             numSelected={selected.length}
             filterName={filterName}
