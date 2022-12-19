@@ -29,7 +29,6 @@ const style = {
 const BillsModal = ({ id, setUpdate, update }) => {
   const [opens, setOpens] = React.useState(false);
   const [isChecked, setChecked] = useState();
-  // const [product, setproduct] = useState({});
 
   const [formData, setFormData] = useState({
     gambar: "",
@@ -51,7 +50,6 @@ const BillsModal = ({ id, setUpdate, update }) => {
     status,
     nominal,
     kategori,
-    // value,
     harga,
     type,
     detail,

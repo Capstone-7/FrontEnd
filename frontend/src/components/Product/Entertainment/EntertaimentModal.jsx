@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
 import Iconify from "../../Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
-import swal from "sweetalert";
+import Swal from "sweetalert";
 
 import AxiosInstance from "../../../configs/axios/AxiosInstance";
 
@@ -29,7 +29,6 @@ const style = {
 const EntertaimentModal = ({ id, setUpdate, update }) => {
   const [opens, setOpens] = React.useState(false);
   const [isChecked, setChecked] = useState();
-  // const [product, setproduct] = useState({});
 
   const [formData, setFormData] = useState({
     gambar: "",
@@ -51,7 +50,6 @@ const EntertaimentModal = ({ id, setUpdate, update }) => {
     status,
     nominal,
     kategori,
-    // value,
     harga,
     type,
     detail,

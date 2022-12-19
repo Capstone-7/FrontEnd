@@ -28,7 +28,6 @@ const style = {
 const ProdukBaruModal = ({ id, setUpdate, update }) => {
   const [open, setOpen] = React.useState(false);
   const [isChecked, setChecked] = useState();
-  // const [product, setproduct] = useState({});
 
   const [formData, setFormData] = useState({
     gambar: "",
@@ -50,7 +49,6 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
     status,
     nominal,
     kategori,
-    // value,
     harga,
     type,
     detail,
@@ -99,10 +97,10 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
         detail: "Detail Here",
         period: 0,
       });
-      setChecked(false)
+      setChecked(false);
       setUpdate(!update);
       return response;
-    } catch (err) { }
+    } catch (err) {}
   };
 
   return (
@@ -183,7 +181,7 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
                     id="custom-switch"
                     label={isChecked ? "Active" : "Not Active"}
                     checked={isChecked}
-                    value={formData.status === 'active' ? true : false}
+                    value={formData.status === "active" ? true : false}
                     onClick={() => setChecked(!isChecked)}
                     onChange={(e) =>
                       handleChangeFormData(

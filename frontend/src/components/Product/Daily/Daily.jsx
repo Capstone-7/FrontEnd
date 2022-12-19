@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
+import Swal from "sweetalert2";
 // @mui
 import {
   Card,
@@ -189,7 +190,7 @@ export default function Daily() {
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
 
-  const [arrayId, setArrayId] = useState([])
+  const [arrayId, setArrayId] = useState([]);
 
   const [token, setToken] = useState(Cookies.get("token"));
   const [currentID, setCurrentID] = useState("");
@@ -199,7 +200,6 @@ export default function Daily() {
   const [update, setUpdate] = useState(false);
 
   const handleOpenMenu = (event, id) => {
-    // console.log(id)
     setOpen(event.currentTarget);
     setCurrentID(id);
   };
@@ -224,7 +224,7 @@ export default function Daily() {
   };
 
   const handleClick = (event, id) => {
-    setArrayId(id)
+    setArrayId(id);
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
@@ -272,19 +272,30 @@ export default function Daily() {
   const isNotFound = !filteredProducts.length && !!filterName;
 
   const handleDelete = (e) => {
-    AxiosInstance.delete(`product/${currentID}`, {
-      headers: { Authorization: `Bearer ` + token },
-    }).then((res) => res);
-    const productIndex = products.findIndex((usr) => usr._id === currentID);
-    const updateProduct = [
-      ...products.slice(0, productIndex),
-      ...products.slice(productIndex + 1),
-    ];
-    setProducts(updateProduct);
-    setOpen(false);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        AxiosInstance.delete(`product/${currentID}`, {
+          headers: { Authorization: `Bearer ` + token },
+        }).then((res) => res);
+        const productIndex = products.findIndex((usr) => usr._id === currentID);
+        const updateProduct = [
+          ...products.slice(0, productIndex),
+          ...products.slice(productIndex + 1),
+        ];
+        setProducts(updateProduct);
+        setOpen(false);
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
   };
-
-  // console.log(selected)
 
   useEffect(() => {
     AxiosInstance.get("product/by_type/daily", {
@@ -292,12 +303,9 @@ export default function Daily() {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      // console.log(res)
       setProducts(res?.data?.data);
     });
   }, [update]);
-
-  // console.log(products)
 
   const handleOpen = () => setOpen(!true);
 
@@ -347,7 +355,6 @@ export default function Daily() {
               update={update}
             />
           </MenuItem>
-          {/*  */}
           <TableContainer className={styles.tableContainer}>
             <Table className={styles.evenodd}>
               <UserListHead
@@ -355,7 +362,6 @@ export default function Daily() {
                 orderBy={orderBy}
                 headLabel={TABLE_HEAD}
                 rowCount={products.length}
-
                 numSelected={selected.length}
                 onRequestSort={handleRequestSort}
                 onSelectAllClick={handleSelectAllClick}
@@ -363,9 +369,9 @@ export default function Daily() {
               <TableBody id="body-table">
                 {(rowsPerPage > 0
                   ? filteredProducts?.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
                   : filteredProducts
                 )?.map((row, index) => {
                   const {
@@ -396,7 +402,6 @@ export default function Daily() {
                       <TableCell component="th" scope="row" width="20">
                         {page * rowsPerPage + (index + 1)}
                       </TableCell>
-                      {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Typography variant="subtitle2" noWrap>

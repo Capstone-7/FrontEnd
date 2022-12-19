@@ -29,7 +29,6 @@ const style = {
 
 const EntertainmentEditModal = ({ id, setUpdate, update, setOpen }) => {
   const [opens, setOpens] = React.useState(false);
-  // const [anchorEl, setAnchorEl] = React.useState(null);
   const [isChecked, setChecked] = useState();
   const [product, setproduct] = useState({});
 
