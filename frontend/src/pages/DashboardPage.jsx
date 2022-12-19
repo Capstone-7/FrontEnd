@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 // @mui
+import { sentenceCase } from "change-case";
 import { useTheme } from "@mui/material/styles";
 import { Grid, Container, Typography } from "@mui/material";
 
@@ -39,7 +40,7 @@ export default function DashboardAppPage() {
   }, []);
 
   const admin = useSelector((state) => state?.UserSlice?.admin);
-  const [pieChart, setPieChart] = useState(0);
+  const [pieChart, setPieChart] = useState([]);
 
   useEffect(() => {
     AxiosInstance.get("user/count", {
@@ -70,8 +71,18 @@ export default function DashboardAppPage() {
       headers: {
         Authorization: "Bearer " + token,
       },
-    }).then((res) => setPieChart(res.data.data));
-  }, []);
+    }).then((res) => {
+      let array = new Map(Object.entries(res.data.data))
+      let x = Array.from(array)
+      let hasil = []
+      x.map((row) => {
+        hasil.push(
+          { label: row[0], value: row[1] }
+        )
+      })
+      setPieChart(hasil)
+    }, [])
+  });
 
   return (
     <>
@@ -177,19 +188,16 @@ export default function DashboardAppPage() {
 
           <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
-              title="Current Visits"
-              chartData={[
-                { label: "Pulsa", value: 4344 },
-                { label: "Paket Data", value: 5435 },
-                { label: "Wifi", value: 1443 },
-                { label: "Top Up", value: 4443 },
-              ]}
-              chartColors={[
-                theme.palette.primary.main,
-                theme.palette.info.main,
-                theme.palette.warning.main,
-                theme.palette.error.main,
-              ]}
+              title="Data Statistik"
+              subheader="Top Produk"
+              chartData={pieChart}
+              chartColors={
+                [
+                  theme.palette.primary.main,
+                  theme.palette.info.main,
+                  theme.palette.warning.main,
+                  theme.palette.error.main,
+                ]}
             />
           </Grid>
         </Grid>

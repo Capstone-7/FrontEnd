@@ -13,11 +13,11 @@ import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
 import { Container, Typography } from '@mui/material';
 import { useSelector, useDispatch } from "react-redux"
 import Image from 'react-bootstrap/Image'
-import { Slide, Zoom, Flip, Bounce } from 'react-toastify';
+// import { Slide, Zoom, Flip, Bounce } from 'react-toastify';
 import Menu from '@mui/material/Menu';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -305,16 +305,16 @@ const Transaction = () => {
         id: data.id
       }))
       setModalShow(false)
-      toast.success('Edit Berhasil', {
-        position: "top-center",
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      // toast.success('Edit Berhasil', {
+      //   position: "top-center",
+      //   autoClose: 1500,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: "light",
+      // });
       setTimeout(() => {
         setUpdate(!update)
       }, 100);
@@ -326,7 +326,7 @@ const Transaction = () => {
 
   return (
     <>
-      <ToastContainer
+      {/* <ToastContainer
         position="top-center"
         autoClose={1500}
         hideProgressBar={false}
@@ -337,7 +337,7 @@ const Transaction = () => {
         draggable
         pauseOnHover
         theme="light"
-      />
+      /> */}
       <Helmet>
         <title>Transaksi</title>
       </Helmet>

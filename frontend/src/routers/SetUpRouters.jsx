@@ -28,7 +28,6 @@ const SetUpRouters = () => {
           {/* Protected Route */}
           <Route path="/admin" element={<ProtectedRoute />}>
             <Route index element={<DashboardAppPage />} />
-            <Route path="/admin/*" element={<Page404 />} />
             <Route path="/admin/products" element={<ProductLayout />}>
               <Route path="/admin/products/daily" element={<Daily />} />
               <Route path="/admin/products/bills" element={<Bills />} />
@@ -40,6 +39,7 @@ const SetUpRouters = () => {
             <Route path="/admin/transaksi" element={<Transaction />} />
             <Route path="/admin/user" element={<UserPage />} />
           </Route>
+          <Route path="/*" element={<Page404 />} />
         </Routes>
       </BrowserRouter>
     </Provider>

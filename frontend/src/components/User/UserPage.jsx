@@ -40,6 +40,8 @@ import Scrollbar from "../Admin-Component/scrollbar/Scrollbar";
 import { UserListHead, UserListToolbar } from "../../section/user";
 // mock
 import AxiosInstance from "../../configs/axios/AxiosInstance";
+// import toast, { Toaster } from 'react-hot-toast';
+// import { ToastContainer, toast } from 'react-toastify';
 
 import "./ModalComponent";
 import ModalComponent from "./ModalComponent";
@@ -286,6 +288,18 @@ export default function UserPage() {
 
   return (
     <>
+      {/* <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      /> */}
       <Helmet>
         <title> User | Minimal UI </title>
       </Helmet>

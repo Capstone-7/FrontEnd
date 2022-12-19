@@ -6,7 +6,9 @@ import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
-import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.min.css';
+// import { ToastContainer, toast } from 'react-toastify';
+// import toast, { Toaster } from 'react-hot-toast';
 
 import AxiosInstance from "../../configs/axios/AxiosInstance";
 
@@ -35,6 +37,11 @@ const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
 
   const handleOpen = () => {
     setOpens(!opens);
+
+  }
+
+  const handleCloseMenuModal = () => {
+    setOpen(!open)
   }
 
 
@@ -52,18 +59,20 @@ const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
     setChecked(user.status === "verified" ? true : false);
   }, []);
 
-  const animateToast = () => {
-    toast.success('Edit Berhasil', {
-      position: "top-center",
-      autoClose: 1500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    })
-  }
+  // const animateToast = () => {
+  //   toast.success('Edit Berhasil',
+  //     {
+  //       position: "top-center",
+  //       autoClose: 1500,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "light",
+  //     }
+  //   )
+  // }
 
   const UpdateStatus = (prop) => {
     // console.log(e)
@@ -83,8 +92,8 @@ const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
     );
 
     // handleOpen()
+    // animateToast()
     setOpen(!open)
-    animateToast()
     setTimeout(() => {
       setUpdate(!update)
     }, 100);
@@ -92,18 +101,6 @@ const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
 
   return (
     <>
-      <ToastContainer
-        position="top-center"
-        autoClose={1500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       <div>
         <MenuItem onClick={handleOpen}>
           <Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
@@ -133,7 +130,7 @@ const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
                   Edit
                   <span className="PrimaryModal__Data ms-2">Data Pengguna</span>
                 </h3>
-                <h3 className="mt-3 ms-auto" onClick={handleOpen}>
+                <h3 className="mt-3 ms-auto" onClick={handleCloseMenuModal}>
                   X
                 </h3>
               </div>
@@ -146,6 +143,7 @@ const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
                     type="switch"
                     id="custom-switch"
                     label={isChecked ? "Verified" : "Not Verified"}
+                    // value={isChecked ? "verified" : "not_verified"}
                     checked={isChecked}
                     onClick={() => setChecked(!isChecked)}
                   />

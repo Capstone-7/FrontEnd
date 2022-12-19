@@ -41,9 +41,8 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      console.log(res)
       setproduct(res.data.data);
-      setChecked(res.data.data.status === 'active' ? true : false)
+      setChecked(res.data.data.status === 'Active' ? true : false)
     });
   }, []);
 
@@ -72,6 +71,22 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
       return response;
     } catch (err) { }
   };
+
+  const resetData = () => {
+    setproduct({
+      icon_url: "",
+      code: "",
+      description: "",
+      status: "Not Active",
+      nominal: "",
+      category: "",
+      price: "",
+      type: "daily",
+      detail: "Detail Here",
+      period: 0,
+    });
+    setChecked(false)
+  }
 
   return (
     <>
@@ -161,7 +176,7 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
                   <Form.Control onChange={handleChangePriceData} name="price" value={product?.price} type="number" />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
-                  <button type="button" class="btn TombolReset">
+                  <button type="button" class="btn TombolReset" onClick={resetData}>
                     Ulangi
                   </button>
                   <button
