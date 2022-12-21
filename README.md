@@ -10,6 +10,7 @@ We call this project Payoll. The products we offer are bill payers, such as phon
 * React (16.14.0)
 * React Hooks
 * React Context
+* Redux
 * Bootstrap & React Bootstrap
 * Mobile friendly layout (responsive)
 * Create-react-app under the hood
