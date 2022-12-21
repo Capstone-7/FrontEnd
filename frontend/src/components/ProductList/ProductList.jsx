@@ -49,9 +49,7 @@ const ProductList = () => {
           <Swiper
             navigation={true}
             effect={"coverflow"}
-            centeredSlides={true}
             spaceBetween={50}
-            slidesPerView={3}
             loop={true}
             coverflowEffect={{
               rotate: 20,
@@ -63,6 +61,28 @@ const ProductList = () => {
             pagination={{
               clickable: true,
             }}
+            breakpoints={{
+              360: {
+                width: 360,
+                slidesPerView: 1,
+                centeredSlides: true,
+              },
+              1024: {
+                width: 1024,
+                slidesPerView: 3,
+                centeredSlides: true,
+              },
+              1550: {
+                width: 1550,
+                slidesPerView: 3,
+                centeredSlides: true,
+              },
+              1250: {
+                width: 1250,
+                slidesPerView: 3,
+                centeredSlides: true,
+              },
+            }}
             className={styles.mySwiper}
           >
             <SwiperSlide style={{ position: "relative" }}>
@@ -73,16 +93,18 @@ const ProductList = () => {
                     alt="First slide"
                     className={`${isActive ? styles.active : styles.normal}`}
                   />
-                  <div className={styles.dailystyle}>
-                    <h2>Daily</h2>
-                    <div>Best price on your Dompet</div>
-                    <Button variant="primary">
-                      Mampir Dulu aja
-                      <FontAwesomeIcon
-                        style={{ paddingLeft: "10px" }}
-                        icon={faCircleArrowRight}
-                      />
-                    </Button>
+                  <div className="d-flex justify-content-center me-4">
+                    <div className={styles.dailystyle}>
+                      <h2>Daily</h2>
+                      <div>Best price on your Dompet</div>
+                      <Button variant="primary">
+                        Mampir Dulu aja
+                        <FontAwesomeIcon
+                          style={{ paddingLeft: "10px" }}
+                          icon={faCircleArrowRight}
+                        />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}

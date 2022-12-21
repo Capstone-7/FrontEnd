@@ -53,8 +53,8 @@
   .Content {
     width: 100%;
     ont-weight: 700;
-    font-size: 25px;
-    line-height: 40px;
+    font-size: 20px;
+    line-height: 30px;
   }
 
   .BebanTagihan {
@@ -67,7 +67,8 @@
   .SecondaryDeskripsi {
     width: 100% !important;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 15px !important;
+    line-height: 30px !important;
   }
 
   .btnDownload {

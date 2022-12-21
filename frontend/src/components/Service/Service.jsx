@@ -39,7 +39,7 @@ const Service = () => {
         </Row>
         <Stack style={{ zIndex: "1" }}>
           <Row className={styles.rowonecard} data-aos="fade-up">
-            <Col lg={3} xxl={3} sm={5} className={styles.toMid}>
+            <Col xs={9} lg={3} xxl={3} sm={5} className={styles.toMid}>
               <Card className={styles.card}>
                 <Card.Img
                   variant="top"
@@ -59,7 +59,7 @@ const Service = () => {
                 </Card.Body>
               </Card>
             </Col>
-            <Col lg={3} xxl={3} sm={5} className={styles.toMid}>
+            <Col xs={9} lg={3} xxl={3} sm={5} className={styles.toMid}>
               <Card className={styles.card}>
                 <Card.Img
                   variant="top"
@@ -79,7 +79,7 @@ const Service = () => {
                 </Card.Body>
               </Card>
             </Col>
-            <Col lg={3} xxl={3} sm={5} className={styles.toMid}>
+            <Col xs={9} lg={3} xxl={3} sm={5} className={styles.toMid}>
               <Card className={styles.card}>
                 <Card.Img
                   variant="top"
@@ -101,7 +101,7 @@ const Service = () => {
           </Row>
         </Stack>
         <Row className={styles.rowtwocard} data-aos="fade-up">
-          <Col lg={3} xxl={3} sm={5} className={styles.toMid}>
+          <Col xs={9} lg={3} xxl={3} sm={5} className={styles.toMid}>
             <Card className={styles.card}>
               <Card.Img
                 variant="top"
@@ -119,7 +119,7 @@ const Service = () => {
               </Card.Body>
             </Card>
           </Col>
-          <Col lg={3} xxl={3} sm={5} className={styles.toMid}>
+          <Col xs={9} lg={3} xxl={3} sm={5} className={styles.toMid}>
             <Card className={styles.card}>
               <Card.Img
                 variant="top"

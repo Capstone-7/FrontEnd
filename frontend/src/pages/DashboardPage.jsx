@@ -7,6 +7,7 @@ import { Grid, Container, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import AxiosInstance from "../configs/axios/AxiosInstance";
 import Cookies from "js-cookie";
+import { ToastContainer } from "react-toastify";
 // components
 // sections
 import {
@@ -84,6 +85,18 @@ export default function DashboardAppPage() {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <Helmet>
         <title> Admin | PayOll </title>
       </Helmet>

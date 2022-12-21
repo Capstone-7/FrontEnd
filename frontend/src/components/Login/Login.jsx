@@ -13,14 +13,13 @@ import { login } from "../../store/features/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { Auth } from "../../utils/Auth";
 import Modal from "react-bootstrap/Modal";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [passwordShown, setPasswordShown] = useState(false);
 
   const dispatch = useDispatch();
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const navigate = useNavigate();
 
@@ -49,8 +48,22 @@ const Login = () => {
     if (validate.payload !== undefined) {
       Auth.storeUserInfoToCookie(validate.payload);
       navigate("/admin");
+      toast.success("🦄 Wow so easy!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     } else {
-      handleShow();
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Email atau Kata Sandi Salah!",
+      });
     }
   };
 
@@ -130,17 +143,6 @@ const Login = () => {
           </Col>
         </Row>
       </Container>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Peringatan</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Email atau Kata sandi salah</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 };

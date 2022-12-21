@@ -13,7 +13,7 @@ const Footer = () => {
   return (
     <Container fluid className={styles.blockfooter}>
       <Row className={styles.rowfooter}>
-        <Col lg={3} sm={3} md={3}>
+        <Col xs={5} lg={3} sm={3} md={3} className={styles.blockone}>
           <Stack direction="horizontal" gap={3}>
             <div>
               <Image
@@ -51,15 +51,16 @@ const Footer = () => {
           </Stack>
         </Col>
         <Col
+          xs={6}
           lg={4}
-          sm={4}
-          md={4}
+          sm={6}
+          md={6}
           style={{ textAlign: "center", fontSize: "13px" }}
           className={styles.columntwo}
         >
           <Stack direction="horizontal" gap={5} className={styles.columntwo}>
-            <div className={styles.line}></div>
-            <div>
+            <div className={styles.leftline}></div>
+            <div className={styles.contentcolumntwo}>
               <h5 style={{ paddingBottom: "12px", color: "#B7D7FD" }}>
                 Contact Us
               </h5>
@@ -81,10 +82,10 @@ const Footer = () => {
                 </Stack>
               </Stack>
             </div>
-            <div className={styles.line}></div>
+            <div className={styles.rightline}></div>
           </Stack>
         </Col>
-        <Col lg={3} sm={3} md={3}>
+        <Col lg={3} sm={3} md={2} className={styles.columnthree}>
           <div style={{ color: "#B7D7FD", paddingBottom: "12px" }}>
             Get in app
           </div>

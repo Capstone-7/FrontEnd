@@ -6,6 +6,7 @@
   padding: 8px 16px;
   cursor: pointer;
   width: 128px;
+  border: none;
   height: 56px;
   background: #284e7d;
   border-color: #284e7d;
@@ -16,7 +17,14 @@
   font-style: normal;
   font-weight: 700;
   font-size: 13px;
+  border-bottom: 5px solid #1e406a;
+  transition: 0.3s;
   letter-spacing: 1.25px;
+}
+
+.Download:hover {
+  border-bottom-width: 0;
+  transform: translateY(5px);
 }
 
 .BackgroundContent {
