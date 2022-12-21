@@ -7,6 +7,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
 
+import Swal from "sweetalert2";
+
 import AxiosInstance from "../../configs/axios/AxiosInstance";
 
 import "../../assets/styles/modalUser.css";
@@ -25,14 +27,20 @@ const style = {
   p: 4,
 };
 
-const ModalComponent = ({ id }) => {
-  const [open, setOpen] = React.useState(false);
+const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
+  const [opens, setOpens] = React.useState(false);
   const [isChecked, setChecked] = useState();
   const [user, setUser] = useState({});
 
   const token = Cookies.get("token");
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => {
+    setOpens(!opens);
+  };
+
+  const handleCloseMenuModal = () => {
+    setOpen(!open);
+  };
 
   useEffect(() => {
     AxiosInstance.get(`user/${id}`, {
@@ -46,7 +54,7 @@ const ModalComponent = ({ id }) => {
 
   useEffect(() => {
     setChecked(user.status === "verified" ? true : false);
-  }, [user]);
+  }, []);
 
   const UpdateStatus = (prop) => {
     const { email, name } = prop;
@@ -63,6 +71,12 @@ const ModalComponent = ({ id }) => {
         },
       }
     );
+
+    setOpen(!open);
+    Swal.fire("Berhasil!", "berhasi merubah data!", "success");
+    setTimeout(() => {
+      setUpdate(!update);
+    }, 100);
   };
 
   return (
@@ -73,7 +87,7 @@ const ModalComponent = ({ id }) => {
           Edit
         </MenuItem>
         <Modal
-          open={open}
+          open={opens}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           className="modalUser"
@@ -96,7 +110,7 @@ const ModalComponent = ({ id }) => {
                   Edit
                   <span className="PrimaryModal__Data ms-2">Data Pengguna</span>
                 </h3>
-                <h3 className="mt-3 ms-auto" onClick={handleOpen}>
+                <h3 className="mt-3 ms-auto" onClick={handleCloseMenuModal}>
                   X
                 </h3>
               </div>

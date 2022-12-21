@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
 import Iconify from "../../Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
-import swal from "sweetalert";
+import Swal from "sweetalert";
 
 import AxiosInstance from "../../../configs/axios/AxiosInstance";
 
@@ -26,10 +26,9 @@ const style = {
   p: 4,
 };
 
-const ProdukBaruModal = ({ id }) => {
-  const [open, setOpen] = React.useState(false);
+const EntertaimentModal = ({ id, setUpdate, update }) => {
+  const [opens, setOpens] = React.useState(false);
   const [isChecked, setChecked] = useState();
-  const [product, setproduct] = useState({});
 
   const [formData, setFormData] = useState({
     gambar: "",
@@ -37,8 +36,9 @@ const ProdukBaruModal = ({ id }) => {
     deskripsi: "",
     status: "Not Active",
     nominal: "",
+    kategori: "",
     harga: "",
-    type: "entertaiment",
+    type: "entertainment",
     detail: "Detail Here",
     period: 0,
   });
@@ -49,7 +49,7 @@ const ProdukBaruModal = ({ id }) => {
     deskripsi,
     status,
     nominal,
-    value,
+    kategori,
     harga,
     type,
     detail,
@@ -58,11 +58,11 @@ const ProdukBaruModal = ({ id }) => {
 
   const token = Cookies.get("token");
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => setOpens(!opens);
 
   useEffect(() => {
-    setChecked(product.status === "active" ? true : false);
-  }, [product]);
+    setChecked(formData.status === "active" ? true : false);
+  }, []);
 
   const handleChangeFormData = (label, newValue) => {
     setFormData({
@@ -80,7 +80,7 @@ const ProdukBaruModal = ({ id }) => {
         description: formData.deskripsi,
         status: formData.status,
         nominal: formData.nominal,
-        category: formData.category,
+        category: formData.kategori,
         type: formData.type,
         details: formData.detail,
         active_period: formData.period,
@@ -92,13 +92,32 @@ const ProdukBaruModal = ({ id }) => {
         deskripsi: "",
         status: "Not Active",
         nominal: "",
+        kategori: "",
         harga: "",
-        type: "daily",
+        type: "entertainment",
         detail: "Detail Here",
         period: 0,
       });
+      setChecked(false);
+      setUpdate(!update);
       return response;
-    } catch (err) { }
+    } catch (err) {}
+  };
+
+  const resetData = () => {
+    setFormData({
+      gambar: "",
+      kodeProduk: "",
+      deskripsi: "",
+      status: "Not Active",
+      nominal: "",
+      kategori: "",
+      harga: "",
+      type: "daily",
+      detail: "Detail Here",
+      period: 0,
+    });
+    setChecked(false);
   };
 
   return (
@@ -108,7 +127,7 @@ const ProdukBaruModal = ({ id }) => {
           + Produk Baru
         </MenuItem>
         <Modal
-          open={open}
+          open={opens}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           className="modalUser"
@@ -177,9 +196,9 @@ const ProdukBaruModal = ({ id }) => {
                   <Form.Check
                     type="switch"
                     id="custom-switch"
-                    label={"status"}
+                    label={isChecked ? "Active" : "Not Active"}
                     checked={isChecked}
-                    value={status}
+                    value={formData.status === "active" ? true : false}
                     onClick={() => setChecked(!isChecked)}
                     onChange={(e) =>
                       handleChangeFormData(
@@ -205,16 +224,15 @@ const ProdukBaruModal = ({ id }) => {
                   <Form.Select
                     style={{ width: "130px" }}
                     aria-label="Default select example"
-                    value={value}
+                    value={kategori}
                     onChange={(e) =>
-                      handleChangeFormData("category", e.currentTarget.value)
+                      handleChangeFormData("kategori", e.currentTarget.value)
                     }
                   >
-                    <option selected disabled>
+                    <option value="" selected disabled>
                       Pilih Disini
                     </option>
                     <option value="Games">Games</option>
-                    {/* <option value="Digital Voucher">Digital Voucher</option> */}
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
@@ -232,7 +250,11 @@ const ProdukBaruModal = ({ id }) => {
                   />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
-                  <button type="button" class="btn TombolReset">
+                  <button
+                    type="button"
+                    class="btn TombolReset"
+                    onClick={resetData}
+                  >
                     Ulangi
                   </button>
                   <button
@@ -252,4 +274,4 @@ const ProdukBaruModal = ({ id }) => {
   );
 };
 
-export default ProdukBaruModal;
+export default EntertaimentModal;

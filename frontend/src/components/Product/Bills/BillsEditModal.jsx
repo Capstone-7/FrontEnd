@@ -8,6 +8,7 @@ import Iconify from "../../Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
 
 import AxiosInstance from "../../../configs/axios/AxiosInstance";
+import Swal from "sweetalert2";
 
 import "../../../assets/styles/modalUser.css";
 
@@ -27,7 +28,6 @@ const style = {
 
 const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
   const [opens, setOpens] = React.useState(false);
-  // const [anchorEl, setAnchorEl] = React.useState(null);
   const [isChecked, setChecked] = useState();
   const [product, setproduct] = useState({});
 
@@ -67,9 +67,25 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
       const response = await AxiosInstance.put(`/product/${data}`, product);
       setUpdate(!update);
       setOpen(false);
-      // setAnchorEl(null);
+      Swal.fire("Good job!", "You clicked the button!", "success");
       return response;
     } catch (err) {}
+  };
+
+  const resetData = () => {
+    setproduct({
+      icon_url: "",
+      code: "",
+      description: "",
+      status: "Not Active",
+      nominal: "",
+      category: "",
+      price: "",
+      type: "daily",
+      detail: "Detail Here",
+      period: 0,
+    });
+    setChecked(false);
   };
 
   return (
@@ -168,7 +184,6 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                     style={{ width: "130px" }}
                     aria-label="Default select example"
                     value={product?.category}
-                    // onSelect={product?.category}
                   >
                     <option value="token">Token</option>
                     <option value="Tagihan Air">Tagihan Air</option>
@@ -185,7 +200,11 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                   />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
-                  <button type="button" class="btn TombolReset">
+                  <button
+                    type="button"
+                    class="btn TombolReset"
+                    onClick={resetData}
+                  >
                     Ulangi
                   </button>
                   <button

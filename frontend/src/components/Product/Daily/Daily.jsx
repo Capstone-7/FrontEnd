@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
+import Swal from "sweetalert2";
 // @mui
 import {
   Card,
@@ -49,8 +50,8 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import { useTheme } from "@mui/material/styles";
 import TableFooter from "@mui/material/TableFooter";
 
-import ProdukBaruModal from "./ProdukBaruModal";
 import styles from "../../../assets/styles/Products.module.css";
+import ProdukBaruModal from "./ProdukBaruModal";
 import ProductSearchBar from "../../SearchBar/ProductSearchBar";
 // ----------------------------------------------------------------------
 
@@ -189,6 +190,8 @@ export default function Daily() {
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
 
+  const [arrayId, setArrayId] = useState([]);
+
   const [token, setToken] = useState(Cookies.get("token"));
   const [currentID, setCurrentID] = useState("");
 
@@ -197,7 +200,6 @@ export default function Daily() {
   const [update, setUpdate] = useState(false);
 
   const handleOpenMenu = (event, id) => {
-    // console.log(id)
     setOpen(event.currentTarget);
     setCurrentID(id);
   };
@@ -221,11 +223,12 @@ export default function Daily() {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    setArrayId(id);
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -249,7 +252,6 @@ export default function Daily() {
     getComparator(order, orderBy),
     filterName
   );
-  // console.log(product)
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -270,16 +272,29 @@ export default function Daily() {
   const isNotFound = !filteredProducts.length && !!filterName;
 
   const handleDelete = (e) => {
-    AxiosInstance.delete(`product/${currentID}`, {
-      headers: { Authorization: `Bearer ` + token },
-    }).then((res) => res);
-    const productIndex = products.findIndex((usr) => usr._id === currentID);
-    const updateProduct = [
-      ...products.slice(0, productIndex),
-      ...products.slice(productIndex + 1),
-    ];
-    setProducts(updateProduct);
-    setOpen(false);
+    Swal.fire({
+      title: "Yakin ingin hapus data ini ?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Batal!",
+      confirmButtonText: "Ya, Hapus!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        AxiosInstance.delete(`product/${currentID}`, {
+          headers: { Authorization: `Bearer ` + token },
+        }).then((res) => res);
+        const productIndex = products.findIndex((usr) => usr._id === currentID);
+        const updateProduct = [
+          ...products.slice(0, productIndex),
+          ...products.slice(productIndex + 1),
+        ];
+        setProducts(updateProduct);
+        setOpen(false);
+        Swal.fire("Dihapus!", "File Anda telah dihapus.", "success");
+      }
+    });
   };
 
   useEffect(() => {
@@ -288,12 +303,9 @@ export default function Daily() {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      // console.log(res)
       setProducts(res?.data?.data);
     });
   }, [update]);
-
-  // console.log(products)
 
   const handleOpen = () => setOpen(!true);
 
@@ -324,6 +336,11 @@ export default function Daily() {
             Daily
           </Typography>
           <ProductSearchBar
+            id={arrayId}
+            selected={selected}
+            setUpdate={setUpdate}
+            update={update}
+            setSelected={setSelected}
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -336,7 +353,6 @@ export default function Daily() {
               update={update}
             />
           </MenuItem>
-          {/*  */}
           <TableContainer className={styles.tableContainer}>
             <Table className={styles.evenodd}>
               <UserListHead
@@ -378,13 +394,12 @@ export default function Daily() {
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={selectedProduct}
-                          onChange={(event) => handleClick(event, code)}
+                          onChange={(event) => handleClick(event, _id)}
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">
                         {page * rowsPerPage + (index + 1)}
                       </TableCell>
-                      {/* <TableCell align="left">{_id}</TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Typography variant="subtitle2" noWrap>
@@ -448,13 +463,14 @@ export default function Daily() {
                         }}
                       >
                         <Typography variant="h6" paragraph>
-                          Not found
+                          Tidak ditemukan
                         </Typography>
 
                         <Typography variant="body2">
-                          No results found for &nbsp;
+                          Tidak ada hasil yang ditemukan untuk &nbsp;
                           <strong>&quot;{filterName}&quot;</strong>.
-                          <br /> Try checking for typos or using complete words.
+                          <br /> Coba periksa kesalahan ketik atau gunakan kata
+                          lengkap.
                         </Typography>
                       </Paper>
                     </TableCell>

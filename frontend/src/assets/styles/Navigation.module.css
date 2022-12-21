@@ -1,131 +1,158 @@
 .Download {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 8px 16px;
-    cursor: pointer;
-    width: 128px;
-    height: 56px;
-    background: #284E7D;
-    border-color: #284E7D;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    color: #fff;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 1.25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  cursor: pointer;
+  width: 128px;
+  border: none;
+  height: 56px;
+  background: #284e7d;
+  border-color: #284e7d;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  color: #fff;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  border-bottom: 5px solid #1e406a;
+  transition: 0.3s;
+  letter-spacing: 1.25px;
 }
 
+.Download:hover {
+  border-bottom-width: 0;
+  transform: translateY(5px);
+}
 
 .BackgroundContent {
-    background-image: url('../../assets/images/Background.png');
-    width: 100%;
-    height: 1200px;
-    background-size: cover;
-    border-radius: 0px;
+  background-image: url("../../assets/images/Background.png");
+  width: 100%;
+  height: 1200px;
+  background-size: cover;
+  border-radius: 0px;
 }
-
-
 
 .MainContent {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    padding: 20px 280px;
-    background: #E8F2FE;
-    box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.25);
-    position: fixed !important;
-    z-index: 2;
-    width: 100vw !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px 280px;
+  background: #e8f2fe;
+  box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.25);
+  position: fixed !important;
+  z-index: 2;
+  width: 100vw !important;
 }
 
-
-
 .MainContent__Navbar {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 39px 0;
-    width: 100%;
-    height: 40px;
-    background: #E8F2FE;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 39px 0;
+  width: 100%;
+  height: 40px;
+  background: #e8f2fe;
 }
 
 .NavItem {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0px;
-    gap: 1px;
-    width: 100%;
-    height: 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 1px;
+  width: 100%;
+  height: 45px;
 }
 
-
 .NavList__Item {
-    font-style: normal !important;
-    font-weight: 500 !important;
-    font-size: 20px !important;
-    text-align: center !important;
-    margin-left: 30px;
-} 
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 20px !important;
+  text-align: center !important;
+  margin-left: 30px;
+}
 
+.NavList__ItemAbout {
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 20px !important;
+  text-align: center !important;
+  margin-left: 30px;
+  color: #8a9097;
+  text-decoration: none !important;
+}
+
+.NavList__ItemAbout:hover .NavList__BottomBorder {
+  content: "";
+  display: block;
+  border-bottom: 4px solid #182e4a;
+  border-radius: 102px 101px 0px 0px;
+  -moz-border-radius: 102px 101px 0px 0px;
+  -webkit-border-radius: 102px 101px 0px 0px;
+  width: 40px;
+  margin-top: 4px;
+  margin-inline: auto;
+  margin-left: 40%;
+}
+
+.NavList__ItemAbout:hover {
+  color: #182e4a !important;
+}
 
 .NavList__Item:hover {
-    color: #182e4a !important;
-  }
-  
-  .NavList__BottomBorder {
-    display: none;
-  }
- 
+  color: #182e4a !important;
+}
+
+.NavList__BottomBorder {
+  display: none;
+}
 
 .NavList__Item:hover .NavList__BottomBorder {
-    content: "";
-    display: block;
-    border-bottom: 4px solid #182e4a;
-    border-radius: 102px 101px 0px 0px;
-    -moz-border-radius: 102px 101px 0px 0px;
-    -webkit-border-radius: 102px 101px 0px 0px;
-    width: 40px;
-    margin-top: 4px;
-    margin-inline: auto;
-  }
+  content: "";
+  display: block;
+  border-bottom: 4px solid #182e4a;
+  border-radius: 102px 101px 0px 0px;
+  -moz-border-radius: 102px 101px 0px 0px;
+  -webkit-border-radius: 102px 101px 0px 0px;
+  width: 40px;
+  margin-top: 4px;
+  margin-inline: auto;
+}
 
 .Hero {
-    width: 100%;
-    padding-top: 150px;
+  width: 100%;
+  padding-top: 150px;
 }
 
 .HeroText {
-    padding-top: 40%;
-    margin-left: 80px;
-    font-family: 'Poppins';
-    width: 100%;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 58px;
-    line-height: 87px;
-    color: #396EB0;
-    text-align: center;
+  padding-top: 40%;
+  margin-left: 80px;
+  font-family: "Poppins";
+  width: 100%;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 58px;
+  line-height: 87px;
+  color: #396eb0;
+  text-align: center;
 }
 
 .SecondaryText {
-    color: #182E4A;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 58px;
+  color: #182e4a;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 58px;
 }
 
 .btnDownload {
-    margin-left: 49%;
-    width: 25%;
-    margin-top: 20px;
-    cursor: pointer;
+  margin-left: 49%;
+  width: 25%;
+  margin-top: 20px;
+  cursor: pointer;
 }

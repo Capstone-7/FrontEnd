@@ -2,7 +2,6 @@
   background-color: #ebf1f7;
   padding: 2em;
   font-family: "Poppins";
-  /* font-style: normal; */
 }
 
 .titleservice {
@@ -16,15 +15,9 @@
 }
 
 .toMid {
-  justify-content: center;
-  text-align: center;
+  justify-content: center !important;
+  text-align: center !important;
 }
-
-/* @media screen and (max-width: 1440px) {
-    .rowonecard {
-        width: 12rem;
-    }
-} */
 
 .rowtwocard {
   justify-content: center;
@@ -64,6 +57,11 @@
 @media screen and (max-width: 1920px) {
   .card {
     width: 18rem;
-    /* height: 22rem !important; */
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .toMid {
+    margin-right: 30px;
   }
 }

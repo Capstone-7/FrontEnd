@@ -1,43 +1,49 @@
 .blocklogin {
-    width: 100%;
-    height: 100vh;
-    background-image: url("../images/updatedloginbackground.png");
-    background-size: 100vw;
-    background-repeat: no-repeat;
-    background-position: center;
-    font-family: 'Poppins';
+  width: 100%;
+  height: 100vh;
+  background-image: url("../images/updatedloginbackground.png");
+  background-size: 100vw;
+  background-repeat: no-repeat;
+  background-position: center;
+  font-family: "Poppins";
 }
 
 .ketlogin h2 {
-    color: #396EB0;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 33px;
-    align-items: center;
-    text-align: center;
+  color: #396eb0;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 33px;
+  align-items: center;
+  text-align: center;
 }
 
 .ketlogin div {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 15px;
-    color: #1D1D1D;
-    align-items: center;
-    text-align: center;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  color: #1d1d1d;
+  align-items: center;
+  text-align: center;
 }
 
 .email,
 .password {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    color: #0E1527;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  color: #0e1527;
 }
 
 .button {
-    width: 386px;
-    height: 40px;
-    padding: 8px 16px;
-    background: #396EB0;
-    border-radius: 8px;
+  width: 386px;
+  height: 40px;
+  padding: 8px 16px;
+  background: #396eb0;
+  border-radius: 8px;
+}
+
+@media screen and (max-width: 1920px) {
+  .button {
+    width: 100% !important;
+  }
 }

@@ -1,60 +1,98 @@
 .blockfooter {
-    background-color: #1F3D61;
-    color: #E8F2FE;
-    padding: 5em 0em 5em 0em;
-    font-family: 'Poppins';
+  background-color: #1f3d61;
+  color: #e8f2fe;
+  padding: 5em 0em 5em 0em;
+  font-family: "Poppins";
+  overflow: hidden;
 }
 
 .rowfooter {
-    justify-content: center;
-    align-items: center;
-    padding: 0em 0em 0em 0em;
+  justify-content: center;
+  align-items: center;
+  padding: 0em 0em 0em 0em;
 }
 
 .logo {
-    width: 90px;
-    padding-bottom: 15px;
+  width: 90px;
+  padding-bottom: 15px;
 }
 
 .columnone {
-    padding-bottom: 15px;
-    font-size: 11px;
+  padding-bottom: 15px;
+  font-size: 11px;
 }
 
 .columnone div {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-@media only screen and (max-width: 750px) {
-    .columnone div {
-        width: 10px;
-        /* height: 3em; */
-    }
+.columnone div:hover {
+  color: #b7d7fd;
 }
 
-.line {
-    border: 2px solid #EBF1F7;
-    width: 1px;
-    height: 150px;
-    /* margin: 0px 10px 0px 10px; */
-    /* margin-left: 50px; */
+.columnthree img:hover {
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  transform: scale(1.04);
 }
 
+.leftline,
+.rightline {
+  border: 2px solid #ebf1f7;
+  width: 1px;
+  height: 150px;
+}
 
-/* @media only screen and (max-width: 750px) {
-    .columntwo {
-        width: 100px;
-    }
-} */
+@media only screen and (max-width: 768px) {
+  .columnone div {
+    width: 35px;
+  }
 
-/* .columntwo {
-    width: 80px;
-} */
+  .leftline {
+    margin-left: 50px;
+  }
 
-/* 
-.linerow {
+  .contentcolumntwo {
+    margin-left: -30px;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .columnone div {
+    width: 35px;
+  }
+
+  .contentcolumntwo {
+    margin-left: -40px !important;
+  }
+
+  .leftline {
+    margin-left: 0px;
+  }
+
+  .columnthree,
+  .columnthree img {
+    padding-top: 10px;
     text-align: center;
-    float: right;
-    justify-content: center;
-    align-items: center;
-} */
+    margin: 0 auto;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .blockone {
+    width: 200px !important;
+  }
+
+  .leftline,
+  .rightline {
+    display: none;
+  }
+
+  .contentcolumntwo {
+    padding-top: 50px;
+  }
+
+  .columnthree {
+    padding-top: 50px;
+  }
+}
