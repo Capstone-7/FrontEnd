@@ -104,6 +104,22 @@ const BillsModal = ({ id, setUpdate, update }) => {
     } catch (err) {}
   };
 
+  const resetData = () => {
+    setFormData({
+      gambar: "",
+      kodeProduk: "",
+      deskripsi: "",
+      status: "Not Active",
+      nominal: "",
+      kategori: "",
+      harga: "",
+      type: "bills",
+      detail: "Detail Here",
+      period: 0,
+    });
+    setChecked(false);
+  };
+
   return (
     <>
       <div>
@@ -236,7 +252,11 @@ const BillsModal = ({ id, setUpdate, update }) => {
                   />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
-                  <button type="button" class="btn TombolReset">
+                  <button
+                    type="button"
+                    class="btn TombolReset"
+                    onClick={resetData}
+                  >
                     Ulangi
                   </button>
                   <button

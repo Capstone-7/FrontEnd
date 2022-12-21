@@ -41,9 +41,8 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      console.log(res);
       setproduct(res.data.data);
-      setChecked(res.data.data.status === "active" ? true : false);
+      setChecked(res.data.data.status === "Active" ? true : false);
     });
   }, []);
 
@@ -67,9 +66,25 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
       const response = await AxiosInstance.put(`/product/${data}`, product);
       setUpdate(!update);
       setOpen(false);
-      Swal.fire("Berhasil!", "You clicked the button!", "success");
+      Swal.fire("Berhasil!", "berhasil merubah Data!", "success");
       return response;
     } catch (err) {}
+  };
+
+  const resetData = () => {
+    setproduct({
+      icon_url: "",
+      code: "",
+      description: "",
+      status: "Not Active",
+      nominal: "",
+      category: "",
+      price: "",
+      type: "daily",
+      detail: "Detail Here",
+      period: 0,
+    });
+    setChecked(false);
   };
 
   return (
@@ -182,7 +197,11 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
                   />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
-                  <button type="button" class="btn TombolReset">
+                  <button
+                    type="button"
+                    class="btn TombolReset"
+                    onClick={resetData}
+                  >
                     Ulangi
                   </button>
                   <button

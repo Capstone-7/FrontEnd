@@ -72,6 +72,22 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
     } catch (err) {}
   };
 
+  const resetData = () => {
+    setproduct({
+      icon_url: "",
+      code: "",
+      description: "",
+      status: "Not Active",
+      nominal: "",
+      category: "",
+      price: "",
+      type: "daily",
+      detail: "Detail Here",
+      period: 0,
+    });
+    setChecked(false);
+  };
+
   return (
     <>
       <div>
@@ -184,7 +200,11 @@ const BillsEditModal = ({ id, setUpdate, update, setOpen }) => {
                   />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
-                  <button type="button" class="btn TombolReset">
+                  <button
+                    type="button"
+                    class="btn TombolReset"
+                    onClick={resetData}
+                  >
                     Ulangi
                   </button>
                   <button

@@ -20,12 +20,6 @@
   text-align: center;
 }
 
-/* @media screen and (max-width: 1440px) {
-    .rowonecard {
-        width: 12rem;
-    }
-} */
-
 .rowtwocard {
   justify-content: center;
   text-align: center;
@@ -64,6 +58,5 @@
 @media screen and (max-width: 1920px) {
   .card {
     width: 18rem;
-    /* height: 22rem !important; */
   }
 }

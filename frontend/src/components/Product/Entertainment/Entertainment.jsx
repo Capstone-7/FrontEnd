@@ -185,7 +185,7 @@ export default function Entertainment() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [token, setToken] = useState(Cookies.get("token"));
   const [arrayId, setArrayId] = useState([]);
   const [products, setProducts] = useState([]);
@@ -261,13 +261,14 @@ export default function Entertainment() {
 
   const handleDelete = (e) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Apa kamu yakin?",
+      text: "Anda tidak akan dapat mengembalikan ini!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Batal!",
+      confirmButtonText: "Ya, Hapus!",
     }).then((result) => {
       if (result.isConfirmed) {
         AxiosInstance.delete(`product/${currentID}`, {
@@ -280,7 +281,7 @@ export default function Entertainment() {
         ];
         setProducts(updateProduct);
         setOpen(false);
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire("Dihapus!", "File Anda telah dihapus.", "success");
       }
     });
   };
@@ -421,7 +422,9 @@ export default function Entertainment() {
                       </TableCell>
                       <TableCell align="left">{nominal}</TableCell>
                       <TableCell align="left">{category}</TableCell>
-                      <TableCell align="left">{price}</TableCell>
+                      <TableCell align="left">
+                        {row.price.toLocaleString(["id"])}
+                      </TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
                           size="large"
@@ -452,13 +455,14 @@ export default function Entertainment() {
                         }}
                       >
                         <Typography variant="h6" paragraph>
-                          Not found
+                          Tidak ditemukan
                         </Typography>
 
                         <Typography variant="body2">
-                          No results found for &nbsp;
+                          Tidak ada hasil yang ditemukan untuk &nbsp;
                           <strong>&quot;{filterName}&quot;</strong>.
-                          <br /> Try checking for typos or using complete words.
+                          <br /> Coba periksa kesalahan ketik atau gunakan kata
+                          lengkap.
                         </Typography>
                       </Paper>
                     </TableCell>

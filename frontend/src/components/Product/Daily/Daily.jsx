@@ -273,13 +273,13 @@ export default function Daily() {
 
   const handleDelete = (e) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
+      title: "Yakin ingin hapus data ini ?",
+      icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Batal!",
+      confirmButtonText: "Ya, Hapus!",
     }).then((result) => {
       if (result.isConfirmed) {
         AxiosInstance.delete(`product/${currentID}`, {
@@ -292,7 +292,7 @@ export default function Daily() {
         ];
         setProducts(updateProduct);
         setOpen(false);
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire("Dihapus!", "File Anda telah dihapus.", "success");
       }
     });
   };
@@ -336,8 +336,6 @@ export default function Daily() {
             Daily
           </Typography>
           <ProductSearchBar
-            products={products}
-            setProducts={setProducts}
             id={arrayId}
             selected={selected}
             setUpdate={setUpdate}
@@ -465,13 +463,14 @@ export default function Daily() {
                         }}
                       >
                         <Typography variant="h6" paragraph>
-                          Not found
+                          Tidak ditemukan
                         </Typography>
 
                         <Typography variant="body2">
-                          No results found for &nbsp;
+                          Tidak ada hasil yang ditemukan untuk &nbsp;
                           <strong>&quot;{filterName}&quot;</strong>.
-                          <br /> Try checking for typos or using complete words.
+                          <br /> Coba periksa kesalahan ketik atau gunakan kata
+                          lengkap.
                         </Typography>
                       </Paper>
                     </TableCell>

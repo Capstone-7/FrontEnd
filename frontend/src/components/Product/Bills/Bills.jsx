@@ -270,13 +270,14 @@ export default function Bills() {
 
   const handleDelete = (e) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Apa kamu yakin?",
+      text: "Anda tidak akan dapat mengembalikan ini!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Batal!",
+      confirmButtonText: "Ya, Hapus!",
     }).then((result) => {
       if (result.isConfirmed) {
         AxiosInstance.delete(`product/${currentID}`, {
@@ -289,7 +290,7 @@ export default function Bills() {
         ];
         setProducts(updateProduct);
         setOpen(false);
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire("Dihapus!", "File Anda telah dihapus.", "success");
       }
     });
   };
@@ -427,7 +428,7 @@ export default function Bills() {
                       </TableCell>
                       <TableCell align="left">{category}</TableCell>
                       <TableCell style={{ color: "#396EB0" }} align="right">
-                        {price}
+                        {row.price.toLocaleString(["id"])}
                       </TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
@@ -459,13 +460,14 @@ export default function Bills() {
                         }}
                       >
                         <Typography variant="h6" paragraph>
-                          Not found
+                          Tidak ditemukan
                         </Typography>
 
                         <Typography variant="body2">
-                          No results found for &nbsp;
+                          Tidak ada hasil yang ditemukan untuk &nbsp;
                           <strong>&quot;{filterName}&quot;</strong>.
-                          <br /> Try checking for typos or using complete words.
+                          <br /> Coba periksa kesalahan ketik atau gunakan kata
+                          lengkap.
                         </Typography>
                       </Paper>
                     </TableCell>

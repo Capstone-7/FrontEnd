@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -14,6 +14,7 @@ import SwiperCore, { EffectCoverflow, Pagination, Navigation } from "swiper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../assets/styles/ProductList.module.css";
+import Aos from "aos";
 
 SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
 
@@ -24,6 +25,9 @@ const ProductList = () => {
     setIndex(selectedIndex);
   };
 
+  useEffect(() => {
+    Aos.init({ duration: 2000 });
+  }, []);
   return (
     <Container fluid className={styles.blockcarousel}>
       <Row
@@ -37,7 +41,10 @@ const ProductList = () => {
           <h2>Product List</h2>
         </Col>
       </Row>
-      <Row style={{ justifyContent: "center", padding: "2em 0em 7em 0em " }}>
+      <Row
+        style={{ justifyContent: "center", padding: "2em 0em 7em 0em " }}
+        data-aos="fade-up"
+      >
         <Col lg={10}>
           <Swiper
             navigation={true}
