@@ -40,19 +40,28 @@ const ProductList = () => {
                     <Swiper
                         navigation={true}
                         effect={"coverflow"}
-                        centeredSlides={true}
                         spaceBetween={50}
-                        slidesPerView={3}
                         loop={true}
                         coverflowEffect={{
                             rotate: 20,
                             stretch: 0,
                             depth: 100,
                             modifier: 1,
-                            slideShadows: true
                         }}
                         pagination={{
                             clickable: true
+                        }}
+                        breakpoints={{
+                            360: {
+                                width: 360,
+                                slidesPerView: 1,
+                                centeredSlides: true
+                            },
+                            1024: {
+                                width: 1024,
+                                slidesPerView: 3,
+                                centeredSlides: true
+                            }
                         }}
                         className={styles.mySwiper}
                     >
@@ -67,7 +76,7 @@ const ProductList = () => {
                                     <div className={styles.dailystyle}>
                                         <h2>Daily</h2>
                                         <div>Best price on your Dompet</div>
-                                        <Button variant="primary">Mampir Dulu aja<FontAwesomeIcon style={{ paddingLeft: "10px" }} icon={faCircleArrowRight} /></Button>
+                                        <Button variant="primary" >Mampir Dulu aja<FontAwesomeIcon style={{ paddingLeft: "10px" }} icon={faCircleArrowRight} /></Button>
                                     </div>
                                 </div>
                             )}

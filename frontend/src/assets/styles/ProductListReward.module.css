@@ -1,4 +1,13 @@
 .blockreward {
     padding: 5em 0em 5em 0em;
     font-family: 'Poppins';
+    overflow: hidden;
+}
+
+.button {
+    transition: all 0.3s;
+}
+
+.button:hover {
+    letter-spacing: .5px;
 }

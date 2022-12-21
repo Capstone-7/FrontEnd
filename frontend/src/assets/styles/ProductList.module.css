@@ -68,7 +68,6 @@
     color: #F8F8F8;
     letter-spacing: 0.5px;
     padding-bottom: 10px;
-    /* line-height: 22px; */
 }
 
 .dailystyle button {
@@ -82,6 +81,7 @@
     font-size: 12px;
     line-height: 18px;
     color: #EBF1F7;
+    border: none;
 }
 
 .billsstyle,
@@ -103,4 +103,24 @@
     font-weight: 700;
     font-size: 23px;
     color: #FFFAE7;
+}
+
+@media screen and (min-width: 360px) {
+    .swiper-container {
+        width: 360px;
+    }
+
+    .dailystyle {
+        margin-left: 60px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .swiper-container {
+        width: 1024px;
+    }
+
+    .dailystyle {
+        margin-left: 37px;
+    }
 }

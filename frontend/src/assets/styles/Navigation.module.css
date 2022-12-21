@@ -6,6 +6,7 @@
     padding: 8px 16px;
     cursor: pointer;
     width: 128px;
+    border: none;
     height: 56px;
     background: #284E7D;
     border-color: #284E7D;
@@ -16,7 +17,15 @@
     font-style: normal;
     font-weight: 700;
     font-size: 13px;
+    border-bottom: 5px solid #1e406a;
+    transition: 0.3s;
     letter-spacing: 1.25px;
+}
+
+
+.Download:hover {
+    border-bottom-width: 0;
+    transform: translateY(5px);
 }
 
 
@@ -41,6 +50,7 @@
     position: fixed !important;
     z-index: 2;
     width: 100vw !important;
+    /* overflow-x: hidden; */
 }
 
 
@@ -73,17 +83,17 @@
     font-size: 20px !important;
     text-align: center !important;
     margin-left: 30px;
-} 
+}
 
 
 .NavList__Item:hover {
     color: #182e4a !important;
-  }
-  
-  .NavList__BottomBorder {
+}
+
+.NavList__BottomBorder {
     display: none;
-  }
- 
+}
+
 
 .NavList__Item:hover .NavList__BottomBorder {
     content: "";
@@ -95,7 +105,7 @@
     width: 40px;
     margin-top: 4px;
     margin-inline: auto;
-  }
+}
 
 .Hero {
     width: 100%;
