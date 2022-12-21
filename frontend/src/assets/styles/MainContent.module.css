@@ -1,58 +1,59 @@
 .BackgroundContent {
-    background-image: url('../../assets/images/Background.png');
+  background-image: url("../../assets/images/Background.png");
+  width: 100%;
+  height: 1200px;
+  background-size: cover;
+  border-radius: 0px;
+}
+
+@media only screen and (max-width: 768px) {
+  .HeroText {
     width: 100%;
-    height: 1200px;
-    background-size: cover;
-    border-radius: 0px; 
+    margin-left: 0 !important;
+    padding-top: 6% !important;
+    font-size: 40px !important;
+  }
+
+  .SecondaryText {
+    font-size: 50px !important;
+  }
+
+  .btnDownload {
+    width: 40% !important;
+  }
+
+  .BackgroundContent {
+    width: 100% !important;
+  }
 }
-
-@media only screen and (max-width: 768px){
-    .HeroText {
-        width: 100%;
-        margin-left: 0 !important;
-        padding-top: 6% !important;
-        font-size: 40px !important;
-    }
-
-    .SecondaryText {
-        font-size: 50px !important;
-    }
-
-    .btnDownload {
-        width: 40% !important;
-    }
-}
-
 
 .Hero {
-    width: 100%;
-    padding-top: 150px;
+  width: 100%;
+  padding-top: 150px;
 }
 
-.HeroText {   
-    padding-top: 40%;
-    /* margin-left: 80px; */
-    font-family: 'Poppins';
-    /* width: 100%; */
-    font-style: normal;
-    font-weight: 500;
-    font-size: 58px;
-    line-height: 87px;
-    color: #396EB0;
-    text-align: center;
+.HeroText {
+  padding-top: 40%;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 58px;
+  line-height: 87px;
+  color: #396eb0;
+  text-align: center;
 }
 
 .SecondaryText {
-    color: #182E4A;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 58px;
+  color: #182e4a;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 58px;
 }
 
 .btnDownload {
-    margin-inline: auto;
-    width: 25%;
-    margin-top: 20px;
-    cursor: pointer;
+  margin-inline: auto;
+  width: 25%;
+  margin-top: 20px;
+  cursor: pointer;
 }

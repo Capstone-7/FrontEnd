@@ -28,7 +28,6 @@ const style = {
 const ProdukBaruModal = ({ id, setUpdate, update }) => {
   const [open, setOpen] = React.useState(false);
   const [isChecked, setChecked] = useState();
-  const [product, setproduct] = useState({});
 
   const [formData, setFormData] = useState({
     gambar: "",
@@ -36,6 +35,7 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
     deskripsi: "",
     status: "Not Active",
     nominal: "",
+    kategori: "",
     harga: "",
     type: "daily",
     detail: "Detail Here",
@@ -48,7 +48,7 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
     deskripsi,
     status,
     nominal,
-    value,
+    kategori,
     harga,
     type,
     detail,
@@ -60,8 +60,8 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
   const handleOpen = () => setOpen(!open);
 
   useEffect(() => {
-    setChecked(product.status === "active" ? true : false);
-  }, [product]);
+    setChecked(formData.status === "active" ? true : false);
+  }, []);
 
   const handleChangeFormData = (label, newValue) => {
     setFormData({
@@ -79,7 +79,7 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
         description: formData.deskripsi,
         status: formData.status,
         nominal: formData.nominal,
-        category: formData.category,
+        category: formData.kategori,
         type: formData.type,
         details: formData.detail,
         active_period: formData.period,
@@ -91,15 +91,33 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
         deskripsi: "",
         status: "Not Active",
         nominal: "",
+        kategori: "",
         harga: "",
         type: "daily",
         detail: "Detail Here",
         period: 0,
       });
+      setChecked(false);
       setUpdate(!update);
       return response;
     } catch (err) {}
   };
+
+  const resetData = () => {
+    setFormData({
+      gambar: "",
+      kodeProduk: "",
+      deskripsi: "",
+      status: "Not Active",
+      nominal: "",
+      kategori: "",
+      harga: "",
+      type: "daily",
+      detail: "Detail Here",
+      period: 0,
+    });
+    setChecked(false)
+  }
 
   return (
     <>
@@ -179,7 +197,7 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
                     id="custom-switch"
                     label={isChecked ? "Active" : "Not Active"}
                     checked={isChecked}
-                    value={status}
+                    value={formData.status === "active" ? true : false}
                     onClick={() => setChecked(!isChecked)}
                     onChange={(e) =>
                       handleChangeFormData(
@@ -205,12 +223,12 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
                   <Form.Select
                     style={{ width: "130px" }}
                     aria-label="Default select example"
-                    value={value}
+                    value={kategori}
                     onChange={(e) =>
-                      handleChangeFormData("category", e.currentTarget.value)
+                      handleChangeFormData("kategori", e.currentTarget.value)
                     }
                   >
-                    <option selected disabled>
+                    <option value="" selected disabled>
                       Pilih Disini
                     </option>
                     <option value="data">Paket Data</option>
@@ -233,7 +251,7 @@ const ProdukBaruModal = ({ id, setUpdate, update }) => {
                   />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
-                  <button type="button" class="btn TombolReset">
+                  <button type="button" class="btn TombolReset" onClick={resetData}>
                     Ulangi
                   </button>
                   <button

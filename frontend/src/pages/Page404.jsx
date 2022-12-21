@@ -51,15 +51,12 @@ export default function Page404() {
           </Typography>
 
           <Box
-            // component="img"
-            // // src="/assets/illustrations/illustration_404.svg"
-            // sx={{ height: 260, mx: "auto", my: { xs: 5, sm: 10 } }}
             style={{ background: "no-repeat" }}
             ref={container}
           />
 
           <Button
-            to="/admin"
+            to="/"
             size="large"
             variant="contained"
             component={RouterLink}

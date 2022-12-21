@@ -1,4 +1,19 @@
 .blockreward {
-    padding: 5em 0em 5em 0em;
-    font-family: 'Poppins';
+  padding: 5em 0em 5em 0em;
+  font-family: "Poppins";
+  overflow: hidden;
+}
+
+@media screen and (max-width: 500px) {
+  .blockreward {
+    margin-top: -100px !important;
+  }
+}
+
+.button {
+  transition: all 0.3s;
+}
+
+.button:hover {
+  letter-spacing: 0.5px;
 }

@@ -26,10 +26,9 @@ const style = {
   p: 4,
 };
 
-const BillsModal = ({ id, setUpdate, update, setOpen }) => {
+const BillsModal = ({ id, setUpdate, update }) => {
   const [opens, setOpens] = React.useState(false);
   const [isChecked, setChecked] = useState();
-  const [product, setproduct] = useState({});
 
   const [formData, setFormData] = useState({
     gambar: "",
@@ -37,6 +36,7 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
     deskripsi: "",
     status: "Not Active",
     nominal: "",
+    kategori: "",
     harga: "",
     type: "bills",
     detail: "Detail Here",
@@ -49,7 +49,7 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
     deskripsi,
     status,
     nominal,
-    value,
+    kategori,
     harga,
     type,
     detail,
@@ -61,8 +61,8 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
   const handleOpen = () => setOpens(!opens);
 
   useEffect(() => {
-    setChecked(product.status === "active" ? true : false);
-  }, [product]);
+    setChecked(formData.status === "active" ? true : false);
+  }, []);
 
   const handleChangeFormData = (label, newValue) => {
     setFormData({
@@ -80,7 +80,7 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
         description: formData.deskripsi,
         status: formData.status,
         nominal: formData.nominal,
-        category: formData.category,
+        category: formData.kategori,
         type: formData.type,
         details: formData.detail,
         active_period: formData.period,
@@ -92,14 +92,32 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
         deskripsi: "",
         status: "Not Active",
         nominal: "",
+        kategori: "",
         harga: "",
-        type: "daily",
+        type: "bills",
         detail: "Detail Here",
         period: 0,
       });
-      setUpdate(!update)
+      setChecked(false);
+      setUpdate(!update);
       return response;
-    } catch (err) { }
+    } catch (err) {}
+  };
+
+  const resetData = () => {
+    setFormData({
+      gambar: "",
+      kodeProduk: "",
+      deskripsi: "",
+      status: "Not Active",
+      nominal: "",
+      kategori: "",
+      harga: "",
+      type: "bills",
+      detail: "Detail Here",
+      period: 0,
+    });
+    setChecked(false);
   };
 
   return (
@@ -206,17 +224,16 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
                   <Form.Select
                     style={{ width: "130px" }}
                     aria-label="Default select example"
-                    value={value}
+                    value={kategori}
                     onChange={(e) =>
-                      handleChangeFormData("category", e.currentTarget.value)
+                      handleChangeFormData("kategori", e.currentTarget.value)
                     }
                   >
-                    <option selected disabled>
+                    <option value="" selected disabled>
                       Pilih Disini
                     </option>
                     <option value="token">Token</option>
                     <option value="Tagihan Air">Tagihan Air</option>
-                    {/* <option value="Internet & Tv">Internet & Tv</option> */}
                     <option value="Pendidikan">Pendidikan</option>
                   </Form.Select>
                 </Form.Group>
@@ -235,7 +252,11 @@ const BillsModal = ({ id, setUpdate, update, setOpen }) => {
                   />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
-                  <button type="button" class="btn TombolReset">
+                  <button
+                    type="button"
+                    class="btn TombolReset"
+                    onClick={resetData}
+                  >
                     Ulangi
                   </button>
                   <button

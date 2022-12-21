@@ -1,17 +1,26 @@
 .CarouselProductList {
-    margin-top: 100px;
-    /* height: 70vh !important; */
-    z-index: -1;
-    margin-bottom: 100px;
-    box-shadow: 7px 5px 33px 21px rgba(0,0,0,0.37);
-    -webkit-box-shadow: 7px 5px 33px 21px rgba(0,0,0,0.37);
-    -moz-box-shadow: 7px 5px 33px 21px rgba(0,0,0,0.37);
+  margin-top: 100px;
+  z-index: -1;
+  margin-bottom: 100px;
+  box-shadow: 7px 5px 33px 21px rgba(0, 0, 0, 0.37);
+  -webkit-box-shadow: 7px 5px 33px 21px rgba(0, 0, 0, 0.37);
+  -moz-box-shadow: 7px 5px 33px 21px rgba(0, 0, 0, 0.37);
 }
 
 .CarouselItemProduct {
-    height: 100vh !important;
+  height: 100vh !important;
 }
 
 .carousel-indicators {
-    background-color: red !important;
+  background-color: red !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .CarouselProductList {
+    height: 25%;
+  }
+
+  .CarouselItemProduct {
+    height: 25% !important;
+  }
 }
