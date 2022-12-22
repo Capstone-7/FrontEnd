@@ -48,7 +48,7 @@ const Login = () => {
     if (validate.payload !== undefined) {
       Auth.storeUserInfoToCookie(validate.payload);
       navigate("/admin");
-      toast.success("🦄 Wow so easy!", {
+      toast.success("Berhasil Login!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
