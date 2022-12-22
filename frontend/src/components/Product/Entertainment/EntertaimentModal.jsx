@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
 import Iconify from "../../Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
-import swal from "sweetalert";
+import Swal from "sweetalert";
 
 import AxiosInstance from "../../../configs/axios/AxiosInstance";
 
@@ -29,7 +29,6 @@ const style = {
 const EntertaimentModal = ({ id, setUpdate, update }) => {
   const [opens, setOpens] = React.useState(false);
   const [isChecked, setChecked] = useState();
-  // const [product, setproduct] = useState({});
 
   const [formData, setFormData] = useState({
     gambar: "",
@@ -51,7 +50,6 @@ const EntertaimentModal = ({ id, setUpdate, update }) => {
     status,
     nominal,
     kategori,
-    // value,
     harga,
     type,
     detail,
@@ -104,6 +102,22 @@ const EntertaimentModal = ({ id, setUpdate, update }) => {
       setUpdate(!update);
       return response;
     } catch (err) {}
+  };
+
+  const resetData = () => {
+    setFormData({
+      gambar: "",
+      kodeProduk: "",
+      deskripsi: "",
+      status: "Not Active",
+      nominal: "",
+      kategori: "",
+      harga: "",
+      type: "daily",
+      detail: "Detail Here",
+      period: 0,
+    });
+    setChecked(false);
   };
 
   return (
@@ -236,7 +250,11 @@ const EntertaimentModal = ({ id, setUpdate, update }) => {
                   />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
-                  <button type="button" class="btn TombolReset">
+                  <button
+                    type="button"
+                    class="btn TombolReset"
+                    onClick={resetData}
+                  >
                     Ulangi
                   </button>
                   <button

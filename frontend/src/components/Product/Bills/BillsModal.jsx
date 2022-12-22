@@ -29,7 +29,6 @@ const style = {
 const BillsModal = ({ id, setUpdate, update }) => {
   const [opens, setOpens] = React.useState(false);
   const [isChecked, setChecked] = useState();
-  // const [product, setproduct] = useState({});
 
   const [formData, setFormData] = useState({
     gambar: "",
@@ -51,7 +50,6 @@ const BillsModal = ({ id, setUpdate, update }) => {
     status,
     nominal,
     kategori,
-    // value,
     harga,
     type,
     detail,
@@ -104,6 +102,22 @@ const BillsModal = ({ id, setUpdate, update }) => {
       setUpdate(!update);
       return response;
     } catch (err) {}
+  };
+
+  const resetData = () => {
+    setFormData({
+      gambar: "",
+      kodeProduk: "",
+      deskripsi: "",
+      status: "Not Active",
+      nominal: "",
+      kategori: "",
+      harga: "",
+      type: "bills",
+      detail: "Detail Here",
+      period: 0,
+    });
+    setChecked(false);
   };
 
   return (
@@ -238,7 +252,11 @@ const BillsModal = ({ id, setUpdate, update }) => {
                   />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
-                  <button type="button" class="btn TombolReset">
+                  <button
+                    type="button"
+                    class="btn TombolReset"
+                    onClick={resetData}
+                  >
                     Ulangi
                   </button>
                   <button

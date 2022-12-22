@@ -185,9 +185,9 @@ export default function Entertainment() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [token, setToken] = useState(Cookies.get("token"));
-  // const [user, setUser] = useState([]);
+  const [arrayId, setArrayId] = useState([]);
   const [products, setProducts] = useState([]);
   const [currentID, setCurrentID] = useState("");
 
@@ -215,11 +215,12 @@ export default function Entertainment() {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    setArrayId(id);
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -258,23 +259,31 @@ export default function Entertainment() {
     setPage(0);
   };
 
-  // const filteredUsers = applySortFilter(
-  //   products,
-  //   getComparator(order, orderBy),
-  //   filterName
-  // );
-
   const handleDelete = (e) => {
-    AxiosInstance.delete(`product/${currentID}`, {
-      headers: { Authorization: `Bearer ` + token },
-    }).then((res) => res);
-    const productIndex = products.findIndex((usr) => usr._id === currentID);
-    const updateProduct = [
-      ...products.slice(0, productIndex),
-      ...products.slice(productIndex + 1),
-    ];
-    setProducts(updateProduct);
-    setOpen(false);
+    Swal.fire({
+      title: "Apa kamu yakin?",
+      text: "Anda tidak akan dapat mengembalikan ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Batal!",
+      confirmButtonText: "Ya, Hapus!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        AxiosInstance.delete(`product/${currentID}`, {
+          headers: { Authorization: `Bearer ` + token },
+        }).then((res) => res);
+        const productIndex = products.findIndex((usr) => usr._id === currentID);
+        const updateProduct = [
+          ...products.slice(0, productIndex),
+          ...products.slice(productIndex + 1),
+        ];
+        setProducts(updateProduct);
+        setOpen(false);
+        Swal.fire("Dihapus!", "File Anda telah dihapus.", "success");
+      }
+    });
   };
 
   const isNotFound = !filteredProducts.length && !!filterName;
@@ -318,6 +327,13 @@ export default function Entertainment() {
             Entertainment
           </Typography>
           <ProductSearchBar
+            products={products}
+            setProducts={setProducts}
+            id={arrayId}
+            selected={selected}
+            setUpdate={setUpdate}
+            update={update}
+            setSelected={setSelected}
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -345,9 +361,9 @@ export default function Entertainment() {
               <TableBody id="body-table">
                 {(rowsPerPage > 0
                   ? filteredProducts?.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
                   : filteredProducts
                 )?.map((row, index) => {
                   const {
@@ -372,7 +388,7 @@ export default function Entertainment() {
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={selectedProduct}
-                          onChange={(event) => handleClick(event, code)}
+                          onChange={(event) => handleClick(event, _id)}
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">
@@ -399,16 +415,16 @@ export default function Entertainment() {
                       </TableCell>
                       <TableCell align="left">
                         <Label
-                          color={
-                            status === "not_verified" ? "error" : "success"
-                          }
+                          color={status === "Not Active" ? "error" : "success"}
                         >
                           {status}
                         </Label>
                       </TableCell>
                       <TableCell align="left">{nominal}</TableCell>
                       <TableCell align="left">{category}</TableCell>
-                      <TableCell align="left">{price}</TableCell>
+                      <TableCell align="left">
+                        {row.price.toLocaleString(["id"])}
+                      </TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
                           size="large"
@@ -439,13 +455,14 @@ export default function Entertainment() {
                         }}
                       >
                         <Typography variant="h6" paragraph>
-                          Not found
+                          Tidak ditemukan
                         </Typography>
 
                         <Typography variant="body2">
-                          No results found for &nbsp;
+                          Tidak ada hasil yang ditemukan untuk &nbsp;
                           <strong>&quot;{filterName}&quot;</strong>.
-                          <br /> Try checking for typos or using complete words.
+                          <br /> Coba periksa kesalahan ketik atau gunakan kata
+                          lengkap.
                         </Typography>
                       </Paper>
                     </TableCell>

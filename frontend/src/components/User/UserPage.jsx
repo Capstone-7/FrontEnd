@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Image from "react-bootstrap/Image";
+import Swal from "sweetalert2";
 // @mui
 import {
   Card,
@@ -40,8 +41,6 @@ import Scrollbar from "../Admin-Component/scrollbar/Scrollbar";
 import { UserListHead, UserListToolbar } from "../../section/user";
 // mock
 import AxiosInstance from "../../configs/axios/AxiosInstance";
-// import toast, { Toaster } from 'react-hot-toast';
-// import { ToastContainer, toast } from 'react-toastify';
 
 import "./ModalComponent";
 import ModalComponent from "./ModalComponent";
@@ -184,7 +183,7 @@ export default function UserPage() {
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
 
-  const [arrayId, setArrayId] = useState([])
+  const [arrayId, setArrayId] = useState([]);
 
   const [update, setUpdate] = useState(false);
 
@@ -217,7 +216,7 @@ export default function UserPage() {
   };
 
   const handleClick = (event, name, id) => {
-    setArrayId(id)
+    setArrayId(id);
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
@@ -260,19 +259,31 @@ export default function UserPage() {
   };
 
   const handleDelete = (e) => {
-    AxiosInstance.delete(`user/${currentID}`, {
-      headers: { Authorization: `Bearer ` + token },
-    }).then((res) => console.log(res));
-    const userIndex = user.findIndex((usr) => usr._id === currentID);
-    console.log(userIndex);
-    const updateUser = [
-      ...user.slice(0, userIndex),
-      ...user.slice(userIndex + 1),
-    ];
-    setUser(updateUser);
-    setOpen(false);
+    Swal.fire({
+      title: "Yakin ingin hapus data ini ?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Batal!",
+      confirmButtonText: "Ya, Hapus!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        AxiosInstance.delete(`user/${currentID}`, {
+          headers: { Authorization: `Bearer ` + token },
+        }).then((res) => console.log(res));
+        const userIndex = user.findIndex((usr) => usr._id === currentID);
+        console.log(userIndex);
+        const updateUser = [
+          ...user.slice(0, userIndex),
+          ...user.slice(userIndex + 1),
+        ];
+        setUser(updateUser);
+        setOpen(false);
+        Swal.fire("Dihapus!", "File Anda telah dihapus.", "success");
+      }
+    });
   };
-  // console.log(currentID);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -288,25 +299,11 @@ export default function UserPage() {
 
   return (
     <>
-      {/* <ToastContainer
-        position="top-center"
-        autoClose={1500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      /> */}
       <Helmet>
         <title> User | Minimal UI </title>
       </Helmet>
 
-      <Container
-        className={styles.container}
-      >
+      <Container className={styles.container}>
         <Stack
           direction="row"
           alignItems="center"
@@ -319,7 +316,11 @@ export default function UserPage() {
         </Stack>
 
         <Card className={styles.box}>
-          <Typography sx={{ padding: "20px 0px 0px 25px" }} variant="h5" gutterBottom>
+          <Typography
+            sx={{ padding: "20px 0px 0px 25px" }}
+            variant="h5"
+            gutterBottom
+          >
             Data Pengguna
           </Typography>
           <UserListToolbar
@@ -332,7 +333,7 @@ export default function UserPage() {
             onFilterName={handleFilterByName}
           />
 
-          <TableContainer className={styles.tableContainer} >
+          <TableContainer className={styles.tableContainer}>
             <Table className={styles.evenodd}>
               <UserListHead
                 order={order}
@@ -344,12 +345,11 @@ export default function UserPage() {
                 onSelectAllClick={handleSelectAllClick}
               />
               <TableBody id="body-table">
-                {/* {filteredUsers.map((row, index) */}
                 {(rowsPerPage > 0
                   ? filteredUsers?.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
                   : filteredUsers
                 )?.map((row, index) => {
                   const { name, _id, created, status, email } = row;
@@ -381,7 +381,11 @@ export default function UserPage() {
                       <TableCell align="left" width="100">
                         {email}
                       </TableCell>
-                      <TableCell align="left" style={{ color: "#396EB0" }} width="50">
+                      <TableCell
+                        align="left"
+                        style={{ color: "#396EB0" }}
+                        width="50"
+                      >
                         {new Date(created).toLocaleDateString()}
                       </TableCell>
                       <TableCell align="left" width="50">
@@ -424,17 +428,18 @@ export default function UserPage() {
                       <Paper
                         sx={{
                           textAlign: "center",
-                          backgroundColor: "#ebf1f7"
+                          backgroundColor: "#ebf1f7",
                         }}
                       >
                         <Typography variant="h6" paragraph>
-                          Not found
+                          Tidak ditemukan
                         </Typography>
 
                         <Typography variant="body2">
-                          No results found for &nbsp;
+                          Tidak ada hasil yang ditemukan untuk &nbsp;
                           <strong>&quot;{filterName}&quot;</strong>.
-                          <br /> Try checking for typos or using complete words.
+                          <br /> Coba periksa kesalahan ketik atau gunakan kata
+                          lengkap.
                         </Typography>
                       </Paper>
                     </TableCell>
@@ -444,7 +449,12 @@ export default function UserPage() {
               <TableFooter>
                 <TableRow>
                   <TablePagination
-                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    rowsPerPageOptions={[
+                      5,
+                      10,
+                      25,
+                      { label: "All", value: -1 },
+                    ]}
                     colSpan={9}
                     count={filteredUsers.length}
                     rowsPerPage={rowsPerPage}
@@ -484,9 +494,13 @@ export default function UserPage() {
           },
         }}
       >
-
-
-        <ModalComponent id={currentID} setUpdate={setUpdate} update={update} open={open} setOpen={setOpen} />
+        <ModalComponent
+          id={currentID}
+          setUpdate={setUpdate}
+          update={update}
+          open={open}
+          setOpen={setOpen}
+        />
 
         <MenuItem sx={{ color: "error.main" }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />

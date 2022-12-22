@@ -7,6 +7,7 @@ import { Grid, Container, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import AxiosInstance from "../configs/axios/AxiosInstance";
 import Cookies from "js-cookie";
+import { ToastContainer } from "react-toastify";
 // components
 // sections
 import {
@@ -72,20 +73,30 @@ export default function DashboardAppPage() {
         Authorization: "Bearer " + token,
       },
     }).then((res) => {
-      let array = new Map(Object.entries(res.data.data))
-      let x = Array.from(array)
-      let hasil = []
+      let array = new Map(Object.entries(res.data.data));
+      let x = Array.from(array);
+      let hasil = [];
       x.map((row) => {
-        hasil.push(
-          { label: row[0], value: row[1] }
-        )
-      })
-      setPieChart(hasil)
-    }, [])
+        hasil.push({ label: row[0], value: row[1] });
+      });
+      setPieChart(hasil);
+    }, []);
   });
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <Helmet>
         <title> Admin | PayOll </title>
       </Helmet>
@@ -110,7 +121,6 @@ export default function DashboardAppPage() {
                     className="DataImage"
                   />
                   <h3 className="DataText">Total Pengguna</h3>
-                  {/* <p onClick={() => AmbilPengguna()}>Ambil Pengguna</p> */}
                   <h4 className="secondText">
                     <strong>{user}</strong> Pengguna
                   </h4>
@@ -124,7 +134,6 @@ export default function DashboardAppPage() {
                     className="DataImage"
                   />
                   <h3 className="DataText">Total Produk</h3>
-                  {/* <p onClick={() => AmbilBarang()}>Ambil Pengguna</p> */}
                   <h4 className="secondText">
                     <strong>{product}</strong> Produk
                   </h4>
@@ -191,13 +200,12 @@ export default function DashboardAppPage() {
               title="Data Statistik"
               subheader="Top Produk"
               chartData={pieChart}
-              chartColors={
-                [
-                  theme.palette.primary.main,
-                  theme.palette.info.main,
-                  theme.palette.warning.main,
-                  theme.palette.error.main,
-                ]}
+              chartColors={[
+                theme.palette.primary.main,
+                theme.palette.info.main,
+                theme.palette.warning.main,
+                theme.palette.error.main,
+              ]}
             />
           </Grid>
         </Grid>

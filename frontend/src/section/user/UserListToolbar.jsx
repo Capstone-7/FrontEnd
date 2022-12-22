@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 // @mui
 import { styled, alpha } from "@mui/material/styles";
+import Swal from "sweetalert2";
 import {
   Toolbar,
   Tooltip,
@@ -64,19 +65,31 @@ export default function UserListToolbar({
   const [currentID, setCurrentID] = useState("");
 
   const handleDelete = (e) => {
-    AxiosInstance.delete(`user/${id}`, {
-      headers: { Authorization: `Bearer ` + token },
-    }).then((res) => console.log(res));
-    const userIndex = user.findIndex((usr) => usr._id === id);
-    console.log(userIndex);
-    const updateUser = [
-      ...user.slice(0, userIndex),
-      ...user.slice(userIndex + 1),
-    ];
-    setUser(updateUser);
-    setSelected([])
-    // numSelected === 0;
-    // setOpen(false);
+    Swal.fire({
+      title: "Apa kamu yakin?",
+      text: "Anda tidak akan dapat mengembalikan ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Batal!",
+      confirmButtonText: "Ya, Hapus!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        AxiosInstance.delete(`user/${id}`, {
+          headers: { Authorization: `Bearer ` + token },
+        }).then((res) => console.log(res));
+        const userIndex = user.findIndex((usr) => usr._id === id);
+        console.log(userIndex);
+        const updateUser = [
+          ...user.slice(0, userIndex),
+          ...user.slice(userIndex + 1),
+        ];
+        setUser(updateUser);
+        setSelected([]);
+        Swal.fire("Dihapus!", "File Anda telah dihapus.", "success");
+      }
+    });
   };
 
   return (
@@ -115,8 +128,7 @@ export default function UserListToolbar({
         </Tooltip>
       ) : (
         <Tooltip title="Filter list" style={{ marginInline: "auto" }}>
-          <IconButton>
-          </IconButton>
+          <IconButton></IconButton>
         </Tooltip>
       )}
     </StyledRoot>

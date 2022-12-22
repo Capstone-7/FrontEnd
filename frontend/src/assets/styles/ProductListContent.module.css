@@ -1,7 +1,9 @@
 .BackgroundProduct {
-  background-image: linear-gradient(0deg,
+  background-image: linear-gradient(
+      0deg,
       rgba(40, 78, 125, 0.5),
-      rgba(40, 78, 125, 0.5)),
+      rgba(40, 78, 125, 0.5)
+    ),
     url("../../assets/images/daily.jpg");
   background-position: 50% 50%;
   width: 100%;
@@ -13,19 +15,120 @@
   -moz-box-shadow: 2px -9px 20px 14px rgba(0, 0, 0, 0.75);
 }
 
-/* .Content {
-    margin-top: 200px;
-  } */
-
 .btnDownload {
-  margin-inline: auto;
   width: 25% !important;
   cursor: pointer;
+}
+
+.BebanTagihan {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 50px;
+  line-height: 60px;
+  align-items: center;
+  letter-spacing: -0.5px;
+  color: #f9a702;
+}
+
+.Content {
+  width: 110%;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 50px;
+  line-height: 60px;
+  align-items: center;
+}
+
+@media screen and (max-width: 1366px) {
+  .Content {
+    width: 100%;
+    font-size: 30px;
+    line-height: 35px !important;
+  }
+
+  .BebanTagihan {
+    font-size: 30px;
+    line-height: 35px !important;
+  }
+
+  .SecondaryDeskripsi {
+    width: 60% !important;
+    font-weight: 500;
+    font-size: 15px !important;
+    line-height: 30px !important;
+  }
+
+  .btnDownload {
+    width: 30% !important;
+  }
+
+  .hrModel {
+    width: 10% !important;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .Content {
+    width: 100%;
+    font-size: 20px;
+    line-height: 25px !important;
+  }
+
+  .BebanTagihan {
+    font-size: 20px;
+    line-height: 25px !important;
+  }
+
+  .SecondaryDeskripsi {
+    width: 100% !important;
+    font-weight: 500;
+    font-size: 15px !important;
+    line-height: 30px !important;
+  }
+
+  .btnDownload {
+    width: 30% !important;
+  }
+
+  .hrModel {
+    width: 15% !important;
+  }
 }
 
 @media screen and (max-width: 500px) {
   .deskripsi {
     width: 80% !important;
+  }
+
+  .Content {
+    width: 100%;
+    ont-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+  }
+
+  .BebanTagihan {
+    width: 100%;
+    ont-weight: 700;
+    font-size: 25px;
+    line-height: 20px;
+  }
+
+  .SecondaryDeskripsi {
+    width: 100% !important;
+    font-weight: 500;
+    font-size: 15px !important;
+    line-height: 30px !important;
+  }
+
+  .btnDownload {
+    width: 50% !important;
+  }
+
+  .hrModel {
+    width: 25%;
   }
 }
 
@@ -35,28 +138,21 @@
   }
 }
 
-
-.Content {
-  width: 70%;
-}
-
 .hrModel {
   opacity: 1;
   color: white;
   border-top: 2.5px solid;
-  width: 25%;
+  width: 50% !important;
 }
 
 .SecondaryDeskripsi {
-  width: 50%;
-  color: #C2D2E7;
-  font-family: 'Poppins';
+  width: 80%;
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 500;
-  font-size: 100%;
-  line-height: 25px;
+  font-size: 25px;
+  line-height: 50px;
+  align-items: center;
+  letter-spacing: 0.25px;
+  color: #c2d2e7;
 }
-
-/* .deskripsi {
-    width: 35% !important;
-  } */

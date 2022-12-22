@@ -6,9 +6,8 @@ import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
 import Iconify from "../../components/Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
-// import 'react-toastify/dist/ReactToastify.min.css';
-// import { ToastContainer, toast } from 'react-toastify';
-// import toast, { Toaster } from 'react-hot-toast';
+
+import Swal from "sweetalert2";
 
 import AxiosInstance from "../../configs/axios/AxiosInstance";
 
@@ -37,13 +36,11 @@ const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
 
   const handleOpen = () => {
     setOpens(!opens);
-
-  }
+  };
 
   const handleCloseMenuModal = () => {
-    setOpen(!open)
-  }
-
+    setOpen(!open);
+  };
 
   useEffect(() => {
     AxiosInstance.get(`user/${id}`, {
@@ -59,23 +56,7 @@ const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
     setChecked(user.status === "verified" ? true : false);
   }, []);
 
-  // const animateToast = () => {
-  //   toast.success('Edit Berhasil',
-  //     {
-  //       position: "top-center",
-  //       autoClose: 1500,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "light",
-  //     }
-  //   )
-  // }
-
   const UpdateStatus = (prop) => {
-    // console.log(e)
     const { email, name } = prop;
     AxiosInstance.put(
       `user/${id}`,
@@ -91,11 +72,10 @@ const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
       }
     );
 
-    // handleOpen()
-    // animateToast()
-    setOpen(!open)
+    setOpen(!open);
+    Swal.fire("Berhasil!", "berhasi merubah data!", "success");
     setTimeout(() => {
-      setUpdate(!update)
+      setUpdate(!update);
     }, 100);
   };
 
@@ -143,7 +123,6 @@ const ModalComponent = ({ id, setUpdate, update, setOpen, open }) => {
                     type="switch"
                     id="custom-switch"
                     label={isChecked ? "Verified" : "Not Verified"}
-                    // value={isChecked ? "verified" : "not_verified"}
                     checked={isChecked}
                     onClick={() => setChecked(!isChecked)}
                   />

@@ -4,6 +4,7 @@ import { sentenceCase } from "change-case";
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import Swal from "sweetalert2";
 
 // @mui
 import {
@@ -185,6 +186,7 @@ export default function Bills() {
   // pagination
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [arrayId, setArrayId] = useState([]);
 
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
@@ -218,11 +220,12 @@ export default function Bills() {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    setArrayId(id);
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -266,16 +269,30 @@ export default function Bills() {
   const isNotFound = !filteredProducts.length && !!filterName;
 
   const handleDelete = (e) => {
-    AxiosInstance.delete(`product/${currentID}`, {
-      headers: { Authorization: `Bearer ` + token },
-    }).then((res) => res);
-    const productIndex = products.findIndex((usr) => usr._id === currentID);
-    const updateProduct = [
-      ...products.slice(0, productIndex),
-      ...products.slice(productIndex + 1),
-    ];
-    setProducts(updateProduct);
-    setOpen(false);
+    Swal.fire({
+      title: "Apa kamu yakin?",
+      text: "Anda tidak akan dapat mengembalikan ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Batal!",
+      confirmButtonText: "Ya, Hapus!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        AxiosInstance.delete(`product/${currentID}`, {
+          headers: { Authorization: `Bearer ` + token },
+        }).then((res) => res);
+        const productIndex = products.findIndex((usr) => usr._id === currentID);
+        const updateProduct = [
+          ...products.slice(0, productIndex),
+          ...products.slice(productIndex + 1),
+        ];
+        setProducts(updateProduct);
+        setOpen(false);
+        Swal.fire("Dihapus!", "File Anda telah dihapus.", "success");
+      }
+    });
   };
 
   useEffect(() => {
@@ -317,6 +334,13 @@ export default function Bills() {
             Bills
           </Typography>
           <ProductSearchBar
+            products={products}
+            setProducts={setProducts}
+            id={arrayId}
+            selected={selected}
+            setUpdate={setUpdate}
+            update={update}
+            setSelected={setSelected}
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -367,7 +391,7 @@ export default function Bills() {
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={selectedProduct}
-                          onChange={(event) => handleClick(event, code)}
+                          onChange={(event) => handleClick(event, _id)}
                         />
                       </TableCell>
                       <TableCell component="th" scope="row" width="20">
@@ -404,7 +428,7 @@ export default function Bills() {
                       </TableCell>
                       <TableCell align="left">{category}</TableCell>
                       <TableCell style={{ color: "#396EB0" }} align="right">
-                        {price}
+                        {row.price.toLocaleString(["id"])}
                       </TableCell>
                       <TableCell align="right" width="50">
                         <IconButton
@@ -436,13 +460,14 @@ export default function Bills() {
                         }}
                       >
                         <Typography variant="h6" paragraph>
-                          Not found
+                          Tidak ditemukan
                         </Typography>
 
                         <Typography variant="body2">
-                          No results found for &nbsp;
+                          Tidak ada hasil yang ditemukan untuk &nbsp;
                           <strong>&quot;{filterName}&quot;</strong>.
-                          <br /> Try checking for typos or using complete words.
+                          <br /> Coba periksa kesalahan ketik atau gunakan kata
+                          lengkap.
                         </Typography>
                       </Paper>
                     </TableCell>

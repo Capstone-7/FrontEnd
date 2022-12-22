@@ -6,8 +6,9 @@ import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
 import Iconify from "../../Admin-Component/iconify/Iconify";
 import Form from "react-bootstrap/Form";
-// import styles from "../../assets/styles/ProductsModal.module.css"
 import AxiosInstance from "../../../configs/axios/AxiosInstance";
+
+import Swal from "sweetalert2";
 
 import "../../../assets/styles/modalUser.css";
 
@@ -27,7 +28,6 @@ const style = {
 
 const DailyModal = ({ id, setUpdate, update, setOpen }) => {
   const [opens, setOpens] = React.useState(false);
-  // const [anchorEl, setAnchorEl] = React.useState(null);
   const [isChecked, setChecked] = useState();
   const [product, setproduct] = useState({});
 
@@ -42,7 +42,7 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
       },
     }).then((res) => {
       setproduct(res.data.data);
-      setChecked(res.data.data.status === 'Active' ? true : false)
+      setChecked(res.data.data.status === "Active" ? true : false);
     });
   }, []);
 
@@ -51,7 +51,6 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
       ...product,
       [e.target.name]: e.target.value,
     });
-    // console.log(e.target.value)
   };
 
   const handleChangePriceData = (e) => {
@@ -65,11 +64,11 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
     e.preventDefault();
     try {
       const response = await AxiosInstance.put(`/product/${data}`, product);
-      setUpdate(!update)
-      setOpen(false)
-      // setAnchorEl(null);
+      setUpdate(!update);
+      setOpen(false);
+      Swal.fire("Berhasil!", "berhasil merubah Data!", "success");
       return response;
-    } catch (err) { }
+    } catch (err) {}
   };
 
   const resetData = () => {
@@ -85,8 +84,8 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
       detail: "Detail Here",
       period: 0,
     });
-    setChecked(false)
-  }
+    setChecked(false);
+  };
 
   return (
     <>
@@ -101,9 +100,7 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
           aria-describedby="modal-modal-description"
           className="modalUser"
         >
-          <Box
-            className="boxModal"
-          >
+          <Box className="boxModal">
             <Typography
               id="modal-modal-title"
               variant="h6"
@@ -124,19 +121,31 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
               <Form>
                 <Form.Group className="mb-1" controlId="formBasicEmail">
                   <Form.Label>Gambar</Form.Label>
-                  <Form.Control onChange={handleChangeFormData}
+                  <Form.Control
+                    onChange={handleChangeFormData}
                     name="icon_url"
                     value={product?.icon_url}
-                    type="text" />
+                    type="text"
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-1" controlId="formBasicPassword">
                   <Form.Label>Kode Produk</Form.Label>
-                  <Form.Control onChange={handleChangeFormData} name="code" value={product?.code} type="text" />
+                  <Form.Control
+                    onChange={handleChangeFormData}
+                    name="code"
+                    value={product?.code}
+                    type="text"
+                  />
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
                   <Form.Label>Deskripsi</Form.Label>
-                  <Form.Control onChange={handleChangeFormData} name="description" value={product?.description} type="text" />
+                  <Form.Control
+                    onChange={handleChangeFormData}
+                    name="description"
+                    value={product?.description}
+                    type="text"
+                  />
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicEmail">
                   <Form.Label>Status</Form.Label>
@@ -153,7 +162,12 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicPassword">
                   <Form.Label>Nominal</Form.Label>
-                  <Form.Control onChange={handleChangeFormData} name="nominal" value={product?.nominal} type="text" />
+                  <Form.Control
+                    onChange={handleChangeFormData}
+                    name="nominal"
+                    value={product?.nominal}
+                    type="text"
+                  />
                 </Form.Group>
                 <Form.Group className="mb-2" controlId="formBasicPassword">
                   <Form.Label>Kategori</Form.Label>
@@ -163,9 +177,11 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
                     style={{ width: "130px" }}
                     aria-label="Default select example"
                     value={product?.category}
-                  // onSelect={product?.category}
+                    // onSelect={product?.category}
                   >
-                    <option disabled value="">Pilih Disini</option>
+                    <option disabled value="">
+                      Pilih Disini
+                    </option>
                     <option value="pulsa">Pulsa</option>
                     <option value="data">Paket Data</option>
                     <option value="voucher">Voucher</option>
@@ -173,10 +189,19 @@ const DailyModal = ({ id, setUpdate, update, setOpen }) => {
                 </Form.Group>
                 <Form.Group className="mb-1" controlId="formBasicPassword">
                   <Form.Label>Harga (Rp)</Form.Label>
-                  <Form.Control onChange={handleChangePriceData} name="price" value={product?.price} type="number" />
+                  <Form.Control
+                    onChange={handleChangePriceData}
+                    name="price"
+                    value={product?.price}
+                    type="number"
+                  />
                 </Form.Group>
                 <div className="d-flex justify-content-center align-items-center mt-4">
-                  <button type="button" class="btn TombolReset" onClick={resetData}>
+                  <button
+                    type="button"
+                    class="btn TombolReset"
+                    onClick={resetData}
+                  >
                     Ulangi
                   </button>
                   <button
