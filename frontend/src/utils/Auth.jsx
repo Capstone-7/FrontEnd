@@ -6,7 +6,6 @@ import axios from "axios";
 export const Auth = {
   isAuthorization() {
     const token = Cookies.get("token");
-    // console.log(token)
 
     if (token) {
       return { token };
