@@ -67,18 +67,13 @@ const ProductList = () => {
                 slidesPerView: 1,
                 centeredSlides: true,
               },
-              980: {
-                width: 980,
+              1030: {
+                width: 1030,
                 slidesPerView: 3,
                 centeredSlides: true,
               },
               1550: {
                 width: 1550,
-                slidesPerView: 3,
-                centeredSlides: true,
-              },
-              1250: {
-                width: 1250,
                 slidesPerView: 3,
                 centeredSlides: true,
               },
