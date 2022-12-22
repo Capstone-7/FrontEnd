@@ -41,7 +41,60 @@
   align-items: center;
 }
 
-.deskripsi {
+@media screen and (max-width: 1366px) {
+  .Content {
+    width: 100%;
+    font-size: 30px;
+    line-height: 35px !important;
+  }
+
+  .BebanTagihan {
+    font-size: 30px;
+    line-height: 35px !important;
+  }
+
+  .SecondaryDeskripsi {
+    width: 60% !important;
+    font-weight: 500;
+    font-size: 15px !important;
+    line-height: 30px !important;
+  }
+
+  .btnDownload {
+    width: 30% !important;
+  }
+
+  .hrModel {
+    width: 10% !important;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .Content {
+    width: 100%;
+    font-size: 20px;
+    line-height: 25px !important;
+  }
+
+  .BebanTagihan {
+    font-size: 20px;
+    line-height: 25px !important;
+  }
+
+  .SecondaryDeskripsi {
+    width: 100% !important;
+    font-weight: 500;
+    font-size: 15px !important;
+    line-height: 30px !important;
+  }
+
+  .btnDownload {
+    width: 30% !important;
+  }
+
+  .hrModel {
+    width: 15% !important;
+  }
 }
 
 @media screen and (max-width: 500px) {
@@ -53,14 +106,14 @@
     width: 100%;
     ont-weight: 700;
     font-size: 20px;
-    line-height: 30px;
+    line-height: 20px;
   }
 
   .BebanTagihan {
     width: 100%;
     ont-weight: 700;
     font-size: 25px;
-    line-height: 30px;
+    line-height: 20px;
   }
 
   .SecondaryDeskripsi {
