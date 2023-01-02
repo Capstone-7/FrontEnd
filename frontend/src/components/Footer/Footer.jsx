@@ -27,7 +27,9 @@ const Footer = () => {
                 gap={4}
                 className={styles.columnone}
               >
-                <div>Download Now</div>
+                <a style={{ textDecoration: "none" }} href="http://bit.ly/3YxSP4A">
+                  <div>Download Now</div>
+                </a>
                 <div>License</div>
                 <AnchorLink
                   href="#about"
@@ -89,11 +91,13 @@ const Footer = () => {
           <div style={{ color: "#B7D7FD", paddingBottom: "12px" }}>
             Get in app
           </div>
-          <Image
-            src={require("../../assets/icons/btn_download.png")}
-            alt="download"
-            fluid
-          />
+          <a style={{ textDecoration: "none" }} href="http://bit.ly/3YxSP4A">
+            <Image
+              src={require("../../assets/icons/btn_download.png")}
+              alt="download"
+              fluid
+            />
+          </a>
         </Col>
       </Row>
     </Container>

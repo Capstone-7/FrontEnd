@@ -77,8 +77,9 @@ const Login = () => {
             justifyContent: "right",
             paddingRight: "4em",
           }}
+          className={styles.respLogin}
         >
-          <Col lg={4} sm={4}>
+          <Col xs={12} lg={4} sm={4}>
             <div>
               <div className={styles.ketlogin}>
                 <h2>Admin Login</h2>

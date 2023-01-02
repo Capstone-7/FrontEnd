@@ -55,7 +55,7 @@ const Navigation = () => {
                 </Nav.Link>
               </Nav>
               <Nav>
-                <button className={styles.Download}>Download</button>
+                <a style={{ textDecoration: "none" }} href="http://bit.ly/3YxSP4A"><button className={styles.Download}>Download</button></a>
               </Nav>
             </Navbar.Collapse>
           </Container>

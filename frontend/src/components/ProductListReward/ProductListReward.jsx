@@ -48,12 +48,14 @@ const ProductListReward = () => {
             Temukan berbagai reward yang pastinya menarik dan dapatkan
             keuntungan lainnya dari para sobat brand PayOll
           </div>
-          <Button
-            variant="primary"
-            style={{ backgroundColor: "#284E7D", padding: "4%" }}
-          >
-            DOWNLOAD SEKARANG JUGA
-          </Button>
+          <a style={{ textDecoration: "none" }} href="http://bit.ly/3YxSP4A">
+            <Button
+              variant="primary"
+              style={{ backgroundColor: "#284E7D", padding: "4%" }}
+            >
+              DOWNLOAD SEKARANG JUGA
+            </Button>
+          </a>
         </Col>
         <Col lg={5} data-aos="zoom-in-up">
           <Image
