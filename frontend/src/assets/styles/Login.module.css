@@ -8,6 +8,19 @@
   font-family: "Poppins";
 }
 
+@media screen and (max-width: 400px) {
+  .blocklogin {
+    background-image: none;
+    background-color: #ebf1f7;
+    background-position: right;
+  }
+
+  .respLogin {
+    padding-right: 0em !important;
+  }
+}
+
+
 .ketlogin h2 {
   color: #396eb0;
   font-style: normal;
