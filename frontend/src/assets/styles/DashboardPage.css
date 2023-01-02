@@ -1,6 +1,6 @@
 .dashboardPage {
-    -webkit-box-shadow: 7px 7px 25px -6px rgba(0,0,0,0.75);
-    -moz-box-shadow: 7px 7px 25px -6px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 7px 7px 25px -6px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 7px 7px 25px -6px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 6px 12px rgba(41, 41, 41, 0.08);
     border-radius: 20px;
     background: #EBF1F7;
@@ -35,10 +35,10 @@
 
 .dataDashboard {
     width: 30% !important;
-    height: 200px; 
+    height: 200px;
     background: #A4BCDB;
-    border-radius: 10px;    
-    margin-top: 1.5% !important;  
+    border-radius: 10px;
+    margin-top: 1.5% !important;
 }
 
 .content {
@@ -68,4 +68,18 @@
     line-height: 18px;
     color: #000000;
     margin-top: 5%;
+}
+
+@media screen and (max-width: 400px) {
+    .secondText {
+        font-size: 10px;
+    }
+
+    .DataText {
+        font-size: 12px;
+    }
+
+    .DataImage {
+        width: 50%;
+    }
 }
